@@ -23,11 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  animated_splash_screen:
+  intl: ^0.17.0
   google_fonts: ^2.1.0
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  animated_splash_screen:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
