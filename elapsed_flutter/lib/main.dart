@@ -1,11 +1,18 @@
-import 'package:elapsed_flutter/pages/quick_timer.dart';
-import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/pages/home.dart';
+import 'package:elapsed_flutter/pages/quick_timer.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 void main() {
   runApp(MaterialApp(
+    theme: ThemeData(
+      textTheme: Typography.whiteMountainView.apply(
+        fontFamily: GoogleFonts.getFont('Rubik').fontFamily,
+      ),
+    ),
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
@@ -28,7 +35,7 @@ class _ElapsedState extends State<Elapsed> {
     return AnimatedSplashScreen(
       //TODO: Change splash to Widget
       splash: 'assets/DarkIcon.png',
-      nextScreen: QuickTimerPage(),
+      nextScreen: Home(),
       backgroundColor: EColors.black,
       //TODO: Change duration accordingly
       duration: 1000,
