@@ -14,7 +14,10 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: EColors.black,
       body: Center(
-        child: Text('elapsed.'),
+        child: Text(
+          'SAVE',
+          style: Theme.of(context).textTheme.button,
+        ),
       ),
     );
   }
