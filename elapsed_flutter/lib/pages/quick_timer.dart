@@ -11,49 +11,118 @@ class QuickTimerPage extends StatefulWidget {
 }
 
 class _QuickTimerPageState extends State<QuickTimerPage> {
-  late Timer _timer;
-  //TODO: separate int variable and display variable
-  //TODO: implement timerMinutes, timerSeconds and their respective display variables
-  var breakMinutes = DateTime.parse("1969-07-20 20:18:04Z").minute;
-  var breakSeconds = DateTime.parse("1969-07-20 20:18:04Z").second;
-  int _start = 10;
+  Timer? _timer;
 
-  void startTimerParam(int timerDuration) {
+  String buttonState = 'NOT STARTED';
+  //NOT STARTED, STARTED, PAUSED
+
+  int timerMinutes = 1;
+  int timerSeconds = 0;
+  int actualTimerMinutes = 0;
+  int actualTimerSeconds = 0;
+  String displayTimerMinutes = '';
+  String displayTimerSeconds = '';
+
+  int breakMinutes = 1;
+  int breakSeconds = 0;
+  String displayBreakMinutes = '';
+  String displayBreakSeconds = '';
+  int actualBreakMinutes = 0;
+  int actualBreakSeconds = 0;
+
+  void startTimerParam(int timerMinutes, int timerSeconds) {
     if (_timer != null) {
-      _timer.cancel();
+      _timer?.cancel();
+    }
+    if (actualTimerMinutes == 0 && actualTimerSeconds == 0) {
+      setState(() {
+        actualTimerMinutes = timerMinutes;
+        actualTimerSeconds = timerSeconds;
+      });
     }
     setState(() {
-      _start = timerDuration;
+      actualBreakMinutes = breakMinutes;
+      actualBreakSeconds = breakSeconds;
+      displayTimerMinutes = convertToTimeString(actualTimerMinutes);
+      displayTimerSeconds = convertToTimeString(actualTimerSeconds);
     });
     const oneSec = const Duration(seconds: 1);
+    //TODO: CONTINUE WITH BREAK TIME AFTER FINISHING TIMER TIME
+    //TODO: SEND TO FINISH SCREEN AFTER FINISHING BREAK TIME
     _timer = new Timer.periodic(
       oneSec,
       (Timer timer) => setState(
         () {
-          if (_start < 1) {
-            timer.cancel();
+          if (actualTimerSeconds < 1) {
+            if (actualTimerMinutes == 0) {
+              timer.cancel();
+              setState(() {
+                buttonState = 'NOT STARTED';
+              });
+            } else {
+              actualTimerMinutes = actualTimerMinutes - 1;
+              actualTimerSeconds = 59;
+            }
           } else {
-            _start = _start - 1;
+            actualTimerSeconds = actualTimerSeconds - 1;
           }
+          displayTimerMinutes = convertToTimeString(actualTimerMinutes);
+          displayTimerSeconds = convertToTimeString(actualTimerSeconds);
         },
       ),
     );
   }
 
   void startTimer() {
-    startTimerParam(10);
+    setState(() {
+      buttonState = 'STARTED';
+    });
+    startTimerParam(timerMinutes, timerSeconds);
   }
 
   void pauseTimer() {
-    // ignore: unnecessary_null_comparison
-    if (_timer != null) _timer.cancel();
+    setState(() {
+      buttonState = 'PAUSED';
+    });
+    if (_timer != null) _timer?.cancel();
   }
 
-  void unpauseTimer() => startTimerParam(_start);
+  void resumeTimer() {
+    setState(() {
+      buttonState = 'STARTED';
+    });
+    startTimerParam(timerMinutes, timerSeconds);
+  }
+
+  void resetTimer() {
+    setState(() {
+      buttonState = 'NOT STARTED';
+      actualTimerMinutes = timerMinutes;
+      actualTimerSeconds = timerSeconds;
+      displayTimerMinutes = convertToTimeString(actualTimerMinutes);
+      displayTimerSeconds = convertToTimeString(actualTimerSeconds);
+    });
+    if (_timer != null) _timer?.cancel();
+  }
+
+  String convertToTimeString(number) {
+    return number < 10 ? '0' + number.toString() : number.toString();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      displayTimerMinutes = convertToTimeString(timerMinutes);
+      displayTimerSeconds = convertToTimeString(timerSeconds);
+      displayBreakMinutes = convertToTimeString(breakMinutes);
+      displayBreakSeconds = convertToTimeString(breakSeconds);
+    });
+  }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -68,7 +137,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(bottom: 20.0),
               child: Text(
                 'Quick Routine',
                 style: TextStyle(
@@ -78,7 +147,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
               ),
             ),
             Text(
-              '$_start',
+              '$displayTimerMinutes',
               style: GoogleFonts.aldrich(
                   textStyle: TextStyle(color: Colors.white, fontSize: 100)),
             ),
@@ -95,7 +164,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
               ),
             ),
             Text(
-              '$_start',
+              '$displayTimerSeconds',
               style: GoogleFonts.aldrich(
                   textStyle: TextStyle(color: Colors.white, fontSize: 100)),
             ),
@@ -104,24 +173,34 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
               style: TextStyle(color: Colors.white38),
             ),
             Text(
-              '$breakMinutes : $breakSeconds',
+              '$displayBreakMinutes : $displayBreakSeconds',
               style: GoogleFonts.aldrich(
                   textStyle: TextStyle(color: Colors.white38, fontSize: 30)),
             ),
-            TimerButton(
-              text: 'START',
-              icon: Icons.play_arrow,
-              event: startTimer,
-            ),
-            TimerButton(
-              text: 'PAUSE',
-              icon: Icons.pause,
-              event: pauseTimer,
-            ),
-            TimerButton(
-              text: 'UNPAUSE',
-              icon: Icons.pause,
-              event: unpauseTimer,
+            if (buttonState == 'NOT STARTED')
+              TimerButton(
+                text: 'START',
+                icon: Icons.play_arrow,
+                event: startTimer,
+              ),
+            if (buttonState == 'STARTED')
+              TimerButton(
+                text: 'PAUSE',
+                icon: Icons.pause,
+                event: pauseTimer,
+              ),
+            if (buttonState == 'PAUSED')
+              TimerButton(
+                text: 'RESUME',
+                icon: Icons.play_arrow,
+                event: resumeTimer,
+              ),
+            IconButton(
+              icon: const Icon(
+                Icons.restart_alt,
+                color: Colors.white,
+              ),
+              onPressed: resetTimer,
             ),
           ],
         ),
