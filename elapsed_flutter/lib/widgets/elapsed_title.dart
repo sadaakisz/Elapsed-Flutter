@@ -9,7 +9,7 @@ class ElapsedTitle extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: 30,
+            height: 60,
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
