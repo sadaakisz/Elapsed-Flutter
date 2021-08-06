@@ -14,6 +14,7 @@ void main() {
         fontFamily: GoogleFonts.getFont('Rubik').fontFamily,
       ),
       iconTheme: IconThemeData(
+        size: 30,
         color: Colors.white24,
       ),
     ).copyWith(

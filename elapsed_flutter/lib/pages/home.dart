@@ -1,4 +1,7 @@
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/widgets/elapsed_title.dart';
+import 'package:elapsed_flutter/widgets/empty_start.dart';
+import 'package:elapsed_flutter/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -14,11 +17,17 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: EColors.black,
       body: Center(
-        child: Text(
-          'SAVE',
-          style: Theme.of(context).textTheme.button,
+        child: Column(
+          children: [
+            ElapsedTitle(),
+            Flexible(
+              child: FractionallySizedBox(
+                  heightFactor: 0.8, child: Center(child: EmptyStart())),
+            ),
+          ],
         ),
       ),
+      bottomNavigationBar: NavBar(),
     );
   }
 }
