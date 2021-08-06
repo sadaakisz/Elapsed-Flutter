@@ -11,28 +11,24 @@ class TimerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        width: 200,
-        height: 50,
-        child: TextButton.icon(
-          onPressed: () {
-            event();
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.white10),
-            overlayColor: MaterialStateProperty.all<Color>(Colors.white54),
-          ),
-          icon: Icon(
-            icon,
-            color: Colors.white60,
-          ),
-          label: Text(
-            text,
-            style:
-                TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
-          ),
+    return SizedBox(
+      width: 200,
+      height: 55,
+      child: TextButton.icon(
+        onPressed: () {
+          event();
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.white10),
+          overlayColor: MaterialStateProperty.all<Color>(Colors.black),
+        ),
+        icon: Icon(
+          icon,
+          color: Theme.of(context).textTheme.button!.color,
+        ),
+        label: Text(
+          text,
+          style: Theme.of(context).textTheme.button,
         ),
       ),
     );
