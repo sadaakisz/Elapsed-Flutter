@@ -13,6 +13,9 @@ void main() {
       textTheme: Typography.whiteMountainView.apply(
         fontFamily: GoogleFonts.getFont('Rubik').fontFamily,
       ),
+      iconTheme: IconThemeData(
+        color: Colors.white24,
+      ),
     ).copyWith(
       textTheme: TextTheme(
         headline1: TextStyle(
