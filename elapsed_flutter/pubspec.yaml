@@ -27,6 +27,7 @@ dependencies:
   google_fonts: ^2.1.0
   animated_splash_screen:
   cupertino_icons: ^1.0.2
+  ms_undraw: ^3.0.0+0
 
 dev_dependencies:
   flutter_test:
