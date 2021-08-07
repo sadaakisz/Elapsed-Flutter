@@ -7,12 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 void main() {
+  String? fontFamily = GoogleFonts.getFont('Rubik').fontFamily;
   runApp(MaterialApp(
     title: 'elapsed.',
     theme: ThemeData(
-      textTheme: Typography.whiteMountainView.apply(
-        fontFamily: GoogleFonts.getFont('Rubik').fontFamily,
-      ),
+      textTheme: Typography.whiteMountainView,
       iconTheme: IconThemeData(
         size: 30,
         color: Colors.white24,
@@ -20,8 +19,12 @@ void main() {
     ).copyWith(
       textTheme: TextTheme(
         headline1: TextStyle(
-            fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white60),
+            fontFamily: fontFamily,
+            fontSize: 30,
+            fontWeight: FontWeight.w500,
+            color: Colors.white60),
         headline2: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 28,
           fontWeight: FontWeight.w500,
           shadows: <Shadow>[
@@ -32,25 +35,55 @@ void main() {
           ],
         ),
         headline3: TextStyle(
-            fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white54),
+            fontFamily: fontFamily,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: Colors.white54),
         headline4: TextStyle(
-            fontSize: 22, fontWeight: FontWeight.w400, color: Colors.white70),
+            fontFamily: fontFamily,
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.white70),
         headline5: TextStyle(
-            fontSize: 36, fontWeight: FontWeight.w500, color: Colors.white),
+            fontFamily: fontFamily,
+            fontSize: 36,
+            fontWeight: FontWeight.w500,
+            color: Colors.white),
         headline6: TextStyle(
-            fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black),
+            fontFamily: fontFamily,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Colors.black),
         subtitle1: TextStyle(
-            fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white54),
+            fontFamily: fontFamily,
+            fontSize: 24,
+            fontWeight: FontWeight.w500,
+            color: Colors.white54),
         subtitle2: TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white54),
+            fontFamily: fontFamily,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: Colors.white54),
         button: TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white70),
+            fontFamily: fontFamily,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.white70),
         overline: TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
+            fontFamily: fontFamily,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Colors.black),
         bodyText1: TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w300, color: Colors.white70),
+            fontFamily: fontFamily,
+            fontSize: 14,
+            fontWeight: FontWeight.w300,
+            color: Colors.white70),
         bodyText2: TextStyle(
-            fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white54),
+            fontFamily: fontFamily,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: Colors.white54),
       ),
     ),
     debugShowCheckedModeBanner: false,
