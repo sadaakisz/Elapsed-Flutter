@@ -20,7 +20,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
   void initState() {
     super.initState();
     controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+        duration: const Duration(milliseconds: 300), vsync: this);
     curve = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
     tween = Tween<double>(begin: 0, end: 80).animate(curve)
       ..addListener(() {
