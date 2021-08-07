@@ -24,6 +24,7 @@ class _NavBarState extends State<NavBar> {
           children: <Widget>[
             SvgPicture.asset(
               'assets/AddIconBG.svg',
+              //TODO: Make this color dynamic by using SharedPref value
               color: EColors.green,
             ),
             Image.asset(
