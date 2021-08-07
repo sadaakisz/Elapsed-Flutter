@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 void main() {
-  String? fontFamily = GoogleFonts.getFont('Rubik').fontFamily;
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     title: 'elapsed.',
     theme: ThemeData(
