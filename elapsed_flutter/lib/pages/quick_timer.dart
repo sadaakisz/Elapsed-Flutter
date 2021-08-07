@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:elapsed_flutter/pages/quick_timer_settings.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
 import 'package:elapsed_flutter/widgets/timer_button.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
@@ -228,7 +229,13 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
                     highlightColor: Colors.black,
                     focusColor: Colors.black,
                     splashColor: Colors.black,
-                    onPressed: resetTimer),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => QuickTimerSettings()),
+                      );
+                    }),
               ],
             ),
             Row(
