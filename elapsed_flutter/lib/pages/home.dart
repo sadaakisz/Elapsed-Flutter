@@ -2,6 +2,7 @@ import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/widgets/elapsed_title.dart';
 import 'package:elapsed_flutter/widgets/empty_start.dart';
 import 'package:elapsed_flutter/widgets/navbar.dart';
+import 'package:elapsed_flutter/widgets/tutorial_start.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -20,10 +21,11 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             ElapsedTitle(),
-            Flexible(
+            TutorialStart(),
+            /*Flexible(
               child: FractionallySizedBox(
                   heightFactor: 0.8, child: Center(child: EmptyStart())),
-            ),
+            ),*/
           ],
         ),
       ),
