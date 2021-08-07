@@ -18,13 +18,9 @@ void main() {
       ),
     ).copyWith(
       textTheme: TextTheme(
-        headline1: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 30,
-            fontWeight: FontWeight.w500,
-            color: Colors.white60),
-        headline2: TextStyle(
-          fontFamily: fontFamily,
+        headline1: GoogleFonts.rubik(
+            fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white60),
+        headline2: GoogleFonts.rubik(
           fontSize: 28,
           fontWeight: FontWeight.w500,
           shadows: <Shadow>[
@@ -34,56 +30,26 @@ void main() {
                 color: Colors.white.withOpacity(0.15))
           ],
         ),
-        headline3: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: Colors.white54),
-        headline4: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 22,
-            fontWeight: FontWeight.w400,
-            color: Colors.white70),
-        headline5: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 36,
-            fontWeight: FontWeight.w500,
-            color: Colors.white),
-        headline6: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: Colors.black),
-        subtitle1: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 24,
-            fontWeight: FontWeight.w500,
-            color: Colors.white54),
-        subtitle2: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: Colors.white54),
-        button: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Colors.white70),
-        overline: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: Colors.black),
-        bodyText1: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 14,
-            fontWeight: FontWeight.w300,
-            color: Colors.white70),
-        bodyText2: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            color: Colors.white54),
+        headline3: GoogleFonts.rubik(
+            fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white54),
+        headline4: GoogleFonts.rubik(
+            fontSize: 22, fontWeight: FontWeight.w400, color: Colors.white70),
+        headline5: GoogleFonts.rubik(
+            fontSize: 36, fontWeight: FontWeight.w500, color: Colors.white),
+        headline6: GoogleFonts.rubik(
+            fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black),
+        subtitle1: GoogleFonts.rubik(
+            fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white54),
+        subtitle2: GoogleFonts.rubik(
+            fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white54),
+        button: GoogleFonts.rubik(
+            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white70),
+        overline: GoogleFonts.rubik(
+            fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
+        bodyText1: GoogleFonts.rubik(
+            fontSize: 14, fontWeight: FontWeight.w300, color: Colors.white70),
+        bodyText2: GoogleFonts.rubik(
+            fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white54),
       ),
     ),
     debugShowCheckedModeBanner: false,
