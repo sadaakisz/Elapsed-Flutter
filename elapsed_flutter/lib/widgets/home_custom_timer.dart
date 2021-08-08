@@ -5,7 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeCustomTimer extends StatefulWidget {
-  const HomeCustomTimer({Key? key}) : super(key: key);
+  final String name;
+  final int timerTime;
+  final int breakTime;
+  const HomeCustomTimer(
+      {Key? key,
+      required this.name,
+      required this.timerTime,
+      required this.breakTime})
+      : super(key: key);
 
   @override
   _HomeCustomTimerState createState() => _HomeCustomTimerState();
@@ -54,61 +62,11 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
             child: FractionallySizedBox(
               widthFactor: 0.7,
               heightFactor: 0.92,
-              child: Container(
-                width: double.maxFinite,
-                height: double.maxFinite,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(tween.value, 0.0, 0.0, 45.0),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.bottomCenter,
-                    widthFactor: 0.75,
-                    heightFactor: 0.2,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          //TODO: Replace with title of custom timer
-                          'Pomodoro 1',
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5!
-                              .copyWith(
-                                  fontSize: 28, fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          //TODO: Replace with active time of custom timer
-                          '25 min',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline3!
-                              .copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          //TODO: Replace with break time of custom timer
-                          'Break · 5 min',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(fontWeight: FontWeight.normal),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    //TODO: Replace with default or specific background of custom timer
-                    image: AssetImage("assets/UnsplashBG.png"),
-                    colorFilter:
-                        new ColorFilter.mode(Colors.black54, BlendMode.dstATop),
-                    fit: BoxFit.cover,
-                  ),
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(30),
-                ),
+              child: CustomTimerInfo(
+                name: widget.name,
+                timerTime: widget.timerTime,
+                breakTime: widget.breakTime,
+                offset: tween.value,
               ),
             ),
           ),
@@ -231,6 +189,78 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomTimerInfo extends StatelessWidget {
+  final String name;
+  final int timerTime;
+  final int breakTime;
+
+  final double offset;
+  const CustomTimerInfo(
+      {Key? key,
+      required this.name,
+      required this.timerTime,
+      required this.breakTime,
+      required this.offset})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.maxFinite,
+      height: double.maxFinite,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          //TODO: Replace with default or specific background of custom timer
+          image: AssetImage("assets/UnsplashBG.png"),
+          colorFilter: new ColorFilter.mode(Colors.black54, BlendMode.dstATop),
+          fit: BoxFit.cover,
+        ),
+        border: Border.all(color: Colors.white),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(offset, 0.0, 0.0, 45.0),
+        child: FractionallySizedBox(
+          alignment: Alignment.bottomCenter,
+          widthFactor: 0.75,
+          heightFactor: 0.2,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5!
+                    .copyWith(fontSize: 28, fontWeight: FontWeight.w600),
+              ),
+              Text(
+                //TODO: Replace with active time of custom timer
+                '$timerTime min',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3!
+                    .copyWith(fontWeight: FontWeight.w600),
+              ),
+              Text(
+                //TODO: Replace with break time of custom timer
+                'Break · $breakTime min',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(fontWeight: FontWeight.normal),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
