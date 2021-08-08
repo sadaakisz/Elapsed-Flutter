@@ -1,4 +1,5 @@
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/widgets/elapsed_title.dart';
 import 'package:elapsed_flutter/widgets/home_custom_timer.dart';
 import 'package:elapsed_flutter/widgets/navbar.dart';
@@ -12,6 +13,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<CustomRoutine> customRoutines =
+      List<CustomRoutine>.empty(growable: true);
+  @override
+  void initState() {
+    customRoutines
+        .add(CustomRoutine(name: 'Pomodoro 1', timerTime: 25, breakTime: 5));
+    customRoutines.add(
+        CustomRoutine(name: 'Second Pomodoro', timerTime: 30, breakTime: 3));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +32,10 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             ElapsedTitle(),
-            HomeCustomTimer(name: 'Pomodoro 1', timerTime: 25, breakTime: 5),
+            HomeCustomTimer(
+                name: customRoutines[1].name,
+                timerTime: customRoutines[0].timerTime,
+                breakTime: customRoutines[0].breakTime),
             //TutorialStart(),
             /*Flexible(
               child: FractionallySizedBox(
