@@ -22,15 +22,15 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
 
   bool isTimerRunning = false;
 
-  int timerMinutes = 0;
-  int timerSeconds = 20;
+  int timerMinutes = 10;
+  int timerSeconds = 0;
   int actualTimerMinutes = 0;
   int actualTimerSeconds = 0;
   String displayTimerMinutes = '';
   String displayTimerSeconds = '';
 
-  int breakMinutes = 0;
-  int breakSeconds = 10;
+  int breakMinutes = 5;
+  int breakSeconds = 0;
   int actualBreakMinutes = 0;
   int actualBreakSeconds = 0;
   String displayBreakMinutes = '';
@@ -160,6 +160,22 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
     });
   }
 
+  void editQuickTimerTime(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => QuickTimerSettings()),
+    );
+    setState(() {
+      timerMinutes = int.parse(result[0]);
+      breakMinutes = int.parse(result[1]);
+      displayTimerMinutes = result[0];
+      displayBreakMinutes = result[1];
+    });
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text('${result[0]} ${result[1]}')));
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -230,11 +246,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
                     focusColor: Colors.black,
                     splashColor: Colors.black,
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => QuickTimerSettings()),
-                      );
+                      editQuickTimerTime(context);
                     }),
               ],
             ),
