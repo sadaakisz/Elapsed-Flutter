@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,10 +16,14 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
   late AnimationController controller;
   late Animation<double> curve;
   late Animation<double> tween;
+  late bool moreExpanded;
+  late double moreOpacity;
 
   @override
   void initState() {
     super.initState();
+    moreExpanded = false;
+    moreOpacity = 0;
     controller = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
     curve = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
@@ -26,6 +31,16 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
       ..addListener(() {
         setState(() {});
       });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void _changeOpacity() {
+    setState(() => moreOpacity = moreOpacity == 0 ? 1.0 : 0.0);
   }
 
   @override
@@ -97,56 +112,121 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
               ),
             ),
           ),
+          AnimatedPositioned(
+            left: 30,
+            bottom: 75,
+            height: moreExpanded ? 110 : 0,
+            curve: Curves.easeInOut,
+            duration: Duration(milliseconds: 300),
+            child: AnimatedOpacity(
+              opacity: moreOpacity,
+              duration: Duration(milliseconds: 300),
+              child: Container(
+                height: 110,
+                width: 55,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Flexible(
+                        child: SizedBox(
+                      height: 5,
+                    )),
+                    Flexible(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                          size: moreExpanded ? 25 : 0,
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                    Flexible(
+                        child: SizedBox(
+                      height: 15,
+                    )),
+                    Flexible(
+                      child: Divider(
+                        height: 25,
+                        thickness: 1,
+                        indent: 7,
+                        endIndent: 7,
+                        color: Colors.black38,
+                      ),
+                    ),
+                    Flexible(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.black,
+                          size: moreExpanded ? 25 : 0,
+                        ),
+                        onPressed: () {},
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
           FractionallySizedBox(
             widthFactor: 0.55,
             child: Container(
-              width: double.maxFinite,
               height: 55,
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 55,
-                    height: 55,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                    child: IconButton(
-                      iconSize: 35,
-                      icon: Icon(
-                        Icons.more_horiz,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          controller.status == AnimationStatus.completed
-                              ? controller.reverse()
-                              : controller.forward();
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: Container(
-                      height: double.maxFinite,
+              child: Container(
+                width: double.maxFinite,
+                height: 55,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 55,
+                      height: 55,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
-                      child: Center(
-                        child: Text(
-                          'Start',
-                          style: GoogleFonts.rubik(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            textStyle: TextStyle(color: Colors.black),
+                      child: IconButton(
+                        iconSize: 35,
+                        icon: Icon(
+                          Icons.more_horiz,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            controller.status == AnimationStatus.completed
+                                ? controller.reverse()
+                                : controller.forward();
+                            moreExpanded = !moreExpanded;
+                            _changeOpacity();
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: Container(
+                        height: double.maxFinite,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Start',
+                            style: GoogleFonts.rubik(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              textStyle: TextStyle(color: Colors.black),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
