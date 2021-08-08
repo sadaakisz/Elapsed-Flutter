@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             ElapsedTitle(),
-            HomeCustomTimer(),
+            HomeCustomTimer(name: 'Pomodoro 1', timerTime: 25, breakTime: 5),
             //TutorialStart(),
             /*Flexible(
               child: FractionallySizedBox(
