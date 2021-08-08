@@ -7,21 +7,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     title: 'elapsed.',
     theme: ThemeData(
-      textTheme: Typography.whiteMountainView.apply(
-        fontFamily: GoogleFonts.getFont('Rubik').fontFamily,
-      ),
+      textTheme: Typography.whiteMountainView,
       iconTheme: IconThemeData(
         size: 30,
         color: Colors.white24,
       ),
     ).copyWith(
       textTheme: TextTheme(
-        headline1: TextStyle(
+        headline1: GoogleFonts.rubik(
             fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white60),
-        headline2: TextStyle(
+        headline2: GoogleFonts.rubik(
           fontSize: 28,
           fontWeight: FontWeight.w500,
           shadows: <Shadow>[
@@ -31,25 +30,25 @@ void main() {
                 color: Colors.white.withOpacity(0.15))
           ],
         ),
-        headline3: TextStyle(
+        headline3: GoogleFonts.rubik(
             fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white54),
-        headline4: TextStyle(
+        headline4: GoogleFonts.rubik(
             fontSize: 22, fontWeight: FontWeight.w400, color: Colors.white70),
-        headline5: TextStyle(
+        headline5: GoogleFonts.rubik(
             fontSize: 36, fontWeight: FontWeight.w500, color: Colors.white),
-        headline6: TextStyle(
+        headline6: GoogleFonts.rubik(
             fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black),
-        subtitle1: TextStyle(
+        subtitle1: GoogleFonts.rubik(
             fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white54),
-        subtitle2: TextStyle(
+        subtitle2: GoogleFonts.rubik(
             fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white54),
-        button: TextStyle(
+        button: GoogleFonts.rubik(
             fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white70),
-        overline: TextStyle(
+        overline: GoogleFonts.rubik(
             fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
-        bodyText1: TextStyle(
+        bodyText1: GoogleFonts.rubik(
             fontSize: 14, fontWeight: FontWeight.w300, color: Colors.white70),
-        bodyText2: TextStyle(
+        bodyText2: GoogleFonts.rubik(
             fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white54),
       ),
     ),
