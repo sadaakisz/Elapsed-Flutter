@@ -151,7 +151,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
                     Flexible(
                       child: Divider(
                         height: 25,
-                        thickness: 1,
+                        thickness: moreExpanded ? 1 : 0,
                         indent: 7,
                         endIndent: 7,
                         color: Colors.black38,
