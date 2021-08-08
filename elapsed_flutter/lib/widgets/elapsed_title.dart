@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ElapsedTitle extends StatelessWidget {
   const ElapsedTitle({Key? key}) : super(key: key);
@@ -26,10 +27,11 @@ class ElapsedTitle extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
                   'elapsed.',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline2!
-                      .copyWith(fontWeight: FontWeight.w400, fontSize: 22),
+                  style: GoogleFonts.rubik(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 22,
+                  ),
                 ),
               )
             ],
