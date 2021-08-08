@@ -185,7 +185,9 @@ class _CustomTimerInfo extends StatelessWidget {
             children: [
               Text(
                 name,
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
                 style: Theme.of(context)
                     .textTheme
                     .headline5!
