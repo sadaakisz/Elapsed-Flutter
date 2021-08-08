@@ -1,8 +1,31 @@
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/widgets/timer_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class QuickTimerSettings extends StatelessWidget {
+class QuickTimerSettings extends StatefulWidget {
+  @override
+  _QuickTimerSettingsState createState() => _QuickTimerSettingsState();
+}
+
+class _QuickTimerSettingsState extends State<QuickTimerSettings> {
+  final timerTimeController = TextEditingController();
+  final breakTimeController = TextEditingController();
+
+  @override
+  void initState() {
+    timerTimeController.text = '45';
+    breakTimeController.text = '5';
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timerTimeController.dispose();
+    breakTimeController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +58,10 @@ class QuickTimerSettings extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 48,
@@ -47,9 +74,7 @@ class QuickTimerSettings extends StatelessWidget {
                                         errorBorder: InputBorder.none,
                                         disabledBorder: InputBorder.none,
                                       ),
-                                      controller: TextEditingController(
-                                        text: "45",
-                                      ),
+                                      controller: timerTimeController,
                                     ),
                                   ),
                                   Text('min',
@@ -78,6 +103,10 @@ class QuickTimerSettings extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 48,
@@ -90,9 +119,7 @@ class QuickTimerSettings extends StatelessWidget {
                                         errorBorder: InputBorder.none,
                                         disabledBorder: InputBorder.none,
                                       ),
-                                      controller: TextEditingController(
-                                        text: "5",
-                                      ),
+                                      controller: breakTimeController,
                                     ),
                                   ),
                                   Text('min',
@@ -113,7 +140,10 @@ class QuickTimerSettings extends StatelessWidget {
                         text: 'START',
                         icon: Icons.play_arrow,
                         event: () {
-                          Navigator.pop(context);
+                          Navigator.pop(context, [
+                            timerTimeController.text,
+                            breakTimeController.text
+                          ]);
                         })
                   ],
                 )
