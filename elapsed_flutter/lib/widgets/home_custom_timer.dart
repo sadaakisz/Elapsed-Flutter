@@ -139,7 +139,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
                         icon: Icon(
                           Icons.edit,
                           color: Colors.black,
-                          size: moreExpanded ? 25 : 0,
+                          size: tween.value / 3.2,
                         ),
                         onPressed: () {},
                       ),
@@ -151,7 +151,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
                     Flexible(
                       child: Divider(
                         height: 25,
-                        thickness: moreExpanded ? 1 : 0,
+                        thickness: tween.value / 80,
                         indent: 7,
                         endIndent: 7,
                         color: Colors.black38,
@@ -162,7 +162,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
                         icon: Icon(
                           Icons.delete,
                           color: Colors.black,
-                          size: moreExpanded ? 25 : 0,
+                          size: tween.value / 3.2,
                         ),
                         onPressed: () {},
                       ),
