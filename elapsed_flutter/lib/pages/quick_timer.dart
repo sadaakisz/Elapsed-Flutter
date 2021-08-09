@@ -57,7 +57,6 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
       displayBreakSeconds = convertToTimeString(actualBreakSeconds);
     });
     const oneSec = const Duration(seconds: 1);
-    //TODO: EDIT TIMER TIME AND BREAK TIME ON PENCIL CLICK
     //TODO: REFACTOR TICKS AND VARIABLES
 
     _timer = new Timer.periodic(
@@ -163,17 +162,16 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
   void editQuickTimerTime(BuildContext context) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => QuickTimerSettings()),
+      MaterialPageRoute(
+          builder: (context) => QuickTimerSettings(
+              int.parse(displayTimerMinutes), int.parse(displayBreakMinutes))),
     );
     setState(() {
       timerMinutes = int.parse(result[0]);
       breakMinutes = int.parse(result[1]);
-      displayTimerMinutes = result[0];
-      displayBreakMinutes = result[1];
+      displayTimerMinutes = convertToTimeString(timerMinutes);
+      displayBreakMinutes = convertToTimeString(breakMinutes);
     });
-    ScaffoldMessenger.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('${result[0]} ${result[1]}')));
   }
 
   @override
