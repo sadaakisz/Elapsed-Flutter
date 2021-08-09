@@ -13,8 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<CustomRoutine> customRoutines =
-      List<CustomRoutine>.empty(growable: true);
+  List<CustomRoutine> customRoutines = [];
   @override
   void initState() {
     customRoutines
