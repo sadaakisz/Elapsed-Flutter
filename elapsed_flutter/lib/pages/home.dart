@@ -31,10 +31,7 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             ElapsedTitle(),
-            HomeCustomTimer(
-                name: customRoutines[1].name,
-                timerTime: customRoutines[0].timerTime,
-                breakTime: customRoutines[0].breakTime),
+            HomeCustomTimer(routine: customRoutines[0]),
             //TutorialStart(),
             /*Flexible(
               child: FractionallySizedBox(
