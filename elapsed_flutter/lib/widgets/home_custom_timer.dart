@@ -1,19 +1,14 @@
 import 'dart:ui';
 
+import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeCustomTimer extends StatefulWidget {
-  final String name;
-  final int timerTime;
-  final int breakTime;
-  const HomeCustomTimer(
-      {Key? key,
-      required this.name,
-      required this.timerTime,
-      required this.breakTime})
-      : super(key: key);
+  final CustomRoutine routine;
+  const HomeCustomTimer({Key? key, required this.routine}) : super(key: key);
 
   @override
   _HomeCustomTimerState createState() => _HomeCustomTimerState();
@@ -27,6 +22,10 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
   late bool moreExpanded;
   late double moreOpacity;
   static const Duration duration = Duration(milliseconds: 300);
+
+  String get name => widget.routine.name;
+  int get timerTime => widget.routine.timerTime;
+  int get breakTime => widget.routine.breakTime;
 
   @override
   void initState() {
@@ -63,9 +62,9 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
               widthFactor: 0.7,
               heightFactor: 0.92,
               child: _CustomTimerInfo(
-                name: widget.name,
-                timerTime: widget.timerTime,
-                breakTime: widget.breakTime,
+                name: name,
+                timerTime: timerTime,
+                breakTime: breakTime,
                 offset: tween.value,
               ),
             ),
@@ -99,6 +98,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
                 child: IconButton(
+                  splashRadius: 1,
                   iconSize: 35,
                   icon: Icon(
                     Icons.more_horiz,
@@ -288,8 +288,18 @@ class _CustomTimerMoreMenu extends StatelessWidget {
                     size: tween.value / 3.2,
                   ),
                 ),
+                //TODO: Show delete dialog
                 onTap: () {
-                  print('World');
+                  showAnimatedDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (BuildContext context) {
+                      return Container();
+                    },
+                    animationType: DialogTransitionType.slideFromBottomFade,
+                    curve: Curves.easeInOut,
+                    duration: Duration(milliseconds: 300),
+                  );
                 },
               )
             ],
