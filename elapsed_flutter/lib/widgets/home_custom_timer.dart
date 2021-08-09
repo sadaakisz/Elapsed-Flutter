@@ -106,11 +106,14 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
                   ),
                   onPressed: () {
                     setState(() {
-                      controller.status == AnimationStatus.completed
-                          ? controller.reverse()
-                          : controller.forward();
-                      moreExpanded = !moreExpanded;
-                      _changeOpacity();
+                      if (controller.status == AnimationStatus.completed ||
+                          controller.status == AnimationStatus.dismissed) {
+                        controller.status == AnimationStatus.completed
+                            ? controller.reverse()
+                            : controller.forward();
+                        moreExpanded = !moreExpanded;
+                        _changeOpacity();
+                      }
                     });
                   },
                 ),
@@ -249,19 +252,22 @@ class _CustomTimerMoreMenu extends StatelessWidget {
           ),
           child: Column(
             children: <Widget>[
-              Flexible(child: SizedBox(height: 5)),
-              Flexible(
-                child: IconButton(
-                  icon: Icon(
+              Flexible(child: SizedBox(height: 10)),
+              InkWell(
+                child: SizedBox(
+                  width: 50,
+                  height: tween.value / 2.7,
+                  child: Icon(
                     Icons.edit,
                     color: Colors.black,
                     size: tween.value / 3.2,
                   ),
-                  //TODO: Add push to edit custom routine page
-                  onPressed: () {},
                 ),
+                onTap: () {
+                  print('Hello');
+                },
               ),
-              Flexible(child: SizedBox(height: 15)),
+              Flexible(child: SizedBox(height: 8)),
               Flexible(
                 child: Divider(
                   height: 25,
@@ -271,16 +277,20 @@ class _CustomTimerMoreMenu extends StatelessWidget {
                   color: Colors.black38,
                 ),
               ),
-              Flexible(
-                child: IconButton(
-                  icon: Icon(
+              Flexible(child: SizedBox(height: 8)),
+              InkWell(
+                child: SizedBox(
+                  width: 50,
+                  height: tween.value / 2.7,
+                  child: Icon(
                     Icons.delete,
                     color: Colors.black,
                     size: tween.value / 3.2,
                   ),
-                  //TODO: Add push to delete custom routine dialog
-                  onPressed: () {},
                 ),
+                onTap: () {
+                  print('World');
+                },
               )
             ],
           ),
