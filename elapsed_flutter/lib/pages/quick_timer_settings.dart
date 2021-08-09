@@ -1,9 +1,11 @@
-import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/widgets/settings_textfield.dart';
 import 'package:elapsed_flutter/widgets/timer_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class QuickTimerSettings extends StatefulWidget {
+  final int timerTime;
+  final int breakTime;
+  const QuickTimerSettings(this.timerTime, this.breakTime);
   @override
   _QuickTimerSettingsState createState() => _QuickTimerSettingsState();
 }
@@ -12,10 +14,12 @@ class _QuickTimerSettingsState extends State<QuickTimerSettings> {
   final timerTimeController = TextEditingController();
   final breakTimeController = TextEditingController();
 
+  int get timerTime => widget.timerTime;
+  int get breakTime => widget.breakTime;
   @override
   void initState() {
-    timerTimeController.text = '45';
-    breakTimeController.text = '5';
+    timerTimeController.text = timerTime.toString();
+    breakTimeController.text = breakTime.toString();
     super.initState();
   }
 
@@ -51,32 +55,14 @@ class _QuickTimerSettingsState extends State<QuickTimerSettings> {
                                 style: Theme.of(context).textTheme.subtitle2),
                           ),
                           Container(
-                            width: MediaQuery.of(context).size.width * .25,
+                            width: MediaQuery.of(context).size.width * .5,
                             child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.baseline,
                                 textBaseline: TextBaseline.alphabetic,
                                 children: [
                                   Flexible(
-                                    child: TextField(
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ],
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 48,
-                                          fontWeight: FontWeight.w500,
-                                          decoration: TextDecoration.underline),
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        errorBorder: InputBorder.none,
-                                        disabledBorder: InputBorder.none,
-                                      ),
-                                      controller: timerTimeController,
-                                    ),
-                                  ),
+                                      child: SettingsTextField(
+                                          timerTimeController)),
                                   Text('min',
                                       style: Theme.of(context)
                                           .textTheme
@@ -95,33 +81,15 @@ class _QuickTimerSettingsState extends State<QuickTimerSettings> {
                                 style: Theme.of(context).textTheme.subtitle2),
                           ),
                           Container(
-                            width: MediaQuery.of(context).size.width * .2,
+                            width: MediaQuery.of(context).size.width * .5,
                             child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.baseline,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 textBaseline: TextBaseline.alphabetic,
                                 children: [
                                   Flexible(
-                                    child: TextField(
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ],
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 48,
-                                          fontWeight: FontWeight.w500,
-                                          decoration: TextDecoration.underline),
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        errorBorder: InputBorder.none,
-                                        disabledBorder: InputBorder.none,
-                                      ),
-                                      controller: breakTimeController,
-                                    ),
-                                  ),
+                                      child: SettingsTextField(
+                                          breakTimeController)),
                                   Text('min',
                                       style: Theme.of(context)
                                           .textTheme
@@ -140,10 +108,18 @@ class _QuickTimerSettingsState extends State<QuickTimerSettings> {
                         text: 'START',
                         icon: Icons.play_arrow,
                         event: () {
-                          Navigator.pop(context, [
-                            timerTimeController.text,
-                            breakTimeController.text
-                          ]);
+                          if (timerTimeController.text != '' &&
+                              breakTimeController.text != '') {
+                            Navigator.pop(context, [
+                              timerTimeController.text,
+                              breakTimeController.text
+                            ]);
+                          } else {
+                            ScaffoldMessenger.of(context)
+                              ..removeCurrentSnackBar()
+                              ..showSnackBar(SnackBar(
+                                  content: Text('Please add a valid time')));
+                          }
                         })
                   ],
                 )
