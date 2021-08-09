@@ -26,14 +26,14 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
   late Animation<double> tween;
   late bool moreExpanded;
   late double moreOpacity;
+  static const Duration duration = Duration(milliseconds: 300);
 
   @override
   void initState() {
     super.initState();
     moreExpanded = false;
     moreOpacity = 0;
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 300), vsync: this);
+    controller = AnimationController(duration: duration, vsync: this);
     curve = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
     tween = Tween<double>(begin: 0, end: 80).animate(curve)
       ..addListener(() {
@@ -62,7 +62,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
             child: FractionallySizedBox(
               widthFactor: 0.7,
               heightFactor: 0.92,
-              child: CustomTimerInfo(
+              child: _CustomTimerInfo(
                 name: widget.name,
                 timerTime: widget.timerTime,
                 breakTime: widget.breakTime,
@@ -70,137 +70,86 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
               ),
             ),
           ),
-          AnimatedPositioned(
-            left: 30,
-            bottom: 75,
-            height: moreExpanded ? 110 : 0,
-            curve: Curves.easeInOut,
-            duration: Duration(milliseconds: 300),
-            child: AnimatedOpacity(
-              opacity: moreOpacity,
-              duration: Duration(milliseconds: 300),
-              child: Container(
-                height: 110,
+          _CustomTimerMoreMenu(
+              moreExpanded: moreExpanded,
+              duration: duration,
+              moreOpacity: moreOpacity,
+              tween: tween),
+          _buildCustomTimerButtons(),
+        ],
+      ),
+    );
+  }
+
+  FractionallySizedBox _buildCustomTimerButtons() {
+    return FractionallySizedBox(
+      widthFactor: 0.55,
+      child: Container(
+        height: 55,
+        child: Container(
+          width: double.maxFinite,
+          height: 55,
+          child: Row(
+            children: <Widget>[
+              Container(
                 width: 55,
+                height: 55,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
-                child: Column(
-                  children: <Widget>[
-                    Flexible(
-                        child: SizedBox(
-                      height: 5,
-                    )),
-                    Flexible(
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                          size: tween.value / 3.2,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                    Flexible(
-                        child: SizedBox(
-                      height: 15,
-                    )),
-                    Flexible(
-                      child: Divider(
-                        height: 25,
-                        thickness: tween.value / 80,
-                        indent: 7,
-                        endIndent: 7,
-                        color: Colors.black38,
-                      ),
-                    ),
-                    Flexible(
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                          color: Colors.black,
-                          size: tween.value / 3.2,
-                        ),
-                        onPressed: () {},
-                      ),
-                    )
-                  ],
+                child: IconButton(
+                  iconSize: 35,
+                  icon: Icon(
+                    Icons.more_horiz,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      controller.status == AnimationStatus.completed
+                          ? controller.reverse()
+                          : controller.forward();
+                      moreExpanded = !moreExpanded;
+                      _changeOpacity();
+                    });
+                  },
                 ),
               ),
-            ),
-          ),
-          FractionallySizedBox(
-            widthFactor: 0.55,
-            child: Container(
-              height: 55,
-              child: Container(
-                width: double.maxFinite,
-                height: 55,
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 55,
-                      height: 55,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      child: IconButton(
-                        iconSize: 35,
-                        icon: Icon(
-                          Icons.more_horiz,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            controller.status == AnimationStatus.completed
-                                ? controller.reverse()
-                                : controller.forward();
-                            moreExpanded = !moreExpanded;
-                            _changeOpacity();
-                          });
-                        },
+              SizedBox(width: 20),
+              Expanded(
+                child: Container(
+                  height: double.maxFinite,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Start',
+                      style: GoogleFonts.rubik(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        textStyle: TextStyle(color: Colors.black),
                       ),
                     ),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: Container(
-                        height: double.maxFinite,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Start',
-                            style: GoogleFonts.rubik(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              textStyle: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
 
-class CustomTimerInfo extends StatelessWidget {
+class _CustomTimerInfo extends StatelessWidget {
   final String name;
   final int timerTime;
   final int breakTime;
 
   final double offset;
-  const CustomTimerInfo(
+  const _CustomTimerInfo(
       {Key? key,
       required this.name,
       required this.timerTime,
@@ -236,14 +185,15 @@ class CustomTimerInfo extends StatelessWidget {
             children: [
               Text(
                 name,
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                maxLines: 1,
                 style: Theme.of(context)
                     .textTheme
                     .headline5!
                     .copyWith(fontSize: 28, fontWeight: FontWeight.w600),
               ),
               Text(
-                //TODO: Replace with active time of custom timer
                 '$timerTime min',
                 style: Theme.of(context)
                     .textTheme
@@ -251,13 +201,87 @@ class CustomTimerInfo extends StatelessWidget {
                     .copyWith(fontWeight: FontWeight.w600),
               ),
               Text(
-                //TODO: Replace with break time of custom timer
                 'Break · $breakTime min',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1!
                     .copyWith(fontWeight: FontWeight.normal),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CustomTimerMoreMenu extends StatelessWidget {
+  const _CustomTimerMoreMenu({
+    Key? key,
+    required this.moreExpanded,
+    required this.duration,
+    required this.moreOpacity,
+    required this.tween,
+  }) : super(key: key);
+
+  final bool moreExpanded;
+  final Duration duration;
+  final double moreOpacity;
+  final Animation<double> tween;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedPositioned(
+      left: 30,
+      bottom: 75,
+      height: moreExpanded ? 110 : 0,
+      curve: Curves.easeInOut,
+      duration: duration,
+      child: AnimatedOpacity(
+        opacity: moreOpacity,
+        duration: duration,
+        child: Container(
+          height: 110,
+          width: 55,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Column(
+            children: <Widget>[
+              Flexible(child: SizedBox(height: 5)),
+              Flexible(
+                child: IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.black,
+                    size: tween.value / 3.2,
+                  ),
+                  //TODO: Add push to edit custom routine page
+                  onPressed: () {},
+                ),
+              ),
+              Flexible(child: SizedBox(height: 15)),
+              Flexible(
+                child: Divider(
+                  height: 25,
+                  thickness: tween.value / 80,
+                  indent: 7,
+                  endIndent: 7,
+                  color: Colors.black38,
+                ),
+              ),
+              Flexible(
+                child: IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.black,
+                    size: tween.value / 3.2,
+                  ),
+                  //TODO: Add push to delete custom routine dialog
+                  onPressed: () {},
+                ),
+              )
             ],
           ),
         ),
