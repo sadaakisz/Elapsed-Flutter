@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:elapsed_flutter/models/custom_routine.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
