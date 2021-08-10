@@ -26,6 +26,7 @@ dependencies:
   intl: ^0.17.0
   google_fonts: ^2.1.0
   animated_splash_screen:
+  flutter_animated_dialog: ^2.0.1
   cupertino_icons: ^1.0.2
   ms_undraw: ^3.0.0+0
   flutter_svg: ^0.22.0
