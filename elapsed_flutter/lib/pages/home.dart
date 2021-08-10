@@ -13,8 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<CustomRoutine> customRoutines =
-      List<CustomRoutine>.empty(growable: true);
+  List<CustomRoutine> customRoutines = [];
   @override
   void initState() {
     customRoutines
@@ -33,9 +32,9 @@ class _HomeState extends State<Home> {
           children: [
             ElapsedTitle(),
             HomeCustomTimer(
-                name: customRoutines[1].name,
-                timerTime: customRoutines[0].timerTime,
-                breakTime: customRoutines[0].breakTime),
+              routine: customRoutines[0],
+              onDelete: _deleteRoutine,
+            ),
             //TutorialStart(),
             /*Flexible(
               child: FractionallySizedBox(
@@ -46,5 +45,12 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: NavBar(),
     );
+  }
+
+  void _deleteRoutine() {
+    setState(() {
+      //TODO: Change index to the index of the list
+      customRoutines.removeAt(0);
+    });
   }
 }
