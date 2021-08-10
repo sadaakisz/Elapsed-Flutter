@@ -31,7 +31,10 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             ElapsedTitle(),
-            HomeCustomTimer(routine: customRoutines[0]),
+            HomeCustomTimer(
+              routine: customRoutines[0],
+              onDelete: _deleteRoutine,
+            ),
             //TutorialStart(),
             /*Flexible(
               child: FractionallySizedBox(
@@ -42,5 +45,12 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: NavBar(),
     );
+  }
+
+  void _deleteRoutine() {
+    setState(() {
+      //TODO: Change index to the index of the list
+      customRoutines.removeAt(0);
+    });
   }
 }
