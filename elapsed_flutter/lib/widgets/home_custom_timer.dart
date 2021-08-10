@@ -1,13 +1,17 @@
 import 'dart:ui';
 
 import 'package:elapsed_flutter/models/custom_routine.dart';
+import 'package:elapsed_flutter/widgets/delete_custom_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeCustomTimer extends StatefulWidget {
   final CustomRoutine routine;
-  const HomeCustomTimer({Key? key, required this.routine}) : super(key: key);
+  final VoidCallback onDelete;
+  const HomeCustomTimer(
+      {Key? key, required this.routine, required this.onDelete})
+      : super(key: key);
 
   @override
   _HomeCustomTimerState createState() => _HomeCustomTimerState();
@@ -25,6 +29,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
   String get name => widget.routine.name;
   int get timerTime => widget.routine.timerTime;
   int get breakTime => widget.routine.breakTime;
+  VoidCallback get onDelete => widget.onDelete;
 
   @override
   void initState() {
@@ -69,10 +74,12 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
             ),
           ),
           _CustomTimerMoreMenu(
-              moreExpanded: moreExpanded,
-              duration: duration,
-              moreOpacity: moreOpacity,
-              tween: tween),
+            moreExpanded: moreExpanded,
+            duration: duration,
+            moreOpacity: moreOpacity,
+            tween: tween,
+            onDelete: onDelete,
+          ),
           _buildCustomTimerButtons(),
         ],
       ),
@@ -83,62 +90,59 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
     return FractionallySizedBox(
       widthFactor: 0.55,
       child: Container(
+        width: double.maxFinite,
         height: 55,
-        child: Container(
-          width: double.maxFinite,
-          height: 55,
-          child: Row(
-            children: <Widget>[
-              Container(
-                width: 55,
-                height: 55,
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 55,
+              height: 55,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: IconButton(
+                splashRadius: 1,
+                iconSize: 35,
+                icon: Icon(
+                  Icons.more_horiz,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  setState(() {
+                    if (controller.status == AnimationStatus.completed ||
+                        controller.status == AnimationStatus.dismissed) {
+                      controller.status == AnimationStatus.completed
+                          ? controller.reverse()
+                          : controller.forward();
+                      moreExpanded = !moreExpanded;
+                      _changeOpacity();
+                    }
+                  });
+                },
+              ),
+            ),
+            SizedBox(width: 20),
+            Expanded(
+              child: Container(
+                height: double.maxFinite,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
-                child: IconButton(
-                  splashRadius: 1,
-                  iconSize: 35,
-                  icon: Icon(
-                    Icons.more_horiz,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      if (controller.status == AnimationStatus.completed ||
-                          controller.status == AnimationStatus.dismissed) {
-                        controller.status == AnimationStatus.completed
-                            ? controller.reverse()
-                            : controller.forward();
-                        moreExpanded = !moreExpanded;
-                        _changeOpacity();
-                      }
-                    });
-                  },
-                ),
-              ),
-              SizedBox(width: 20),
-              Expanded(
-                child: Container(
-                  height: double.maxFinite,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Start',
-                      style: GoogleFonts.rubik(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        textStyle: TextStyle(color: Colors.black),
-                      ),
+                child: Center(
+                  child: Text(
+                    'Start',
+                    style: GoogleFonts.rubik(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      textStyle: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -224,12 +228,14 @@ class _CustomTimerMoreMenu extends StatelessWidget {
     required this.duration,
     required this.moreOpacity,
     required this.tween,
+    required this.onDelete,
   }) : super(key: key);
 
   final bool moreExpanded;
   final Duration duration;
   final double moreOpacity;
   final Animation<double> tween;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -293,11 +299,11 @@ class _CustomTimerMoreMenu extends StatelessWidget {
                     context: context,
                     barrierDismissible: true,
                     builder: (BuildContext context) {
-                      return Container();
+                      return DeleteCustomTimer(onDelete: onDelete);
                     },
-                    animationType: DialogTransitionType.slideFromBottomFade,
+                    animationType: DialogTransitionType.sizeFade,
                     curve: Curves.easeInOut,
-                    duration: Duration(milliseconds: 300),
+                    duration: Duration(milliseconds: 500),
                   );
                 },
               )
