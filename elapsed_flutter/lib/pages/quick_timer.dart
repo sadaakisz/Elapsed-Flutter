@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:elapsed_flutter/pages/quick_timer_settings.dart';
+import 'package:elapsed_flutter/utils/time.dart';
+import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
-import 'package:elapsed_flutter/widgets/timer_button.dart';
+import 'package:elapsed_flutter/models/time_model.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
 import 'package:flutter/material.dart';
 
@@ -15,94 +17,57 @@ class QuickTimerPage extends StatefulWidget {
 class _QuickTimerPageState extends State<QuickTimerPage> {
   Timer? _timer;
 
+  TimeModel timerTime = new TimeModel(minutes: 10, seconds: 0);
+  TimeModel breakTime = new TimeModel(minutes: 5, seconds: 0);
+  Time time = new Time();
+
   String buttonState = 'NOT STARTED';
   //NOT STARTED, STARTED, PAUSED
 
   bool timerTimeTurn = true;
-
   bool isTimerRunning = false;
 
-  int timerMinutes = 10;
-  int timerSeconds = 0;
-  int actualTimerMinutes = 0;
-  int actualTimerSeconds = 0;
-  String displayTimerMinutes = '';
-  String displayTimerSeconds = '';
+  @override
+  void initState() {
+    super.initState();
 
-  int breakMinutes = 5;
-  int breakSeconds = 0;
-  int actualBreakMinutes = 0;
-  int actualBreakSeconds = 0;
-  String displayBreakMinutes = '';
-  String displayBreakSeconds = '';
+    setState(() {
+      timerTime.updateActual();
+      breakTime.updateActual();
+      timerTime.updateDisplay();
+      breakTime.updateDisplay();
+    });
+  }
 
-  void startTimerParam(
-      int timerMinutes, int timerSeconds, int breakMinutes, int breakSeconds) {
+  void startTimerParam() {
     if (_timer != null) {
       _timer?.cancel();
     }
     if (!isTimerRunning) {
       setState(() {
-        actualTimerMinutes = timerMinutes;
-        actualTimerSeconds = timerSeconds;
-        actualBreakMinutes = breakMinutes;
-        actualBreakSeconds = breakSeconds;
+        timerTime.updateActual();
+        breakTime.updateActual();
         isTimerRunning = true;
       });
     }
     setState(() {
-      displayTimerMinutes = convertToTimeString(actualTimerMinutes);
-      displayTimerSeconds = convertToTimeString(actualTimerSeconds);
-      displayBreakMinutes = convertToTimeString(actualBreakMinutes);
-      displayBreakSeconds = convertToTimeString(actualBreakSeconds);
+      timerTime.updateDisplay();
+      breakTime.updateDisplay();
     });
+
     const oneSec = const Duration(seconds: 1);
-    //TODO: REFACTOR TICKS AND VARIABLES
 
     _timer = new Timer.periodic(
         oneSec,
         (Timer timer) => setState(() {
               if (timerTimeTurn) {
-                tickTimerTime(timer);
+                time.tickTimerTime(timer, timerTime, breakTime, timerTimeTurn,
+                    resetTimer, context);
               } else {
-                tickBreakTime(timer);
+                time.tickBreakTime(timer, timerTime, breakTime, timerTimeTurn,
+                    resetTimer, context);
               }
             }));
-  }
-
-  void tickTimerTime(timer) {
-    if (actualTimerSeconds < 1) {
-      if (actualTimerMinutes == 0) {
-        setState(() {
-          timerTimeTurn = false;
-          tickBreakTime(timer);
-        });
-      } else {
-        actualTimerMinutes = actualTimerMinutes - 1;
-        actualTimerSeconds = 59;
-      }
-    } else {
-      actualTimerSeconds = actualTimerSeconds - 1;
-    }
-    displayTimerMinutes = convertToTimeString(actualTimerMinutes);
-    displayTimerSeconds = convertToTimeString(actualTimerSeconds);
-  }
-
-  void tickBreakTime(timer) {
-    if (actualBreakSeconds < 1) {
-      if (actualBreakMinutes == 0) {
-        timer.cancel();
-        resetTimer();
-        Navigator.pop(context);
-      } else {
-        actualBreakMinutes = actualBreakMinutes - 1;
-        actualBreakSeconds = 59;
-      }
-    } else {
-      actualBreakSeconds = actualBreakSeconds - 1;
-    }
-    displayBreakMinutes = convertToTimeString(actualBreakMinutes);
-    displayBreakSeconds = convertToTimeString(actualBreakSeconds);
   }
 
   void startTimer() {
@@ -110,7 +75,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
       buttonState = 'STARTED';
       timerTimeTurn = true;
     });
-    startTimerParam(timerMinutes, timerSeconds, breakMinutes, breakSeconds);
+    startTimerParam();
   }
 
   void pauseTimer() {
@@ -124,7 +89,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
     setState(() {
       buttonState = 'STARTED';
     });
-    startTimerParam(timerMinutes, timerSeconds, breakMinutes, breakSeconds);
+    startTimerParam();
   }
 
   void resetTimer() {
@@ -132,45 +97,31 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
       buttonState = 'NOT STARTED';
       timerTimeTurn = true;
       isTimerRunning = false;
-      actualTimerMinutes = timerMinutes;
-      actualTimerSeconds = timerSeconds;
-      actualBreakMinutes = breakMinutes;
-      actualBreakSeconds = breakSeconds;
-      displayTimerMinutes = convertToTimeString(actualTimerMinutes);
-      displayTimerSeconds = convertToTimeString(actualTimerSeconds);
-      displayBreakMinutes = convertToTimeString(actualBreakMinutes);
-      displayBreakSeconds = convertToTimeString(actualBreakSeconds);
+
+      timerTime.updateActual();
+      breakTime.updateActual();
+      timerTime.updateDisplay();
+      breakTime.updateDisplay();
     });
     if (_timer != null) _timer?.cancel();
   }
 
-  String convertToTimeString(number) {
-    return number < 10 ? '0' + number.toString() : number.toString();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      displayTimerMinutes = convertToTimeString(timerMinutes);
-      displayTimerSeconds = convertToTimeString(timerSeconds);
-      displayBreakMinutes = convertToTimeString(breakMinutes);
-      displayBreakSeconds = convertToTimeString(breakSeconds);
-    });
-  }
-
   void editQuickTimerTime(BuildContext context) async {
+    resetTimer();
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => QuickTimerSettings(
-              int.parse(displayTimerMinutes), int.parse(displayBreakMinutes))),
+              int.parse(timerTime.displayMinutes!),
+              int.parse(breakTime.displayMinutes!))),
     );
     setState(() {
-      timerMinutes = int.parse(result[0]);
-      breakMinutes = int.parse(result[1]);
-      displayTimerMinutes = convertToTimeString(timerMinutes);
-      displayBreakMinutes = convertToTimeString(breakMinutes);
+      timerTime.minutes = int.parse(result[0]);
+      breakTime.minutes = int.parse(result[1]);
+      timerTime.updateActual();
+      breakTime.updateActual();
+      timerTime.updateDisplay();
+      breakTime.updateDisplay();
     });
   }
 
@@ -211,18 +162,12 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
                       ),
                     ],
                   ),
-                  IconButton(
-                      icon: const Icon(
-                        Icons.close,
-                        size: 40,
-                      ),
-                      hoverColor: Colors.black,
-                      highlightColor: Colors.black,
-                      focusColor: Colors.black,
-                      splashColor: Colors.black,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
+                  TimerIconButton(
+                    icon: Icons.close,
+                    event: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -232,20 +177,14 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
               textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
                 TimerTime(
-                    displayTimerMinutes: displayTimerMinutes,
-                    displayTimerSeconds: displayTimerSeconds),
-                IconButton(
-                    icon: const Icon(
-                      Icons.edit_outlined,
-                      size: 40,
-                    ),
-                    hoverColor: Colors.black,
-                    highlightColor: Colors.black,
-                    focusColor: Colors.black,
-                    splashColor: Colors.black,
-                    onPressed: () {
-                      editQuickTimerTime(context);
-                    }),
+                    displayTimerMinutes: timerTime.displayMinutes!,
+                    displayTimerSeconds: timerTime.displaySeconds!),
+                TimerIconButton(
+                  icon: Icons.edit_outlined,
+                  event: () {
+                    editQuickTimerTime(context);
+                  },
+                ),
               ],
             ),
             Row(
@@ -254,8 +193,8 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: BreakTime(
-                      displayBreakMinutes: displayBreakMinutes,
-                      displayBreakSeconds: displayBreakSeconds),
+                      displayBreakMinutes: breakTime.displayMinutes!,
+                      displayBreakSeconds: breakTime.displaySeconds!),
                 )
               ],
             ),
@@ -263,17 +202,12 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                button(),
-                IconButton(
-                    icon: const Icon(
-                      Icons.restart_alt,
-                      size: 40,
-                    ),
-                    hoverColor: Colors.black,
-                    highlightColor: Colors.black,
-                    focusColor: Colors.black,
-                    splashColor: Colors.black,
-                    onPressed: resetTimer),
+                TimerButtonClass.button(
+                    buttonState, startTimer, pauseTimer, resumeTimer),
+                TimerIconButton(
+                  icon: Icons.restart_alt,
+                  event: resetTimer,
+                ),
               ],
             )
           ],
@@ -281,26 +215,32 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
       ),
     );
   }
+}
 
-  TimerButton button() {
-    if (buttonState == 'NOT STARTED') {
-      return TimerButton(
-        text: 'START',
-        icon: Icons.play_arrow,
-        event: startTimer,
-      );
-    }
-    if (buttonState == 'STARTED') {
-      return TimerButton(
-        text: 'PAUSE',
-        icon: Icons.pause,
-        event: pauseTimer,
-      );
-    }
-    return TimerButton(
-      text: 'RESUME',
-      icon: Icons.play_arrow,
-      event: resumeTimer,
+class TimerIconButton extends StatelessWidget {
+  const TimerIconButton({
+    Key? key,
+    required this.event,
+    required this.icon,
+  }) : super(key: key);
+
+  final Function event;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        icon,
+        size: 40,
+      ),
+      hoverColor: Colors.black,
+      highlightColor: Colors.black,
+      focusColor: Colors.black,
+      splashColor: Colors.black,
+      onPressed: () {
+        event();
+      },
     );
   }
 }
