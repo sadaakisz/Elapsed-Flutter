@@ -6,6 +6,7 @@ class EmptyStart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -15,7 +16,7 @@ class EmptyStart extends StatelessWidget {
           child: UnDraw(
             illustration: UnDrawIllustration.empty,
             color: Colors.grey,
-            height: 200,
+            height: width / 2,
           ),
         ),
         Flexible(child: FractionallySizedBox(heightFactor: 0.6)),
