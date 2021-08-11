@@ -301,7 +301,6 @@ class _CustomTimerMoreMenu extends StatelessWidget {
                     size: tween.value / 3.2,
                   ),
                 ),
-                //TODO: Show delete dialog
                 onTap: () {
                   showAnimatedDialog(
                     context: context,
