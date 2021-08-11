@@ -6,6 +6,7 @@ import 'package:elapsed_flutter/widgets/break_time.dart';
 import 'package:elapsed_flutter/models/time_model.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuickTimerPage extends StatefulWidget {
   QuickTimerPage({Key? key}) : super(key: key);
@@ -27,10 +28,27 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
   bool timerTimeTurn = true;
   bool isTimerRunning = false;
 
+  getMinutesFromSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final timerMinutes = (prefs.getInt('timerMinutes'));
+    final breakMinutes = (prefs.getInt('breakMinutes'));
+
+    if (timerMinutes != null) {
+      setState(() {
+        timerTime.minutes = timerMinutes;
+      });
+    }
+    if (breakMinutes != null) {
+      setState(() {
+        breakTime.minutes = breakMinutes;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-
+    getMinutesFromSharedPrefs();
     setState(() {
       timerTime.updateActual();
       breakTime.updateActual();
