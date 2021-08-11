@@ -8,9 +8,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 class HomeCustomTimer extends StatefulWidget {
   final CustomRoutine routine;
-  final VoidCallback onDelete;
+  final Function(int) onDelete;
+  final int index;
   const HomeCustomTimer(
-      {Key? key, required this.routine, required this.onDelete})
+      {Key? key,
+      required this.routine,
+      required this.onDelete,
+      required this.index})
       : super(key: key);
 
   @override
@@ -29,7 +33,8 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
   String get name => widget.routine.name;
   int get timerTime => widget.routine.timerTime;
   int get breakTime => widget.routine.breakTime;
-  VoidCallback get onDelete => widget.onDelete;
+  Function(int) get onDelete => widget.onDelete;
+  int get index => widget.index;
 
   @override
   void initState() {
@@ -64,7 +69,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
             padding: const EdgeInsets.symmetric(vertical: 27.0),
             child: FractionallySizedBox(
               widthFactor: 0.7,
-              heightFactor: 0.92,
+              heightFactor: 0.9,
               child: _CustomTimerInfo(
                 name: name,
                 timerTime: timerTime,
@@ -79,6 +84,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
             moreOpacity: moreOpacity,
             tween: tween,
             onDelete: onDelete,
+            index: index,
           ),
           _buildCustomTimerButtons(),
         ],
@@ -229,13 +235,15 @@ class _CustomTimerMoreMenu extends StatelessWidget {
     required this.moreOpacity,
     required this.tween,
     required this.onDelete,
+    required this.index,
   }) : super(key: key);
 
   final bool moreExpanded;
   final Duration duration;
   final double moreOpacity;
   final Animation<double> tween;
-  final VoidCallback onDelete;
+  final Function(int) onDelete;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -299,7 +307,8 @@ class _CustomTimerMoreMenu extends StatelessWidget {
                     context: context,
                     barrierDismissible: true,
                     builder: (BuildContext context) {
-                      return DeleteCustomTimer(onDelete: onDelete);
+                      return DeleteCustomTimer(
+                          onDelete: onDelete, index: index);
                     },
                     animationType: DialogTransitionType.sizeFade,
                     curve: Curves.easeInOut,
