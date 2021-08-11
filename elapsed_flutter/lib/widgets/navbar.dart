@@ -12,6 +12,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -30,12 +31,13 @@ class _NavBarState extends State<NavBar> {
           children: <Widget>[
             SvgPicture.asset(
               'assets/AddIconBG.svg',
+              width: width / 2.1,
               //TODO: Make this color dynamic by using SharedPref value
               color: EColors.green,
             ),
             Image.asset(
               'assets/GreyIcon.png',
-              scale: 1.8,
+              width: width / 13,
             ),
           ],
         ),
