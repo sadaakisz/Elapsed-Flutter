@@ -1,8 +1,9 @@
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/widgets/elapsed_title.dart';
-import 'package:elapsed_flutter/widgets/home_custom_timer.dart';
+import 'package:elapsed_flutter/widgets/home_carousel.dart';
 import 'package:elapsed_flutter/widgets/navbar.dart';
+import 'package:elapsed_flutter/widgets/tutorial_start.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -13,15 +14,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<CustomRoutine> customRoutines = [];
-  @override
-  void initState() {
-    customRoutines
-        .add(CustomRoutine(name: 'Pomodoro 1', timerTime: 25, breakTime: 5));
-    customRoutines.add(
-        CustomRoutine(name: 'Second Pomodoro', timerTime: 30, breakTime: 3));
-    super.initState();
-  }
+  List<CustomRoutine> customRoutines = [
+    CustomRoutine(name: 'Pomodoro 1', timerTime: 25, breakTime: 5),
+    CustomRoutine(name: 'Second Pomodoro', timerTime: 30, breakTime: 3),
+    CustomRoutine(name: 'Third Pomo', timerTime: 30, breakTime: 3),
+    CustomRoutine(name: '4 Pomodoro', timerTime: 30, breakTime: 3),
+    CustomRoutine(name: 'Go Pomodoro', timerTime: 30, breakTime: 3),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +30,12 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             ElapsedTitle(),
-            HomeCustomTimer(
-              routine: customRoutines[0],
-              onDelete: _deleteRoutine,
-            ),
+            customRoutines.length == 0
+                ? TutorialStart()
+                : HomeCarousel(
+                    customRoutines: customRoutines,
+                    onDelete: _deleteRoutine,
+                  ),
             //TutorialStart(),
             /*Flexible(
               child: FractionallySizedBox(
@@ -47,10 +48,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _deleteRoutine() {
+  void _deleteRoutine(int index) {
     setState(() {
       //TODO: Change index to the index of the list
-      customRoutines.removeAt(0);
+      customRoutines.removeAt(index);
     });
   }
 }

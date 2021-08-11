@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 class DeleteCustomTimer extends StatefulWidget {
-  const DeleteCustomTimer({Key? key, required this.onDelete}) : super(key: key);
+  const DeleteCustomTimer(
+      {Key? key, required this.onDelete, required this.index})
+      : super(key: key);
 
-  final VoidCallback onDelete;
+  final Function(int) onDelete;
+  final int index;
 
   @override
   _DeleteCustomTimerState createState() => _DeleteCustomTimerState();
 }
 
 class _DeleteCustomTimerState extends State<DeleteCustomTimer> {
-  VoidCallback get onDelete => widget.onDelete;
+  Function(int) get onDelete => widget.onDelete;
+  int get index => widget.index;
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -92,7 +96,7 @@ class _DeleteCustomTimerState extends State<DeleteCustomTimer> {
                       ),
                       onTap: () {
                         setState(() {
-                          onDelete();
+                          onDelete(index);
                         });
                         Navigator.of(context).pop();
                         showAnimatedDialog(
