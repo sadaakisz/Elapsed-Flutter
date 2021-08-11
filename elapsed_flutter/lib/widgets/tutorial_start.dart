@@ -5,42 +5,48 @@ class TutorialStart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 60),
-        TutorialCard(
-          leading: Icon(Icons.bolt, color: Colors.white54),
-          title: 'QUICK ROUTINE',
-          message:
-              'Want a no-brainer pomodoro timer? Create a quick routine by specifying your productive minutes and your break time.',
-        ),
-        TutorialDivider(),
-        TutorialCard(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 6.0),
-            child: Container(
-              width: 35,
-              height: 35,
-              child: Image.asset(
-                'assets/TutorialDarkIcon.png',
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      height: height * 0.5,
+      width: width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          TutorialCard(
+            leading: Icon(Icons.bolt, color: Colors.white54),
+            title: 'QUICK ROUTINE',
+            message:
+                'Want a no-brainer pomodoro timer? Create a quick routine by specifying your productive minutes and your break time.',
+          ),
+          TutorialDivider(),
+          TutorialCard(
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 6.0),
+              child: Container(
+                width: 35,
+                height: 35,
+                child: Image.asset(
+                  'assets/TutorialDarkIcon.png',
+                ),
               ),
             ),
+            title: 'CUSTOM ROUTINE',
+            message:
+                'Customizability? Explore all the options for your own pomodoro timer for all your activities!',
           ),
-          title: 'CUSTOM ROUTINE',
-          message:
-              'Customizability? Explore all the options for your own pomodoro timer for all your activities!',
-        ),
-        TutorialDivider(),
-        TutorialCard(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 7.0),
-            child: Icon(Icons.settings, color: Colors.white54),
+          TutorialDivider(),
+          TutorialCard(
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 7.0),
+              child: Icon(Icons.settings, color: Colors.white54),
+            ),
+            title: 'APP SETTINGS',
+            message:
+                'Tweak ALL the corners of the app, from the background, to timer font size and everything in between.',
           ),
-          title: 'APP SETTINGS',
-          message:
-              'Tweak ALL the corners of the app, from the background, to timer font size and everything in between.',
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
