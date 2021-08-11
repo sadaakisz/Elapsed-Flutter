@@ -28,6 +28,7 @@ class _HomeState extends State<Home> {
       backgroundColor: EColors.black,
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElapsedTitle(),
             customRoutines.length == 0
@@ -41,6 +42,7 @@ class _HomeState extends State<Home> {
               child: FractionallySizedBox(
                   heightFactor: 0.8, child: Center(child: EmptyStart())),
             ),*/
+            SizedBox(height: 0),
           ],
         ),
       ),
