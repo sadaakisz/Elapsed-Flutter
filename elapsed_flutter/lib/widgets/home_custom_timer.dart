@@ -247,8 +247,9 @@ class _CustomTimerMoreMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return AnimatedPositioned(
-      left: 30,
+      left: width / 13,
       bottom: 75,
       height: moreExpanded ? 110 : 0,
       curve: Curves.easeInOut,
@@ -276,6 +277,7 @@ class _CustomTimerMoreMenu extends StatelessWidget {
                     size: tween.value / 3.2,
                   ),
                 ),
+                //TODO: Route the edit icon to edit a custom routine
                 onTap: () {
                   print('Hello');
                 },
