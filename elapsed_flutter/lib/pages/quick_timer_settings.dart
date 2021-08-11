@@ -1,6 +1,7 @@
 import 'package:elapsed_flutter/widgets/settings_textfield.dart';
 import 'package:elapsed_flutter/widgets/timer_button.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuickTimerSettings extends StatefulWidget {
   final int timerTime;
@@ -16,6 +17,13 @@ class _QuickTimerSettingsState extends State<QuickTimerSettings> {
 
   int get timerTime => widget.timerTime;
   int get breakTime => widget.breakTime;
+
+  setMinutesSharedPrefs(timerTime, breakTime) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('timerMinutes', timerTime);
+    await prefs.setInt('breakMinutes', breakTime);
+  }
+
   @override
   void initState() {
     timerTimeController.text = timerTime.toString();
@@ -110,6 +118,9 @@ class _QuickTimerSettingsState extends State<QuickTimerSettings> {
                         event: () {
                           if (timerTimeController.text != '' &&
                               breakTimeController.text != '') {
+                            setMinutesSharedPrefs(
+                                int.parse(timerTimeController.text),
+                                int.parse(breakTimeController.text));
                             Navigator.pop(context, [
                               timerTimeController.text,
                               breakTimeController.text
