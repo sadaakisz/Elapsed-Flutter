@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/pages/home.dart';
@@ -7,21 +9,26 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 void main() {
+  var pixelRatio = window.devicePixelRatio;
+  var logicalScreenSize = window.physicalSize / pixelRatio;
+  var logicalWidth = logicalScreenSize.width;
+  var logicalHeight = logicalScreenSize.height;
+  print('$logicalWidth, $logicalHeight');
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     title: 'elapsed.',
     theme: ThemeData(
       textTheme: Typography.whiteMountainView,
       iconTheme: IconThemeData(
-        size: 30,
+        size: logicalWidth / 13,
         color: Colors.white24,
       ),
     ).copyWith(
       textTheme: TextTheme(
         headline1: GoogleFonts.rubik(
-            fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white60),
+            fontSize: logicalWidth / 13, fontWeight: FontWeight.w500, color: Colors.white60),
         headline2: GoogleFonts.rubik(
-          fontSize: 28,
+          fontSize: logicalWidth / 14,
           fontWeight: FontWeight.w500,
           shadows: <Shadow>[
             Shadow(
@@ -31,25 +38,25 @@ void main() {
           ],
         ),
         headline3: GoogleFonts.rubik(
-            fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white54),
+            fontSize: logicalWidth / 22, fontWeight: FontWeight.w500, color: Colors.white54),
         headline4: GoogleFonts.rubik(
-            fontSize: 22, fontWeight: FontWeight.w400, color: Colors.white70),
+            fontSize: logicalWidth / 18, fontWeight: FontWeight.w400, color: Colors.white70),
         headline5: GoogleFonts.rubik(
-            fontSize: 36, fontWeight: FontWeight.w500, color: Colors.white),
+            fontSize: logicalWidth / 11, fontWeight: FontWeight.w500, color: Colors.white),
         headline6: GoogleFonts.rubik(
-            fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black),
+            fontSize: logicalWidth / 22, fontWeight: FontWeight.w700, color: Colors.black),
         subtitle1: GoogleFonts.rubik(
-            fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white54),
+            fontSize: logicalWidth / 16.5, fontWeight: FontWeight.w500, color: Colors.white54),
         subtitle2: GoogleFonts.rubik(
-            fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white54),
+            fontSize: logicalWidth / 24.5, fontWeight: FontWeight.w400, color: Colors.white54),
         button: GoogleFonts.rubik(
-            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white70),
+            fontSize: logicalWidth / 24.5, fontWeight: FontWeight.w500, color: Colors.white70),
         overline: GoogleFonts.rubik(
-            fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
+            fontSize: logicalWidth / 28, fontWeight: FontWeight.w400, color: Colors.black),
         bodyText1: GoogleFonts.rubik(
-            fontSize: 14, fontWeight: FontWeight.w300, color: Colors.white70),
+            fontSize: logicalWidth / 28, fontWeight: FontWeight.w300, color: Colors.white70),
         bodyText2: GoogleFonts.rubik(
-            fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white54),
+            fontSize: logicalWidth / 33, fontWeight: FontWeight.w400, color: Colors.white54),
       ),
     ),
     debugShowCheckedModeBanner: false,
