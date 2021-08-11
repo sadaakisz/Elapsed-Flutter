@@ -28,36 +28,39 @@ class _SuccessDeleteCustomTimerState extends State<SuccessDeleteCustomTimer> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15.0))),
       backgroundColor: EColors.black,
       insetPadding: EdgeInsets.symmetric(horizontal: 70, vertical: 80),
-      child: FractionallySizedBox(
-        widthFactor: 0.78,
-        heightFactor: 0.26,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 25),
-            Icon(
-              Icons.check,
-              color: Colors.white,
-            ),
-            SizedBox(height: 15),
-            Text(
-              'Success!',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline3!
-                  .copyWith(color: Colors.white),
-            ),
-            SizedBox(height: 15),
-            Text(
-              'The routine was successfully deleted.',
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-          ],
+      child: Container(
+        height: height * 0.2,
+        width: width * 0.6,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
+              Text(
+                'Success!',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3!
+                    .copyWith(color: Colors.white),
+              ),
+              Text(
+                'The routine was successfully deleted.',
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+            ],
+          ),
         ),
       ),
     );
