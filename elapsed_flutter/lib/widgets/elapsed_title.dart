@@ -6,11 +6,12 @@ class ElapsedTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Column(
         children: [
           SizedBox(
-            height: 60,
+            height: width / 6.5,
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
@@ -20,7 +21,7 @@ class ElapsedTitle extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 4.0),
                 child: Image.asset(
                   'assets/DarkIcon.png',
-                  scale: 2.5,
+                  width: width / 11,
                 ),
               ),
               Padding(
@@ -30,14 +31,14 @@ class ElapsedTitle extends StatelessWidget {
                   style: GoogleFonts.rubik(
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
-                    fontSize: 22,
+                    fontSize: width / 18,
                   ),
                 ),
               )
             ],
           ),
           SizedBox(
-            height: 20,
+            height: width / 20,
           ),
           FractionallySizedBox(
             widthFactor: 0.7,
@@ -46,9 +47,6 @@ class ElapsedTitle extends StatelessWidget {
               height: 1,
             ),
           ),
-          SizedBox(
-            height: 20,
-          )
         ],
       ),
     );
