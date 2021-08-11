@@ -50,7 +50,6 @@ class _HomeState extends State<Home> {
 
   void _deleteRoutine(int index) {
     setState(() {
-      //TODO: Change index to the index of the list
       customRoutines.removeAt(index);
     });
   }
