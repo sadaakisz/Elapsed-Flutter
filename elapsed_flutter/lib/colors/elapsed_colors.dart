@@ -7,4 +7,6 @@ class EColors {
   static const Color aqua = const Color(0xFF2DDEBE);
   static const Color light_blue = const Color(0xFF5CFFD8);
   static const Color purple = const Color(0xFF8F7CFF);
+  static const Color light_aqua = const Color(0xFF8CFFE3);
+  static const Color light_purple = const Color(0xFFC2B8FF);
 }
