@@ -17,8 +17,14 @@ class _NavBarState extends State<NavBar> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 16.0),
-          child: Icon(Icons.bolt, color: Colors.white54),
+          child: GestureDetector(
+            child: Icon(Icons.bolt, color: Colors.white54),
+            onTap: () {
+              Navigator.of(context).pushNamed('/quick-timer');
+            },
+          ),
         ),
+        //TODO: Connect elapsed icon to create new custom routine
         Stack(
           alignment: Alignment.center,
           children: <Widget>[
@@ -35,6 +41,7 @@ class _NavBarState extends State<NavBar> {
         ),
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
+          //TODO: Connect icon to settings page
           child: Icon(Icons.settings, color: Colors.white54),
         ),
       ],
