@@ -1,21 +1,20 @@
 import 'dart:async';
-import 'package:elapsed_flutter/pages/quick_timer_settings.dart';
+import 'package:elapsed_flutter/pages/custom_timer_settings.dart';
 import 'package:elapsed_flutter/utils/time.dart';
 import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
 import 'package:elapsed_flutter/models/time_model.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class QuickTimerPage extends StatefulWidget {
-  QuickTimerPage({Key? key}) : super(key: key);
+class CustomTimerPage extends StatefulWidget {
+  CustomTimerPage({Key? key}) : super(key: key);
 
   @override
-  _QuickTimerPageState createState() => _QuickTimerPageState();
+  _CustomTimerPageState createState() => _CustomTimerPageState();
 }
 
-class _QuickTimerPageState extends State<QuickTimerPage> {
+class _CustomTimerPageState extends State<CustomTimerPage> {
   Timer? _timer;
 
   TimeModel timerTime = new TimeModel(minutes: 10, seconds: 0);
@@ -28,33 +27,15 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
   bool timerTimeTurn = true;
   bool isTimerRunning = false;
 
-  getMinutesFromSharedPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final timerMinutes = (prefs.getInt('timerMinutes'));
-    final breakMinutes = (prefs.getInt('breakMinutes'));
-
-    if (timerMinutes != null) {
-      setState(() {
-        timerTime.minutes = timerMinutes;
-      });
-    }
-    if (breakMinutes != null) {
-      setState(() {
-        breakTime.minutes = breakMinutes;
-      });
-    }
+  @override
+  void initState() {
+    super.initState();
     setState(() {
       timerTime.updateActual();
       breakTime.updateActual();
       timerTime.updateDisplay();
       breakTime.updateDisplay();
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getMinutesFromSharedPrefs();
   }
 
   void startTimerParam() {
@@ -124,12 +105,12 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
     if (_timer != null) _timer?.cancel();
   }
 
-  void editQuickTimerTime(BuildContext context) async {
+  void editCustomTimerTime(BuildContext context) async {
     resetTimer();
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => QuickTimerSettings(
+          builder: (context) => CustomTimerSettings(
               int.parse(timerTime.displayMinutes!),
               int.parse(breakTime.displayMinutes!))),
     );
@@ -171,12 +152,12 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
                     children: [
                       Icon(
                         Icons.stop_rounded,
-                        color: Colors.tealAccent.shade400,
+                        color: Colors.pink.shade600,
                       ),
                       Text(
-                        'Quick Routine',
+                        'Custom Routine',
                         style: TextStyle(
-                            color: Colors.tealAccent.shade400,
+                            color: Colors.pink.shade600,
                             fontWeight: FontWeight.w500,
                             fontSize: 20),
                       ),
@@ -202,7 +183,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
                 TimerIconButton(
                   icon: Icons.edit_outlined,
                   event: () {
-                    editQuickTimerTime(context);
+                    editCustomTimerTime(context);
                   },
                 ),
               ],
