@@ -8,10 +8,10 @@ class TutorialStart extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
-      height: height * 0.5,
+      height: height * 0.57,
       width: width,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TutorialCard(
             leading: Icon(Icons.bolt, color: Colors.white54),
@@ -64,8 +64,9 @@ class TutorialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.7,
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      width: width * 0.7,
       child: Column(
         children: <Widget>[
           Row(
@@ -81,7 +82,7 @@ class TutorialCard extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: 15),
+          SizedBox(height: width / 26),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
@@ -100,12 +101,13 @@ class TutorialDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.7,
-      child: Divider(
-        color: Colors.white70,
-        height: 70,
-        thickness: 0.5,
+    return Flexible(
+      child: FractionallySizedBox(
+        widthFactor: 0.7,
+        child: Divider(
+          color: Colors.white70,
+          thickness: 0.5,
+        ),
       ),
     );
   }
