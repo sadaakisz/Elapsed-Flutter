@@ -3,26 +3,20 @@ import 'package:elapsed_flutter/widgets/timer_button.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class QuickTimerSettings extends StatefulWidget {
+class CustomTimerSettings extends StatefulWidget {
   final int timerTime;
   final int breakTime;
-  const QuickTimerSettings(this.timerTime, this.breakTime);
+  const CustomTimerSettings(this.timerTime, this.breakTime);
   @override
-  _QuickTimerSettingsState createState() => _QuickTimerSettingsState();
+  _CustomTimerSettingsState createState() => _CustomTimerSettingsState();
 }
 
-class _QuickTimerSettingsState extends State<QuickTimerSettings> {
+class _CustomTimerSettingsState extends State<CustomTimerSettings> {
   final timerTimeController = TextEditingController();
   final breakTimeController = TextEditingController();
 
   int get timerTime => widget.timerTime;
   int get breakTime => widget.breakTime;
-
-  setMinutesSharedPrefs(timerTime, breakTime) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('timerMinutes', timerTime);
-    await prefs.setInt('breakMinutes', breakTime);
-  }
 
   @override
   void initState() {
@@ -52,7 +46,7 @@ class _QuickTimerSettingsState extends State<QuickTimerSettings> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('QUICK ROUTINE',
+                    Text('CUSTOM ROUTINE',
                         style: Theme.of(context).textTheme.headline1),
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
@@ -118,9 +112,7 @@ class _QuickTimerSettingsState extends State<QuickTimerSettings> {
                         event: () {
                           if (timerTimeController.text != '' &&
                               breakTimeController.text != '') {
-                            setMinutesSharedPrefs(
-                                int.parse(timerTimeController.text),
-                                int.parse(breakTimeController.text));
+                            //TODO: Update the custom timer object's time
                             Navigator.pop(context, [
                               timerTimeController.text,
                               breakTimeController.text
