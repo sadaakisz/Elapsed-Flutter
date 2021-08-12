@@ -43,18 +43,18 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
         breakTime.minutes = breakMinutes;
       });
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getMinutesFromSharedPrefs();
     setState(() {
       timerTime.updateActual();
       breakTime.updateActual();
       timerTime.updateDisplay();
       breakTime.updateDisplay();
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getMinutesFromSharedPrefs();
   }
 
   void startTimerParam() {
@@ -133,14 +133,16 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
               int.parse(timerTime.displayMinutes!),
               int.parse(breakTime.displayMinutes!))),
     );
-    setState(() {
-      timerTime.minutes = int.parse(result[0]);
-      breakTime.minutes = int.parse(result[1]);
-      timerTime.updateActual();
-      breakTime.updateActual();
-      timerTime.updateDisplay();
-      breakTime.updateDisplay();
-    });
+    if (result != null) {
+      setState(() {
+        timerTime.minutes = int.parse(result[0]);
+        breakTime.minutes = int.parse(result[1]);
+        timerTime.updateActual();
+        breakTime.updateActual();
+        timerTime.updateDisplay();
+        breakTime.updateDisplay();
+      });
+    }
   }
 
   @override
