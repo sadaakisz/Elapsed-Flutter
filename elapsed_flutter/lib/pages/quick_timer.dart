@@ -252,10 +252,11 @@ class TimerIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return IconButton(
       icon: Icon(
         icon,
-        size: 40,
+        size: width / 10,
       ),
       hoverColor: Colors.black,
       highlightColor: Colors.black,
