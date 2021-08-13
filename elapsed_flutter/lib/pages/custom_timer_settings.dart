@@ -1,7 +1,6 @@
 import 'package:elapsed_flutter/widgets/settings_textfield.dart';
 import 'package:elapsed_flutter/widgets/timer_button.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomTimerSettings extends StatefulWidget {
   final int timerTime;

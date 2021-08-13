@@ -11,6 +11,7 @@ class EmptyStart extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
+        SizedBox(height: width * 0.2),
         FractionallySizedBox(
           widthFactor: 0.65,
           child: UnDraw(
@@ -19,13 +20,13 @@ class EmptyStart extends StatelessWidget {
             height: width / 2,
           ),
         ),
-        Flexible(child: FractionallySizedBox(heightFactor: 0.6)),
+        SizedBox(height: width * 0.2),
         Text(
           'There are no custom routines.\nExplore all the options for your own\npomodoro timer for all your activities!',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyText1,
         ),
-        Flexible(child: FractionallySizedBox(heightFactor: 0.3)),
+        SizedBox(height: width * 0.1),
         Icon(
           Icons.expand_more,
           color: Colors.white54,
