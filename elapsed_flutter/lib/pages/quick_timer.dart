@@ -1,9 +1,10 @@
 import 'dart:async';
+
+import 'package:elapsed_flutter/models/time_model.dart';
 import 'package:elapsed_flutter/pages/quick_timer_settings.dart';
 import 'package:elapsed_flutter/utils/time.dart';
 import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
-import 'package:elapsed_flutter/models/time_model.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -153,6 +154,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black87,
       body: Padding(
@@ -175,10 +177,11 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
                       ),
                       Text(
                         'Quick Routine',
-                        style: TextStyle(
-                            color: Colors.tealAccent.shade400,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20),
+                        style: Theme.of(context).textTheme.headline3!.copyWith(
+                              color: Colors.tealAccent.shade400,
+                              fontWeight: FontWeight.w500,
+                              fontSize: width / 20,
+                            ),
                       ),
                     ],
                   ),
