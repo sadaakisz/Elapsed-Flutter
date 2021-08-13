@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'package:elapsed_flutter/models/time_model.dart';
 import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/pages/custom_timer_settings.dart';
 import 'package:elapsed_flutter/utils/time.dart';
 import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
-import 'package:elapsed_flutter/models/time_model.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
 import 'package:flutter/material.dart';
 
@@ -140,6 +140,7 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black87,
       body: Padding(
@@ -162,10 +163,11 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
                       ),
                       Text(
                         customRoutine!.name,
-                        style: TextStyle(
-                            color: customRoutine!.labelColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20),
+                        style: Theme.of(context).textTheme.headline3!.copyWith(
+                              color: Colors.pink.shade600,
+                              fontWeight: FontWeight.w500,
+                              fontSize: width / 20,
+                            ),
                       ),
                     ],
                   ),
@@ -236,10 +238,11 @@ class TimerIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return IconButton(
       icon: Icon(
         icon,
-        size: 40,
+        size: width / 10,
       ),
       hoverColor: Colors.black,
       highlightColor: Colors.black,
