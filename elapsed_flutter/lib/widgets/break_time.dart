@@ -20,7 +20,7 @@ class BreakTime extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 5.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Icon(
                 Icons.stop_rounded,
