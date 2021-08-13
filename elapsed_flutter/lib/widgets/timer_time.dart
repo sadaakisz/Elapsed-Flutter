@@ -13,8 +13,9 @@ class TimerTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Container(
-      transform: Matrix4.translationValues(-5.0, 0.0, 0.0),
+      transform: Matrix4.translationValues(-2.0, 0.0, 0.0),
       child: Column(
         verticalDirection: VerticalDirection.up,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,7 +23,8 @@ class TimerTime extends StatelessWidget {
           Text(
             '$displayTimerSeconds',
             style: GoogleFonts.aldrich(
-                textStyle: TextStyle(color: Colors.white, fontSize: 120)),
+                textStyle:
+                    TextStyle(color: Colors.white, fontSize: width * 0.3)),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
@@ -31,7 +33,7 @@ class TimerTime extends StatelessWidget {
               style: GoogleFonts.aldrich(
                   textStyle: TextStyle(
                 color: Colors.white,
-                fontSize: 120,
+                fontSize: width * 0.3,
                 height: 0.20,
               )),
             ),
@@ -39,7 +41,8 @@ class TimerTime extends StatelessWidget {
           Text(
             '$displayTimerMinutes',
             style: GoogleFonts.aldrich(
-                textStyle: TextStyle(color: Colors.white, fontSize: 120)),
+                textStyle:
+                    TextStyle(color: Colors.white, fontSize: width * 0.3)),
           ),
         ],
       ),
