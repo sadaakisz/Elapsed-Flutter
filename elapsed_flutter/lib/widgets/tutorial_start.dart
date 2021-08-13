@@ -1,52 +1,67 @@
 import 'package:flutter/material.dart';
 
 class TutorialStart extends StatelessWidget {
-  const TutorialStart({Key? key}) : super(key: key);
+  const TutorialStart({Key? key, required this.onDismiss}) : super(key: key);
+
+  final VoidCallback onDismiss;
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      height: height * 0.57,
-      width: width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TutorialCard(
-            leading: Icon(Icons.bolt, color: Colors.white54),
-            title: 'QUICK ROUTINE',
-            message:
-                'Want a no-brainer pomodoro timer? Create a quick routine by specifying your productive minutes and your break time.',
+    return Stack(
+      children: [
+        Positioned(
+          right: width * 0.15,
+          child: GestureDetector(
+            child: Icon(Icons.close),
+            onTap: () {
+              onDismiss();
+            },
           ),
-          TutorialDivider(),
-          TutorialCard(
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 6.0),
-              child: Container(
-                width: 35,
-                height: 35,
-                child: Image.asset(
-                  'assets/TutorialDarkIcon.png',
-                ),
+        ),
+        Container(
+          height: height * 0.57,
+          width: width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TutorialCard(
+                leading: Icon(Icons.bolt, color: Colors.white54),
+                title: 'QUICK ROUTINE',
+                message:
+                    'Want a no-brainer pomodoro timer? Create a quick routine by specifying your productive minutes and your break time.',
               ),
-            ),
-            title: 'CUSTOM ROUTINE',
-            message:
-                'Customizability? Explore all the options for your own pomodoro timer for all your activities!',
+              TutorialDivider(),
+              TutorialCard(
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: Container(
+                    width: 35,
+                    height: 35,
+                    child: Image.asset(
+                      'assets/TutorialDarkIcon.png',
+                    ),
+                  ),
+                ),
+                title: 'CUSTOM ROUTINE',
+                message:
+                    'Customizability? Explore all the options for your own pomodoro timer for all your activities!',
+              ),
+              TutorialDivider(),
+              TutorialCard(
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 7.0),
+                  child: Icon(Icons.settings, color: Colors.white54),
+                ),
+                title: 'APP SETTINGS',
+                message:
+                    'Tweak ALL the corners of the app, from the background, to timer font size and everything in between.',
+              ),
+            ],
           ),
-          TutorialDivider(),
-          TutorialCard(
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 7.0),
-              child: Icon(Icons.settings, color: Colors.white54),
-            ),
-            title: 'APP SETTINGS',
-            message:
-                'Tweak ALL the corners of the app, from the background, to timer font size and everything in between.',
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

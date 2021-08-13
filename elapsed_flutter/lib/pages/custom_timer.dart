@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:elapsed_flutter/models/time_model.dart';
+import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/pages/custom_timer_settings.dart';
 import 'package:elapsed_flutter/utils/time.dart';
 import 'package:elapsed_flutter/utils/timer_button.dart';
@@ -9,7 +9,9 @@ import 'package:elapsed_flutter/widgets/timer_time.dart';
 import 'package:flutter/material.dart';
 
 class CustomTimerPage extends StatefulWidget {
-  CustomTimerPage({Key? key}) : super(key: key);
+  final CustomRoutine? customRoutine;
+
+  CustomTimerPage({Key? key, this.customRoutine}) : super(key: key);
 
   @override
   _CustomTimerPageState createState() => _CustomTimerPageState();
@@ -17,6 +19,7 @@ class CustomTimerPage extends StatefulWidget {
 
 class _CustomTimerPageState extends State<CustomTimerPage> {
   Timer? _timer;
+  CustomRoutine? get customRoutine => widget.customRoutine;
 
   TimeModel timerTime = new TimeModel(minutes: 10, seconds: 0);
   TimeModel breakTime = new TimeModel(minutes: 5, seconds: 0);
@@ -32,6 +35,8 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
   void initState() {
     super.initState();
     setState(() {
+      timerTime.minutes = customRoutine!.timerTime;
+      breakTime.minutes = customRoutine!.breakTime;
       timerTime.updateActual();
       breakTime.updateActual();
       timerTime.updateDisplay();
@@ -154,10 +159,10 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
                     children: [
                       Icon(
                         Icons.stop_rounded,
-                        color: Colors.pink.shade600,
+                        color: customRoutine!.labelColor,
                       ),
                       Text(
-                        'Custom Routine',
+                        customRoutine!.name,
                         style: Theme.of(context).textTheme.headline3!.copyWith(
                               color: Colors.pink.shade600,
                               fontWeight: FontWeight.w500,
