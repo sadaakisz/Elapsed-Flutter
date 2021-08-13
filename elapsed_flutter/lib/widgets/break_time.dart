@@ -13,6 +13,7 @@ class BreakTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -36,10 +37,14 @@ class BreakTime extends StatelessWidget {
             ],
           ),
         ),
-        Text(
-          '$displayBreakMinutes:$displayBreakSeconds',
-          style: GoogleFonts.aldrich(
-              textStyle: TextStyle(color: Colors.white38, fontSize: 40)),
+        Padding(
+          padding: const EdgeInsets.only(left: 5.0),
+          child: Text(
+            '$displayBreakMinutes:$displayBreakSeconds',
+            style: GoogleFonts.aldrich(
+                textStyle:
+                    TextStyle(color: Colors.white38, fontSize: width / 10)),
+          ),
         ),
       ],
     );
