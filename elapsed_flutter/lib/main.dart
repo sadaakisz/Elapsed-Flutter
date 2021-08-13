@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:wakelock/wakelock.dart';
 
 void main() {
   var pixelRatio = window.devicePixelRatio;
@@ -104,6 +105,7 @@ class Elapsed extends StatefulWidget {
 class _ElapsedState extends State<Elapsed> {
   @override
   Widget build(BuildContext context) {
+    Wakelock.enable();
     return AnimatedSplashScreen(
       //TODO: Change splash to Widget
       splash: 'assets/DarkIcon.png',
