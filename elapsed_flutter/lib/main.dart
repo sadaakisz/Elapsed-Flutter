@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
-import 'package:elapsed_flutter/pages/home.dart';
+import 'package:elapsed_flutter/pages/app_settings.dart';
 import 'package:elapsed_flutter/pages/quick_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,9 +72,11 @@ void main() {
               fontWeight: FontWeight.w500,
               color: Colors.white70),
           overline: GoogleFonts.rubik(
-              fontSize: logicalWidth / 28,
-              fontWeight: FontWeight.w400,
-              color: Colors.black),
+            fontSize: logicalWidth / 28,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+            decoration: TextDecoration.underline,
+          ),
           bodyText1: GoogleFonts.rubik(
               fontSize: logicalWidth / 28,
               fontWeight: FontWeight.w300,
@@ -109,7 +111,7 @@ class _ElapsedState extends State<Elapsed> {
     return AnimatedSplashScreen(
       //TODO: Change splash to Widget
       splash: 'assets/DarkIcon.png',
-      nextScreen: Home(),
+      nextScreen: AppSettings(),
       backgroundColor: EColors.black,
       //TODO: Change duration accordingly
       duration: 1000,
