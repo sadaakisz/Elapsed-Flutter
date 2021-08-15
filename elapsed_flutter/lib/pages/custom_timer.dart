@@ -118,7 +118,8 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
       MaterialPageRoute(
           builder: (context) => CustomTimerSettings(
               int.parse(timerTime.displayMinutes!),
-              int.parse(breakTime.displayMinutes!))),
+              int.parse(breakTime.displayMinutes!),
+              customRoutine!.name)),
     );
     if (result != null) {
       setState(() {
