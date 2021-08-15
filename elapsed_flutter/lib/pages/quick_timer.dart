@@ -19,7 +19,7 @@ class QuickTimerPage extends StatefulWidget {
 class _QuickTimerPageState extends State<QuickTimerPage> {
   Timer? _timer;
 
-  TimeModel timerTime = new TimeModel(minutes: 10, seconds: 0);
+  TimeModel timerTime = new TimeModel(minutes: 25, seconds: 0);
   TimeModel breakTime = new TimeModel(minutes: 5, seconds: 0);
   Time time = new Time();
 

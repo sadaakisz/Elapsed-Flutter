@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/models/custom_routine.dart';
+import 'package:elapsed_flutter/pages/custom_timer.dart';
 import 'package:elapsed_flutter/widgets/home_custom_timer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,15 +40,26 @@ class _HomeCarouselState extends State<HomeCarousel> {
             },
           ),
           itemBuilder: (context, index, realIdx) {
-            return Flex(
-              direction: Axis.vertical,
-              children: [
-                HomeCustomTimer(
-                  routine: widget.customRoutines[index],
-                  onDelete: widget.onDelete,
-                  index: index,
-                ),
-              ],
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CustomTimerPage(
+                        customRoutine: widget.customRoutines[index],
+                      ),
+                    ));
+              },
+              child: Flex(
+                direction: Axis.vertical,
+                children: [
+                  HomeCustomTimer(
+                    routine: widget.customRoutines[index],
+                    onDelete: widget.onDelete,
+                    index: index,
+                  ),
+                ],
+              ),
             );
           },
         ),
