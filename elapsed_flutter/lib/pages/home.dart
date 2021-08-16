@@ -26,8 +26,10 @@ class _HomeState extends State<Home> {
 
   String tutorialDismissed = 'NOT DISMISSED';
 
+  late SharedPreferences prefs;
+
   _getTutorialState() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     setState(() {
       tutorialDismissed = (prefs.containsKey('tutorialDismissed')
           ? prefs.getString('tutorialDismissed')
@@ -36,7 +38,6 @@ class _HomeState extends State<Home> {
   }
 
   void _dismissTutorial() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       tutorialDismissed = 'DISMISSED';
     });
