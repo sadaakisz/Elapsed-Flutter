@@ -1,15 +1,16 @@
-import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({Key? key}) : super(key: key);
+  final Color accentColor;
+  const NavBar({Key? key, required this.accentColor}) : super(key: key);
 
   @override
   _NavBarState createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> {
+  Color get accentColor => widget.accentColor;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -33,7 +34,7 @@ class _NavBarState extends State<NavBar> {
               'assets/AddIconBG.svg',
               width: width / 2.1,
               //TODO: Make this color dynamic by using SharedPref value
-              color: EColors.green,
+              color: accentColor,
             ),
             Image.asset(
               'assets/GreyIcon.png',
@@ -44,7 +45,12 @@ class _NavBarState extends State<NavBar> {
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           //TODO: Connect icon to settings page
-          child: Icon(Icons.settings, color: Colors.white54),
+          child: GestureDetector(
+            child: Icon(Icons.settings, color: Colors.white54),
+            onTap: () {
+              Navigator.of(context).pushNamed('/settings');
+            },
+          ),
         ),
       ],
     );
