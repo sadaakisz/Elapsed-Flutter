@@ -1,5 +1,6 @@
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/models/custom_routine.dart';
+import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/widgets/elapsed_title.dart';
 import 'package:elapsed_flutter/widgets/empty_start.dart';
 import 'package:elapsed_flutter/widgets/home_carousel.dart';
@@ -26,6 +27,9 @@ class _HomeState extends State<Home> {
 
   String tutorialDismissed = 'NOT DISMISSED';
 
+  Color backgroundColor = EColors.black;
+  Color accentColor = EColors.green;
+
   late SharedPreferences prefs;
 
   _getTutorialState() async {
@@ -44,16 +48,23 @@ class _HomeState extends State<Home> {
     await prefs.setString('tutorialDismissed', tutorialDismissed);
   }
 
+  _getColors() async {
+    prefs = await SharedPreferences.getInstance();
+    backgroundColor = (prefs.getString('backgroundColor'))!.toColorFromHex();
+    accentColor = (prefs.getString('homePageAccentColor'))!.toColorFromHex();
+  }
+
   @override
   void initState() {
     _getTutorialState();
+    _getColors();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EColors.black,
+      backgroundColor: backgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,7 +89,7 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: NavBar(accentColor: accentColor),
     );
   }
 
