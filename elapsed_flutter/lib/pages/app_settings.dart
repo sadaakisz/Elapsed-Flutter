@@ -19,8 +19,10 @@ class _AppSettingsState extends State<AppSettings> {
   Color quickRoutineAccentColor = Colors.tealAccent.shade400;
   Color homePageAccentColor = EColors.green;
 
+  late SharedPreferences prefs;
+
   _getColors() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     setState(() {
       backgroundColor = (prefs.getString('backgroundColor')!.toColorFromHex());
       timerFontColor = (prefs.getString('timerFontColor')!.toColorFromHex());
@@ -35,32 +37,57 @@ class _AppSettingsState extends State<AppSettings> {
     setState(() {
       backgroundColor = color;
     });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('backgroundColor', color.toHex());
+  }
+
+  resetBackgroundColor() async {
+    setState(() {
+      backgroundColor = EColors.black;
+    });
+    await prefs.setString('backgroundColor', EColors.black.toHex());
   }
 
   setTimerFontColor(Color color) async {
     setState(() {
       timerFontColor = color;
     });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('timerFontColor', color.toHex());
+  }
+
+  resetTimerFontColor() async {
+    setState(() {
+      timerFontColor = Colors.white;
+    });
+    await prefs.setString('timerFontColor', Colors.white.toHex());
   }
 
   setQuickRoutineAccentColor(Color color) async {
     setState(() {
       quickRoutineAccentColor = color;
     });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('quickRoutineAccentColor', color.toHex());
+  }
+
+  resetQuickRoutineAccentColor() async {
+    setState(() {
+      quickRoutineAccentColor = Colors.tealAccent.shade400;
+    });
+    await prefs.setString(
+        'quickRoutineAccentColor', Colors.tealAccent.shade400.toHex());
   }
 
   setHomePageAccentColor(Color color) async {
     setState(() {
       homePageAccentColor = color;
     });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('homePageAccentColor', color.toHex());
+  }
+
+  resetHomePageAccentColor() async {
+    setState(() {
+      homePageAccentColor = EColors.green;
+    });
+    await prefs.setString('homePageAccentColor', EColors.green.toHex());
   }
 
   @override
@@ -95,6 +122,7 @@ class _AppSettingsState extends State<AppSettings> {
                     displayColor: backgroundColor,
                     hexText: backgroundColor.toHex(),
                     onColorChange: setBackgroundColor,
+                    onColorReset: resetBackgroundColor,
                   ),
                   _ImageSelector(),
                   _Subtitle(subtitleText: 'Timer'),
@@ -103,6 +131,7 @@ class _AppSettingsState extends State<AppSettings> {
                     displayColor: timerFontColor,
                     hexText: timerFontColor.toHex(),
                     onColorChange: setTimerFontColor,
+                    onColorReset: resetTimerFontColor,
                   ),
                   _FontOption(selectedFont: 'Aldrich'),
                   _FontSizeOption(fontSize: '120'),
@@ -111,6 +140,7 @@ class _AppSettingsState extends State<AppSettings> {
                     displayColor: quickRoutineAccentColor,
                     hexText: quickRoutineAccentColor.toHex(),
                     onColorChange: setQuickRoutineAccentColor,
+                    onColorReset: resetQuickRoutineAccentColor,
                   ),
                   _Subtitle(subtitleText: 'Home page'),
                   ColorOption(
@@ -118,6 +148,7 @@ class _AppSettingsState extends State<AppSettings> {
                     displayColor: homePageAccentColor,
                     hexText: homePageAccentColor.toHex(),
                     onColorChange: setHomePageAccentColor,
+                    onColorReset: resetHomePageAccentColor,
                   ),
                   SizedBox(height: 100),
                 ],
@@ -210,12 +241,14 @@ class ColorOption extends StatefulWidget {
   final Color displayColor;
   final String hexText;
   final Function(Color) onColorChange;
+  final VoidCallback onColorReset;
   const ColorOption({
     Key? key,
     required this.colorText,
     required this.displayColor,
     required this.hexText,
     required this.onColorChange,
+    required this.onColorReset,
   }) : super(key: key);
 
   @override
@@ -249,21 +282,21 @@ class _ColorOptionState extends State<ColorOption> {
               Flexible(
                 flex: 9,
                 child: CustomColorButton(
-                  darkMode: true,
-                  color: displayColor,
-                  boxShape: BoxShape.rectangle,
-                  height: 40,
-                  decoration: BoxDecoration(
+                    darkMode: true,
                     color: displayColor,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  config: ColorPickerConfig(enableEyePicker: false),
-                  onColorChanged: (value) => setState(
-                    () {
-                      widget.onColorChange(value);
-                    },
-                  ),
-                ),
+                    boxShape: BoxShape.rectangle,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: displayColor,
+                      border: Border.all(color: Colors.white38, width: 0.5),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    config: ColorPickerConfig(enableEyePicker: false),
+                    onColorChanged: (value) {
+                      setState(() {
+                        widget.onColorChange(value);
+                      });
+                    }),
               ),
               SizedBox(width: 18),
               Flexible(
@@ -279,7 +312,6 @@ class _ColorOptionState extends State<ColorOption> {
                       ),
                     ),
                     Text(
-                      //TODO: Change text according to color selected
                       hexText,
                       style: Theme.of(context).textTheme.overline,
                     )
@@ -289,8 +321,11 @@ class _ColorOptionState extends State<ColorOption> {
               SizedBox(width: 18),
               GestureDetector(
                 child: Icon(Icons.restart_alt),
-                //TODO: Pass an event or VoidCallback
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    widget.onColorReset();
+                  });
+                },
               ),
             ],
           ),
