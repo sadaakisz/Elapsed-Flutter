@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:elapsed_flutter/models/time_model.dart';
 import 'package:elapsed_flutter/pages/quick_timer_settings.dart';
+import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/utils/time.dart';
 import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
@@ -28,6 +29,16 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
 
   bool timerTimeTurn = true;
   bool isTimerRunning = false;
+
+  Color timerFontColor = Colors.white;
+  Color quickRoutineAccentColor = Colors.tealAccent.shade400;
+
+  getSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    timerFontColor = prefs.getString('timerFontColor')!.toColorFromHex();
+    quickRoutineAccentColor =
+        prefs.getString('quickRoutineAccentColor')!.toColorFromHex();
+  }
 
   getMinutesFromSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -56,6 +67,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
   void initState() {
     super.initState();
     getMinutesFromSharedPrefs();
+    getSettings();
   }
 
   void startTimerParam() {
@@ -173,12 +185,12 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
                     children: [
                       Icon(
                         Icons.stop_rounded,
-                        color: Colors.tealAccent.shade400,
+                        color: quickRoutineAccentColor,
                       ),
                       Text(
                         'Quick Routine',
                         style: Theme.of(context).textTheme.headline3!.copyWith(
-                              color: Colors.tealAccent.shade400,
+                              color: quickRoutineAccentColor,
                               fontWeight: FontWeight.w500,
                               fontSize: width / 20,
                             ),
@@ -200,8 +212,10 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
               textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
                 TimerTime(
-                    displayTimerMinutes: timerTime.displayMinutes!,
-                    displayTimerSeconds: timerTime.displaySeconds!),
+                  displayTimerMinutes: timerTime.displayMinutes!,
+                  displayTimerSeconds: timerTime.displaySeconds!,
+                  fontColor: timerFontColor,
+                ),
                 TimerIconButton(
                   icon: Icons.edit_outlined,
                   event: () {
