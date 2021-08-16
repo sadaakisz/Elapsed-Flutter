@@ -100,7 +100,7 @@ class _AppSettingsState extends State<AppSettings> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: EColors.black,
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: width / 14),
@@ -162,7 +162,10 @@ class _AppSettingsState extends State<AppSettings> {
                     gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        colors: [EColors.black, EColors.black.withOpacity(0)]),
+                        colors: [
+                          backgroundColor,
+                          backgroundColor.withOpacity(0)
+                        ]),
                   ),
                 ),
               ),
@@ -186,7 +189,9 @@ class _AppSettingsState extends State<AppSettings> {
                           ),
                         ),
                         //TODO: Implement Save changes
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).pushReplacementNamed('/home');
+                        },
                       ),
                     ),
                   ],
