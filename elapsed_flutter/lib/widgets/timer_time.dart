@@ -6,10 +6,12 @@ class TimerTime extends StatelessWidget {
     Key? key,
     required this.displayTimerMinutes,
     required this.displayTimerSeconds,
+    required this.fontColor,
   }) : super(key: key);
 
   final String displayTimerMinutes;
   final String displayTimerSeconds;
+  final Color fontColor;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,7 @@ class TimerTime extends StatelessWidget {
           Text(
             '$displayTimerSeconds',
             style: GoogleFonts.aldrich(
-                textStyle:
-                    TextStyle(color: Colors.white, fontSize: width * 0.3)),
+                textStyle: TextStyle(color: fontColor, fontSize: width * 0.3)),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
@@ -32,7 +33,7 @@ class TimerTime extends StatelessWidget {
               '..',
               style: GoogleFonts.aldrich(
                   textStyle: TextStyle(
-                color: Colors.white,
+                color: fontColor,
                 fontSize: width * 0.3,
                 height: 0.20,
               )),
@@ -41,8 +42,7 @@ class TimerTime extends StatelessWidget {
           Text(
             '$displayTimerMinutes',
             style: GoogleFonts.aldrich(
-                textStyle:
-                    TextStyle(color: Colors.white, fontSize: width * 0.3)),
+                textStyle: TextStyle(color: fontColor, fontSize: width * 0.3)),
           ),
         ],
       ),
