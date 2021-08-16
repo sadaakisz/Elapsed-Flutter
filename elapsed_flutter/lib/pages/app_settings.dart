@@ -1,6 +1,10 @@
+import 'package:cyclop/cyclop.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/utils/color_utils.dart';
+import 'package:elapsed_flutter/widgets/custom_color_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings extends StatefulWidget {
   const AppSettings({Key? key}) : super(key: key);
@@ -10,6 +14,61 @@ class AppSettings extends StatefulWidget {
 }
 
 class _AppSettingsState extends State<AppSettings> {
+  Color backgroundColor = EColors.black;
+  Color timerFontColor = Colors.white;
+  Color quickRoutineAccentColor = Colors.tealAccent.shade400;
+  Color homePageAccentColor = EColors.green;
+
+  _getColors() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      backgroundColor = (prefs.getString('backgroundColor')!.toColorFromHex());
+      timerFontColor = (prefs.getString('timerFontColor')!.toColorFromHex());
+      quickRoutineAccentColor =
+          (prefs.getString('quickRoutineAccentColor')!.toColorFromHex());
+      homePageAccentColor =
+          (prefs.getString('homePageAccentColor')!.toColorFromHex());
+    });
+  }
+
+  setBackgroundColor(Color color) async {
+    setState(() {
+      backgroundColor = color;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('backgroundColor', color.toHex());
+  }
+
+  setTimerFontColor(Color color) async {
+    setState(() {
+      timerFontColor = color;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('timerFontColor', color.toHex());
+  }
+
+  setQuickRoutineAccentColor(Color color) async {
+    setState(() {
+      quickRoutineAccentColor = color;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('quickRoutineAccentColor', color.toHex());
+  }
+
+  setHomePageAccentColor(Color color) async {
+    setState(() {
+      homePageAccentColor = color;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('homePageAccentColor', color.toHex());
+  }
+
+  @override
+  void initState() {
+    _getColors();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -31,30 +90,34 @@ class _AppSettingsState extends State<AppSettings> {
                   ),
                   SizedBox(height: 8),
                   _Subtitle(subtitleText: 'General'),
-                  _ColorOption(
+                  ColorOption(
                     colorText: 'Background Color',
-                    displayColor: EColors.black,
-                    hexText: '#1A1A1A',
+                    displayColor: backgroundColor,
+                    hexText: backgroundColor.toHex(),
+                    onColorChange: setBackgroundColor,
                   ),
                   _ImageSelector(),
                   _Subtitle(subtitleText: 'Timer'),
-                  _ColorOption(
+                  ColorOption(
                     colorText: 'Timer Font Color',
-                    displayColor: Colors.white,
-                    hexText: '#EEEEEE',
+                    displayColor: timerFontColor,
+                    hexText: timerFontColor.toHex(),
+                    onColorChange: setTimerFontColor,
                   ),
                   _FontOption(selectedFont: 'Aldrich'),
                   _FontSizeOption(fontSize: '120'),
-                  _ColorOption(
+                  ColorOption(
                     colorText: 'Quick Routine Accent Color',
-                    displayColor: Colors.tealAccent.shade400,
-                    hexText: '#2DDEBE',
+                    displayColor: quickRoutineAccentColor,
+                    hexText: quickRoutineAccentColor.toHex(),
+                    onColorChange: setQuickRoutineAccentColor,
                   ),
                   _Subtitle(subtitleText: 'Home page'),
-                  _ColorOption(
+                  ColorOption(
                     colorText: 'Home Page Accent Color',
-                    displayColor: EColors.green,
-                    hexText: '#C0E8A1',
+                    displayColor: homePageAccentColor,
+                    hexText: homePageAccentColor.toHex(),
+                    onColorChange: setHomePageAccentColor,
                   ),
                   SizedBox(height: 100),
                 ],
@@ -78,25 +141,6 @@ class _AppSettingsState extends State<AppSettings> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Container(
-                      transform: Matrix4.translationValues(-0.5, 0.0, 0.0),
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                      child: GestureDetector(
-                        child: Icon(
-                          Icons.delete_outline_outlined,
-                          color: EColors.green,
-                          size: 25,
-                        ),
-                        //TODO: Implement discard changes
-                        onTap: () {},
-                      ),
-                    ),
-                    SizedBox(width: 12),
                     Expanded(
                       child: GestureDetector(
                         child: Container(
@@ -161,16 +205,32 @@ class _Subtitle extends StatelessWidget {
   }
 }
 
-class _ColorOption extends StatelessWidget {
+class ColorOption extends StatefulWidget {
   final String colorText;
   final Color displayColor;
   final String hexText;
-  const _ColorOption({
+  final Function(Color) onColorChange;
+  const ColorOption({
     Key? key,
     required this.colorText,
     required this.displayColor,
     required this.hexText,
+    required this.onColorChange,
   }) : super(key: key);
+
+  @override
+  _ColorOptionState createState() => _ColorOptionState();
+}
+
+class _ColorOptionState extends State<ColorOption> {
+  String get colorText => widget.colorText;
+  Color get displayColor => widget.displayColor;
+  String get hexText => widget.hexText;
+
+  setColorSharedPrefs(name, value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(name, value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,12 +248,21 @@ class _ColorOption extends StatelessWidget {
             children: <Widget>[
               Flexible(
                 flex: 9,
-                child: Container(
+                child: CustomColorButton(
+                  darkMode: true,
+                  color: displayColor,
+                  boxShape: BoxShape.rectangle,
                   height: 40,
                   decoration: BoxDecoration(
                     color: displayColor,
                     border: Border.all(color: Colors.white38, width: 0.5),
                     borderRadius: BorderRadius.circular(5),
+                  ),
+                  config: ColorPickerConfig(enableEyePicker: false),
+                  onColorChanged: (value) => setState(
+                    () {
+                      widget.onColorChange(value);
+                    },
                   ),
                 ),
               ),
