@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/pages/app_settings.dart';
+import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/pages/quick_timer.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +95,9 @@ void main() {
       initialRoute: '/',
       routes: {
         '/': (context) => Elapsed(),
+        '/home': (context) => Home(),
         '/quick-timer': (context) => QuickTimerPage(),
+        '/settings': (context) => AppSettings(),
       },
     ));
   });
@@ -127,13 +130,13 @@ class _ElapsedState extends State<Elapsed> {
     return AnimatedSplashScreen(
       //TODO: Change splash to Widget
       splash: 'assets/DarkIcon.png',
-      nextScreen: AppSettings(),
+      nextScreen: Home(),
       backgroundColor: EColors.black,
       //TODO: Change duration accordingly
       duration: 1000,
       curve: Curves.easeInOut,
       splashTransition: SplashTransition.fadeTransition,
-      pageTransitionType: PageTransitionType.rightToLeft,
+      pageTransitionType: PageTransitionType.bottomToTop,
     );
   }
 }
