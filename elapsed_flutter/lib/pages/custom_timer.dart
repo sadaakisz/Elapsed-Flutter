@@ -1,12 +1,15 @@
 import 'dart:async';
-import 'package:elapsed_flutter/models/time_model.dart';
+
 import 'package:elapsed_flutter/models/custom_routine.dart';
+import 'package:elapsed_flutter/models/time_model.dart';
 import 'package:elapsed_flutter/pages/custom_timer_settings.dart';
+import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/utils/time.dart';
 import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomTimerPage extends StatefulWidget {
   final CustomRoutine? customRoutine;
@@ -30,6 +33,16 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
 
   bool timerTimeTurn = true;
   bool isTimerRunning = false;
+
+  Color timerFontColor = Colors.white;
+  Color quickRoutineAccentColor = Colors.tealAccent.shade400;
+
+  getSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    timerFontColor = prefs.getString('timerFontColor')!.toColorFromHex();
+    quickRoutineAccentColor =
+        prefs.getString('quickRoutineAccentColor')!.toColorFromHex();
+  }
 
   @override
   void initState() {
@@ -187,8 +200,10 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
               textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
                 TimerTime(
-                    displayTimerMinutes: timerTime.displayMinutes!,
-                    displayTimerSeconds: timerTime.displaySeconds!),
+                  displayTimerMinutes: timerTime.displayMinutes!,
+                  displayTimerSeconds: timerTime.displaySeconds!,
+                  fontColor: timerFontColor,
+                ),
                 TimerIconButton(
                   icon: Icons.edit_outlined,
                   event: () {
