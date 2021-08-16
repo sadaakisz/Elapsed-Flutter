@@ -33,7 +33,6 @@ class _NavBarState extends State<NavBar> {
             SvgPicture.asset(
               'assets/AddIconBG.svg',
               width: width / 2.1,
-              //TODO: Make this color dynamic by using SharedPref value
               color: accentColor,
             ),
             Image.asset(
@@ -44,7 +43,6 @@ class _NavBarState extends State<NavBar> {
         ),
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
-          //TODO: Connect icon to settings page
           child: GestureDetector(
             child: Icon(Icons.settings, color: Colors.white54),
             onTap: () {

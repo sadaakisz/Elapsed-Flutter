@@ -188,7 +188,6 @@ class _AppSettingsState extends State<AppSettings> {
                                 style: Theme.of(context).textTheme.button),
                           ),
                         ),
-                        //TODO: Implement Save changes
                         onTap: () {
                           Navigator.of(context).pushReplacementNamed('/home');
                         },
