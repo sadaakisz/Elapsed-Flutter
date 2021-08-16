@@ -255,7 +255,6 @@ class _ColorOptionState extends State<ColorOption> {
                   height: 40,
                   decoration: BoxDecoration(
                     color: displayColor,
-                    border: Border.all(color: Colors.white38, width: 0.5),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   config: ColorPickerConfig(enableEyePicker: false),
