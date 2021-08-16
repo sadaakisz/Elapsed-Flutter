@@ -2,12 +2,15 @@ import 'dart:ui';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/pages/app_settings.dart';
 import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/pages/quick_timer.dart';
+import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
 
 void main() {
@@ -17,6 +20,7 @@ void main() {
   var logicalHeight = logicalScreenSize.height;
   print('$logicalWidth, $logicalHeight');
   WidgetsFlutterBinding.ensureInitialized();
+  _initializeSharedPrefsVariables();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .whenComplete(() {
     runApp(MaterialApp(
@@ -72,9 +76,11 @@ void main() {
               fontWeight: FontWeight.w500,
               color: Colors.white70),
           overline: GoogleFonts.rubik(
-              fontSize: logicalWidth / 28,
-              fontWeight: FontWeight.w400,
-              color: Colors.black),
+            fontSize: logicalWidth / 28,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+            decoration: TextDecoration.underline,
+          ),
           bodyText1: GoogleFonts.rubik(
               fontSize: logicalWidth / 28,
               fontWeight: FontWeight.w300,
@@ -89,10 +95,25 @@ void main() {
       initialRoute: '/',
       routes: {
         '/': (context) => Elapsed(),
+        '/home': (context) => Home(),
         '/quick-timer': (context) => QuickTimerPage(),
+        '/settings': (context) => AppSettings(),
       },
     ));
   });
+}
+
+_initializeSharedPrefsVariables() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (!prefs.containsKey('backgroundColor'))
+    await prefs.setString('backgroundColor', EColors.black.toHex());
+  if (!prefs.containsKey('timerFontColor'))
+    await prefs.setString('timerFontColor', Colors.white.toHex());
+  if (!prefs.containsKey('quickRoutineAccentColor'))
+    await prefs.setString(
+        'quickRoutineAccentColor', Colors.tealAccent.shade400.toHex());
+  if (!prefs.containsKey('homePageAccentColor'))
+    await prefs.setString('homePageAccentColor', EColors.green.toHex());
 }
 
 class Elapsed extends StatefulWidget {
@@ -115,7 +136,7 @@ class _ElapsedState extends State<Elapsed> {
       duration: 1000,
       curve: Curves.easeInOut,
       splashTransition: SplashTransition.fadeTransition,
-      pageTransitionType: PageTransitionType.rightToLeft,
+      pageTransitionType: PageTransitionType.bottomToTop,
     );
   }
 }
