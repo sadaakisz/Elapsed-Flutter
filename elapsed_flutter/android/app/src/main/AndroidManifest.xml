@@ -2,7 +2,7 @@
     package="com.oversuchi.elapsed_flutter">
    <application
         android:label="elapsed_flutter"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
