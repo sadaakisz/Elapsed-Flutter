@@ -109,13 +109,13 @@ class _AppSettingsState extends State<AppSettings> {
               ListView(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
+                    padding: EdgeInsets.only(top: width / 16),
                     child: Text(
                       'APP SETTINGS',
                       style: Theme.of(context).textTheme.headline1,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: width / 50),
                   _Subtitle(subtitleText: 'General'),
                   ColorOption(
                     colorText: 'Background Color',
@@ -150,12 +150,12 @@ class _AppSettingsState extends State<AppSettings> {
                     onColorChange: setHomePageAccentColor,
                     onColorReset: resetHomePageAccentColor,
                   ),
-                  SizedBox(height: 100),
+                  SizedBox(height: width / 4),
                 ],
               ),
               Positioned(
                 width: width,
-                height: 100,
+                height: width / 4,
                 bottom: 0,
                 child: Container(
                   decoration: BoxDecoration(
@@ -170,7 +170,7 @@ class _AppSettingsState extends State<AppSettings> {
                 ),
               ),
               Positioned(
-                bottom: 30,
+                bottom: width / 13,
                 width: width * 6 / 7,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -178,7 +178,7 @@ class _AppSettingsState extends State<AppSettings> {
                     Expanded(
                       child: GestureDetector(
                         child: Container(
-                          height: 50,
+                          height: width / 8,
                           decoration: BoxDecoration(
                             color: Colors.grey.shade800,
                             borderRadius: BorderRadius.circular(3),
@@ -213,8 +213,9 @@ class _Subtitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      padding: EdgeInsets.symmetric(vertical: width / 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -224,7 +225,7 @@ class _Subtitle extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+              padding: EdgeInsets.only(left: width / 25),
               child: Container(
                 height: 2,
                 decoration: BoxDecoration(
@@ -271,8 +272,9 @@ class _ColorOptionState extends State<ColorOption> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: EdgeInsets.symmetric(vertical: width / 33),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -280,7 +282,7 @@ class _ColorOptionState extends State<ColorOption> {
             colorText,
             style: Theme.of(context).textTheme.subtitle2,
           ),
-          SizedBox(height: 12.0),
+          SizedBox(height: width / 33),
           Row(
             children: <Widget>[
               Flexible(
@@ -289,7 +291,7 @@ class _ColorOptionState extends State<ColorOption> {
                     darkMode: true,
                     color: displayColor,
                     boxShape: BoxShape.rectangle,
-                    height: 40,
+                    height: width / 10,
                     decoration: BoxDecoration(
                       color: displayColor,
                       border: Border.all(color: Colors.white38, width: 0.5),
@@ -302,14 +304,14 @@ class _ColorOptionState extends State<ColorOption> {
                       });
                     }),
               ),
-              SizedBox(width: 18),
+              SizedBox(width: width / 22),
               Flexible(
                 flex: 5,
                 child: Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
                     Container(
-                      height: 40,
+                      height: width / 10,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5),
@@ -322,7 +324,7 @@ class _ColorOptionState extends State<ColorOption> {
                   ],
                 ),
               ),
-              SizedBox(width: 18),
+              SizedBox(width: width / 22),
               GestureDetector(
                 child: Icon(Icons.restart_alt),
                 onTap: () {
@@ -346,8 +348,9 @@ class _ImageSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: EdgeInsets.symmetric(vertical: width / 33),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -355,19 +358,19 @@ class _ImageSelector extends StatelessWidget {
             'Background Image',
             style: Theme.of(context).textTheme.subtitle2,
           ),
-          SizedBox(height: 12.0),
+          SizedBox(height: width / 33),
           Stack(
             alignment: Alignment.center,
             children: <Widget>[
               Container(
-                height: 40,
+                height: width / 10,
                 decoration: BoxDecoration(
                   color: Colors.white10,
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
               Positioned(
-                left: 20,
+                left: width / 20,
                 child: Text(
                   'Select photo from library',
                   style: Theme.of(context)
@@ -377,11 +380,11 @@ class _ImageSelector extends StatelessWidget {
                 ),
               ),
               Positioned(
-                right: 20,
+                right: width / 20,
                 child: Icon(
                   Icons.image_outlined,
                   color: Colors.white,
-                  size: 25,
+                  size: width / 16,
                 ),
               ),
             ],
@@ -401,8 +404,9 @@ class _FontOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: EdgeInsets.symmetric(vertical: width / 33),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -410,19 +414,19 @@ class _FontOption extends StatelessWidget {
             'Timer Font Family',
             style: Theme.of(context).textTheme.subtitle2,
           ),
-          SizedBox(height: 12.0),
+          SizedBox(height: width / 33),
           Stack(
             alignment: Alignment.center,
             children: <Widget>[
               Container(
-                height: 40,
+                height: width / 10,
                 decoration: BoxDecoration(
                   color: Colors.white10,
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
               Positioned(
-                left: 20,
+                left: width / 20,
                 child: Text(
                   selectedFont,
                   style: Theme.of(context).textTheme.subtitle2!.copyWith(
@@ -449,8 +453,9 @@ class _FontSizeOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: EdgeInsets.symmetric(vertical: width / 33),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -458,14 +463,14 @@ class _FontSizeOption extends StatelessWidget {
             'Timer Font Size',
             style: Theme.of(context).textTheme.subtitle2,
           ),
-          SizedBox(height: 12.0),
+          SizedBox(height: width / 33),
           Row(
             children: <Widget>[
               Expanded(
                 flex: 9,
                 child: Container(
-                  padding: EdgeInsets.only(left: 3.0),
-                  height: 40,
+                  padding: EdgeInsets.only(left: width / 131),
+                  height: width / 10,
                   child: Text(
                     fontSize,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
@@ -475,7 +480,7 @@ class _FontSizeOption extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 18),
+              SizedBox(width: width / 22),
               GestureDetector(
                 child: Icon(Icons.restart_alt),
                 //TODO: Pass an event or VoidCallback
