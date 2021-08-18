@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class TimerTime extends StatelessWidget {
+class TimerTime extends StatefulWidget {
   const TimerTime({
     Key? key,
     required this.displayTimerMinutes,
@@ -14,9 +15,35 @@ class TimerTime extends StatelessWidget {
   final Color fontColor;
 
   @override
+  _TimerTimeState createState() => _TimerTimeState();
+}
+
+class _TimerTimeState extends State<TimerTime> {
+  String get displayTimerMinutes => widget.displayTimerMinutes;
+  String get displayTimerSeconds => widget.displayTimerSeconds;
+  Color get fontColor => widget.fontColor;
+
+  double fontSize = 30;
+
+  _getFontSize() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      fontSize = prefs.getDouble('timerFontSize')!;
+      fontSize /= 100;
+    });
+  }
+
+  @override
+  void initState() {
+    _getFontSize();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
+      //TODO: Fix when font is other than the default, it slides left or right
       transform: Matrix4.translationValues(-2.0, 0.0, 0.0),
       child: Column(
         verticalDirection: VerticalDirection.up,
@@ -25,16 +52,17 @@ class TimerTime extends StatelessWidget {
           Text(
             '$displayTimerSeconds',
             style: GoogleFonts.aldrich(
-                textStyle: TextStyle(color: fontColor, fontSize: width * 0.3)),
+                textStyle:
+                    TextStyle(color: fontColor, fontSize: width * fontSize)),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 20),
+            padding: EdgeInsets.only(bottom: width * fontSize * 0.16),
             child: Text(
               '..',
               style: GoogleFonts.aldrich(
                   textStyle: TextStyle(
                 color: fontColor,
-                fontSize: width * 0.3,
+                fontSize: width * fontSize,
                 height: 0.20,
               )),
             ),
@@ -42,7 +70,8 @@ class TimerTime extends StatelessWidget {
           Text(
             '$displayTimerMinutes',
             style: GoogleFonts.aldrich(
-                textStyle: TextStyle(color: fontColor, fontSize: width * 0.3)),
+                textStyle:
+                    TextStyle(color: fontColor, fontSize: width * fontSize)),
           ),
         ],
       ),
