@@ -8,6 +8,7 @@ import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QuickTimerPage extends StatefulWidget {
@@ -65,6 +66,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
 
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     super.initState();
     getMinutesFromSharedPrefs();
     getSettings();
@@ -161,6 +163,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
   @override
   void dispose() {
     _timer?.cancel();
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.dispose();
   }
 
