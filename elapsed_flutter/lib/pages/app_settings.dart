@@ -23,6 +23,7 @@ class _AppSettingsState extends State<AppSettings> {
   late SharedPreferences prefs;
 
   final fontSizeController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
 
   _getColors() async {
     prefs = await SharedPreferences.getInstance();
@@ -111,6 +112,14 @@ class _AppSettingsState extends State<AppSettings> {
     fontSizeController.text = '30';
   }
 
+  _scrollDown() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   @override
   void initState() {
     _getColors();
@@ -129,6 +138,7 @@ class _AppSettingsState extends State<AppSettings> {
           child: Stack(
             children: [
               ListView(
+                controller: scrollController,
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(top: width / 16),
@@ -160,6 +170,7 @@ class _AppSettingsState extends State<AppSettings> {
                     controller: fontSizeController,
                     onFontSizeChange: _setTimerFontSize,
                     onReset: _resetTimerFontSize,
+                    scrollDown: _scrollDown,
                   ),
                   ColorOption(
                     colorText: 'Quick Routine Accent Color',
@@ -462,11 +473,13 @@ class FontSizeOption extends StatefulWidget {
   final TextEditingController controller;
   final VoidCallback onFontSizeChange;
   final VoidCallback onReset;
+  final VoidCallback scrollDown;
   const FontSizeOption({
     Key? key,
     required this.controller,
     required this.onFontSizeChange,
     required this.onReset,
+    required this.scrollDown,
   }) : super(key: key);
 
   @override
@@ -477,6 +490,26 @@ class _FontSizeOptionState extends State<FontSizeOption> {
   TextEditingController get controller => widget.controller;
   VoidCallback get onFontSizeChange => widget.onFontSizeChange;
   VoidCallback get onReset => widget.onReset;
+  VoidCallback get scrollDown => widget.scrollDown;
+  FocusNode _focus = new FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focus.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _focus.removeListener(_onFocusChange);
+    _focus.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    scrollDown();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -498,6 +531,7 @@ class _FontSizeOptionState extends State<FontSizeOption> {
                   padding: EdgeInsets.only(left: width / 131),
                   height: width / 10,
                   child: TextField(
+                    focusNode: _focus,
                     textAlign: TextAlign.start,
                     keyboardType: TextInputType.number,
                     onChanged: (text) {
