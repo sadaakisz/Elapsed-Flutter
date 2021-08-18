@@ -17,11 +17,13 @@ class _SettingsTextFieldState extends State<SettingsTextField> {
       keyboardType: TextInputType.number,
       onChanged: (text) {
         setState(() {
-          String firstChar = controller.text[0];
-          if (firstChar == '0') {
-            controller.text = text.replaceFirst(new RegExp(r'^0+'), '');
-            controller.selection =
-                TextSelection.fromPosition(TextPosition(offset: 0));
+          if (controller.text.isNotEmpty) {
+            String firstChar = controller.text[0];
+            if (firstChar == '0') {
+              controller.text = text.replaceFirst(new RegExp(r'^0+'), '');
+              controller.selection =
+                  TextSelection.fromPosition(TextPosition(offset: 0));
+            }
           }
         });
       },
