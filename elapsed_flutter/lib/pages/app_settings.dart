@@ -3,6 +3,7 @@ import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/widgets/custom_color_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +21,9 @@ class _AppSettingsState extends State<AppSettings> {
   Color homePageAccentColor = EColors.green;
 
   late SharedPreferences prefs;
+
+  final fontSizeController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
 
   _getColors() async {
     prefs = await SharedPreferences.getInstance();
@@ -90,9 +94,36 @@ class _AppSettingsState extends State<AppSettings> {
     await prefs.setString('homePageAccentColor', EColors.green.toHex());
   }
 
+  _getTimerFontSize() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      fontSizeController.text =
+          prefs.getDouble('timerFontSize')!.toInt().toString();
+    });
+  }
+
+  _setTimerFontSize() async {
+    await prefs.setDouble(
+        'timerFontSize', double.parse(fontSizeController.text));
+  }
+
+  _resetTimerFontSize() async {
+    await prefs.setDouble('timerFontSize', 30);
+    fontSizeController.text = '30';
+  }
+
+  _scrollDown() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   @override
   void initState() {
     _getColors();
+    _getTimerFontSize();
     super.initState();
   }
 
@@ -107,6 +138,7 @@ class _AppSettingsState extends State<AppSettings> {
           child: Stack(
             children: [
               ListView(
+                controller: scrollController,
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(top: width / 16),
@@ -134,7 +166,12 @@ class _AppSettingsState extends State<AppSettings> {
                     onColorReset: resetTimerFontColor,
                   ),
                   _FontOption(selectedFont: 'Aldrich'),
-                  _FontSizeOption(fontSize: '120'),
+                  FontSizeOption(
+                    controller: fontSizeController,
+                    onFontSizeChange: _setTimerFontSize,
+                    onReset: _resetTimerFontSize,
+                    scrollDown: _scrollDown,
+                  ),
                   ColorOption(
                     colorText: 'Quick Routine Accent Color',
                     displayColor: quickRoutineAccentColor,
@@ -172,28 +209,21 @@ class _AppSettingsState extends State<AppSettings> {
               Positioned(
                 bottom: width / 13,
                 width: width * 6 / 7,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Expanded(
-                      child: GestureDetector(
-                        child: Container(
-                          height: width / 8,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade800,
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                          child: Center(
-                            child: Text('SAVE',
-                                style: Theme.of(context).textTheme.button),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pushReplacementNamed('/home');
-                        },
-                      ),
+                child: GestureDetector(
+                  child: Container(
+                    height: width / 8,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800,
+                      borderRadius: BorderRadius.circular(3),
                     ),
-                  ],
+                    child: Center(
+                      child: Text('SAVE',
+                          style: Theme.of(context).textTheme.button),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushReplacementNamed('/home');
+                  },
                 ),
               )
             ],
@@ -264,11 +294,6 @@ class _ColorOptionState extends State<ColorOption> {
   String get colorText => widget.colorText;
   Color get displayColor => widget.displayColor;
   String get hexText => widget.hexText;
-
-  setColorSharedPrefs(name, value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(name, value);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -444,12 +469,46 @@ class _FontOption extends StatelessWidget {
   }
 }
 
-class _FontSizeOption extends StatelessWidget {
-  final String fontSize;
-  const _FontSizeOption({
+class FontSizeOption extends StatefulWidget {
+  final TextEditingController controller;
+  final VoidCallback onFontSizeChange;
+  final VoidCallback onReset;
+  final VoidCallback scrollDown;
+  const FontSizeOption({
     Key? key,
-    required this.fontSize,
+    required this.controller,
+    required this.onFontSizeChange,
+    required this.onReset,
+    required this.scrollDown,
   }) : super(key: key);
+
+  @override
+  _FontSizeOptionState createState() => _FontSizeOptionState();
+}
+
+class _FontSizeOptionState extends State<FontSizeOption> {
+  TextEditingController get controller => widget.controller;
+  VoidCallback get onFontSizeChange => widget.onFontSizeChange;
+  VoidCallback get onReset => widget.onReset;
+  VoidCallback get scrollDown => widget.scrollDown;
+  FocusNode _focus = new FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focus.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _focus.removeListener(_onFocusChange);
+    _focus.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    scrollDown();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -471,20 +530,46 @@ class _FontSizeOption extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.only(left: width / 131),
                   height: width / 10,
-                  child: Text(
-                    fontSize,
+                  child: TextField(
+                    focusNode: _focus,
+                    textAlign: TextAlign.start,
+                    keyboardType: TextInputType.number,
+                    onChanged: (text) {
+                      setState(() {
+                        if (controller.text.isNotEmpty) {
+                          String firstChar = controller.text[0];
+                          if (firstChar == '0') {
+                            controller.text =
+                                text.replaceFirst(new RegExp(r'^0+'), '');
+                            controller.selection = TextSelection.fromPosition(
+                                TextPosition(offset: 0));
+                          }
+                          onFontSizeChange();
+                        }
+                      });
+                    },
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                           color: Colors.white,
                           decoration: TextDecoration.underline,
                         ),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                    ),
+                    controller: widget.controller,
                   ),
                 ),
               ),
               SizedBox(width: width / 22),
               GestureDetector(
                 child: Icon(Icons.restart_alt),
-                //TODO: Pass an event or VoidCallback
-                onTap: () {},
+                onTap: () => onReset(),
               ),
             ],
           ),
