@@ -114,6 +114,8 @@ _initializeSharedPrefsVariables() async {
         'quickRoutineAccentColor', Colors.tealAccent.shade400.toHex());
   if (!prefs.containsKey('homePageAccentColor'))
     await prefs.setString('homePageAccentColor', EColors.green.toHex());
+  if (!prefs.containsKey('timerFontFamily'))
+    await prefs.setString('timerFontFamily', 'Aldrich');
   if (!prefs.containsKey('timerFontSize'))
     await prefs.setDouble('timerFontSize', 30);
 }
