@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class BreakTime extends StatelessWidget {
+class BreakTime extends StatefulWidget {
   const BreakTime({
     Key? key,
     required this.displayBreakMinutes,
@@ -10,6 +11,26 @@ class BreakTime extends StatelessWidget {
 
   final String displayBreakMinutes;
   final String displayBreakSeconds;
+
+  @override
+  _BreakTimeState createState() => _BreakTimeState();
+}
+
+class _BreakTimeState extends State<BreakTime> {
+  String fontFamily = 'Aldrich';
+
+  _getFontFamily() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      fontFamily = prefs.getString('timerFontFamily')!;
+    });
+  }
+
+  @override
+  void initState() {
+    _getFontFamily();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +61,9 @@ class BreakTime extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 5.0),
           child: Text(
-            '$displayBreakMinutes:$displayBreakSeconds',
-            style: GoogleFonts.aldrich(
-                textStyle:
-                    TextStyle(color: Colors.white38, fontSize: width / 10)),
+            '${widget.displayBreakMinutes}:${widget.displayBreakSeconds}',
+            style: GoogleFonts.getFont(fontFamily)
+                .copyWith(color: Colors.white38, fontSize: width / 10),
           ),
         ),
       ],
