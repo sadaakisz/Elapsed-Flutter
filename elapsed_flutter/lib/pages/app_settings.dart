@@ -502,6 +502,9 @@ class _FontSizeOptionState extends State<FontSizeOption> {
   VoidCallback get scrollDown => widget.scrollDown;
   FocusNode _focus = new FocusNode();
 
+  int minValue = 10;
+  int maxValue = 40;
+
   @override
   void initState() {
     super.initState();
@@ -543,10 +546,10 @@ class _FontSizeOptionState extends State<FontSizeOption> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty)
-                          return 'Please enter a font size between 10 and 50';
+                          return 'Please enter a font size between $minValue and $maxValue';
                         int numValue = int.parse(value);
-                        if (numValue < 10 || 50 < numValue)
-                          return 'Please enter a font size between 10 and 50';
+                        if (numValue < minValue || maxValue < numValue)
+                          return 'Please enter a font size between $minValue and $maxValue';
                         return null;
                       },
                       focusNode: _focus,
@@ -563,7 +566,7 @@ class _FontSizeOptionState extends State<FontSizeOption> {
                                   TextPosition(offset: 0));
                             }
                             int numValue = int.parse(text);
-                            if (10 <= numValue && numValue <= 50)
+                            if (minValue <= numValue && numValue <= maxValue)
                               onFontSizeChange();
                           }
                         });
