@@ -43,6 +43,7 @@ class _TimerTimeState extends State<TimerTime> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
+      padding: EdgeInsets.only(top: fontSize * 40),
       //TODO: Fix when font is other than the default, it slides left or right
       transform: Matrix4.translationValues(-2.0, 0.0, 0.0),
       child: Column(
