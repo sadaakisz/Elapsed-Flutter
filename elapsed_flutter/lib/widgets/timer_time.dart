@@ -44,8 +44,8 @@ class _TimerTimeState extends State<TimerTime> {
     double width = MediaQuery.of(context).size.width;
     return Container(
       padding: EdgeInsets.only(top: fontSize * 40),
-      //TODO: Fix when font is other than the default, it slides left or right
-      transform: Matrix4.translationValues(-2.0, 0.0, 0.0),
+      transform:
+          Matrix4.translationValues(-2.0 - (fontSize - 0.3) * 20, 0.0, 0.0),
       child: Column(
         verticalDirection: VerticalDirection.up,
         crossAxisAlignment: CrossAxisAlignment.start,
