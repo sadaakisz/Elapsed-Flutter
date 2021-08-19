@@ -31,11 +31,12 @@ dependencies:
   ms_undraw: ^3.0.0+0
   flutter_svg: ^0.22.0
   path_provider: ^2.0.2
-  image_picker: ^0.6.3+4
+  image_picker: ^0.8.3+2
   carousel_slider: ^4.0.0
   shared_preferences: ^2.0.6
   wakelock: ^0.5.3+3
   cyclop: ^0.4.1
+  flutter_material_pickers: ^3.1.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.1"
