@@ -4,6 +4,7 @@ import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/widgets/custom_color_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +23,7 @@ class _AppSettingsState extends State<AppSettings> {
 
   late SharedPreferences prefs;
 
+  final fontFamilyController = TextEditingController();
   final fontSizeController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
@@ -95,6 +97,24 @@ class _AppSettingsState extends State<AppSettings> {
     await prefs.setString('homePageAccentColor', EColors.green.toHex());
   }
 
+  _getTimerFontFamily() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      fontFamilyController.text = prefs.getString('timerFontFamily')!;
+    });
+  }
+
+  _setTimerFontFamily() async {
+    await prefs.setString('timerFontFamily', fontFamilyController.text);
+  }
+
+  _resetTimerFontFamily() async {
+    setState(() {
+      fontFamilyController.text = 'Aldrich';
+    });
+    await prefs.setString('timerFontFamily', 'Aldrich');
+  }
+
   _getTimerFontSize() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -119,8 +139,10 @@ class _AppSettingsState extends State<AppSettings> {
 
   @override
   void initState() {
+    fontFamilyController.text = 'Aldrich';
     _getColors();
     _getTimerFontSize();
+    _getTimerFontFamily();
     super.initState();
   }
 
@@ -169,7 +191,11 @@ class _AppSettingsState extends State<AppSettings> {
                         onColorChange: setTimerFontColor,
                         onColorReset: resetTimerFontColor,
                       ),
-                      _FontOption(selectedFont: 'Aldrich'),
+                      FontOption(
+                        controller: fontFamilyController,
+                        onFontFamilyChange: _setTimerFontFamily,
+                        onReset: _resetTimerFontFamily,
+                      ),
                       FontSizeOption(
                         controller: fontSizeController,
                         onFontSizeChange: _setTimerFontSize,
@@ -429,13 +455,25 @@ class _ImageSelector extends StatelessWidget {
   }
 }
 
-class _FontOption extends StatelessWidget {
-  final String selectedFont;
-  const _FontOption({
+class FontOption extends StatefulWidget {
+  final TextEditingController controller;
+  final VoidCallback onFontFamilyChange;
+  final VoidCallback onReset;
+  const FontOption({
     Key? key,
-    required this.selectedFont,
+    required this.controller,
+    required this.onFontFamilyChange,
+    required this.onReset,
   }) : super(key: key);
 
+  @override
+  _FontOptionState createState() => _FontOptionState();
+}
+
+class _FontOptionState extends State<FontOption> {
+  VoidCallback get onFontFamilyChange => widget.onFontFamilyChange;
+  VoidCallback get onReset => widget.onReset;
+  List<String> fontFamilyList = GoogleFonts.asMap().keys.toList();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -449,26 +487,66 @@ class _FontOption extends StatelessWidget {
             style: Theme.of(context).textTheme.subtitle2,
           ),
           SizedBox(height: width / 33),
-          Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                height: width / 10,
-                decoration: BoxDecoration(
-                  color: Colors.white10,
-                  borderRadius: BorderRadius.circular(5),
+          //TODO: Remove notice when spacing problem is fixed.
+          Text(
+            'EXPERIMENTAL FEATURE! Expect\nmisaligned/uneven spacing in the timer.',
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2!
+                .copyWith(color: EColors.red),
+          ),
+          SizedBox(height: width / 33),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  showMaterialScrollPicker<String>(
+                    headerColor:
+                        EColors.black, // background color of the header area
+                    headerTextColor: Colors.white, // text fcolor of the header
+                    backgroundColor:
+                        EColors.black, // background color of the entire dialog
+                    buttonTextColor: EColors.red,
+                    context: context,
+                    title: 'Pick your font family',
+                    items: fontFamilyList,
+                    selectedItem: widget.controller.text,
+                    onChanged: (value) => setState(() {
+                      widget.controller.text = value;
+                      onFontFamilyChange();
+                    }),
+                  );
+                },
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: width / 10,
+                      width: width * 0.74,
+                      decoration: BoxDecoration(
+                        color: Colors.white10,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    Positioned(
+                      left: width / 20,
+                      child: Text(
+                        widget.controller.text,
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                              color: Colors.white,
+                              fontFamily:
+                                  GoogleFonts.getFont(widget.controller.text)
+                                      .fontFamily,
+                            ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Positioned(
-                left: width / 20,
-                child: Text(
-                  selectedFont,
-                  style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                        color: Colors.white,
-                        fontFamily:
-                            GoogleFonts.getFont(selectedFont).fontFamily,
-                      ),
-                ),
+              GestureDetector(
+                onTap: () => onReset(),
+                child: Icon(Icons.restart_alt),
               ),
             ],
           ),
