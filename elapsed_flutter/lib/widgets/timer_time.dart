@@ -23,7 +23,15 @@ class _TimerTimeState extends State<TimerTime> {
   String get displayTimerSeconds => widget.displayTimerSeconds;
   Color get fontColor => widget.fontColor;
 
+  String fontFamily = 'Aldrich';
   double fontSize = 30;
+
+  _getFontFamily() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      fontFamily = prefs.getString('timerFontFamily')!;
+    });
+  }
 
   _getFontSize() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -36,6 +44,7 @@ class _TimerTimeState extends State<TimerTime> {
   @override
   void initState() {
     _getFontSize();
+    _getFontFamily();
     super.initState();
   }
 
@@ -50,29 +59,27 @@ class _TimerTimeState extends State<TimerTime> {
         verticalDirection: VerticalDirection.up,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          //TODO: Fix mis-spaced numbers when not using Aldrich
           Text(
             '$displayTimerSeconds',
-            style: GoogleFonts.aldrich(
-                textStyle:
-                    TextStyle(color: fontColor, fontSize: width * fontSize)),
+            style: GoogleFonts.getFont(fontFamily)
+                .copyWith(color: fontColor, fontSize: width * fontSize),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: width * fontSize * 0.16),
             child: Text(
               '..',
-              style: GoogleFonts.aldrich(
-                  textStyle: TextStyle(
+              style: GoogleFonts.getFont(fontFamily).copyWith(
                 color: fontColor,
                 fontSize: width * fontSize,
                 height: 0.20,
-              )),
+              ),
             ),
           ),
           Text(
             '$displayTimerMinutes',
-            style: GoogleFonts.aldrich(
-                textStyle:
-                    TextStyle(color: fontColor, fontSize: width * fontSize)),
+            style: GoogleFonts.getFont(fontFamily)
+                .copyWith(color: fontColor, fontSize: width * fontSize),
           ),
         ],
       ),
