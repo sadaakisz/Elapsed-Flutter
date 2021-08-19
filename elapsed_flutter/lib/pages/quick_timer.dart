@@ -178,36 +178,33 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.stop_rounded,
-                        color: quickRoutineAccentColor,
-                      ),
-                      Text(
-                        'Quick Routine',
-                        style: Theme.of(context).textTheme.headline3!.copyWith(
-                              color: quickRoutineAccentColor,
-                              fontWeight: FontWeight.w500,
-                              fontSize: width / 20,
-                            ),
-                      ),
-                    ],
-                  ),
-                  TimerIconButton(
-                    icon: Icons.close,
-                    event: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  children: [
+                    Icon(
+                      Icons.stop_rounded,
+                      color: quickRoutineAccentColor,
+                    ),
+                    Text(
+                      'Quick Routine',
+                      style: Theme.of(context).textTheme.headline3!.copyWith(
+                            color: quickRoutineAccentColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: width / 20,
+                          ),
+                    ),
+                  ],
+                ),
+                TimerIconButton(
+                  icon: Icons.close,
+                  event: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
