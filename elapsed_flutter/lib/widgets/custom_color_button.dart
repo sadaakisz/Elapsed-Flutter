@@ -106,6 +106,7 @@ class _CustomColorButtonState extends State<CustomColorButton>
   }
 
   OverlayEntry _buildPickerOverlay(Offset offset, BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     final size = MediaQuery.of(context).size;
     final left = offset.dx + pickerWidth < size.width - 30
         ? offset.dx + _buttonSize
@@ -122,9 +123,9 @@ class _CustomColorButtonState extends State<CustomColorButton>
         return Positioned(
           left: isPhoneScreen ? (size.width - pickerWidth) / 2 : left,
           top: isPhoneScreen
-              ? (keyboardOn ? 20 : (size.height - pickerHeight) / 2)
+              ? (keyboardOn ? height * 0.13 : (size.height - pickerHeight) / 2)
               : top,
-          bottom: isPhoneScreen ? 20 + bottom : null,
+          bottom: isPhoneScreen ? height * 0.13 + bottom : null,
           child: IgnorePointer(
             ignoring: hidden,
             child: Opacity(
