@@ -321,7 +321,8 @@ class _ColorOptionState extends State<ColorOption> {
                       border: Border.all(color: Colors.white38, width: 0.5),
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    config: ColorPickerConfig(enableEyePicker: false),
+                    config: ColorPickerConfig(
+                        enableEyePicker: false, enableLibrary: false),
                     onColorChanged: (value) {
                       setState(() {
                         widget.onColorChange(value);
