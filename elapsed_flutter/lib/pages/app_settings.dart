@@ -24,6 +24,7 @@ class _AppSettingsState extends State<AppSettings> {
 
   final fontSizeController = TextEditingController();
   final ScrollController scrollController = ScrollController();
+  final _formKey = GlobalKey<FormState>();
 
   _getColors() async {
     prefs = await SharedPreferences.getInstance();
@@ -127,104 +128,112 @@ class _AppSettingsState extends State<AppSettings> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      onTap: () {
+        if (_formKey.currentState!.validate())
+          FocusManager.instance.primaryFocus?.unfocus();
+      },
       child: Scaffold(
         backgroundColor: backgroundColor,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: width / 14),
-            child: Stack(
-              children: [
-                ListView(
-                  controller: scrollController,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: width / 16),
-                      child: Text(
-                        'APP SETTINGS',
-                        style: Theme.of(context).textTheme.headline1,
+            child: Form(
+              key: _formKey,
+              child: Stack(
+                children: [
+                  ListView(
+                    controller: scrollController,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(top: width / 16),
+                        child: Text(
+                          'APP SETTINGS',
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: width / 50),
-                    _Subtitle(subtitleText: 'General'),
-                    ColorOption(
-                      colorText: 'Background Color',
-                      displayColor: backgroundColor,
-                      hexText: backgroundColor.toHex(),
-                      onColorChange: setBackgroundColor,
-                      onColorReset: resetBackgroundColor,
-                    ),
-                    _ImageSelector(),
-                    _Subtitle(subtitleText: 'Timer'),
-                    ColorOption(
-                      colorText: 'Timer Font Color',
-                      displayColor: timerFontColor,
-                      hexText: timerFontColor.toHex(),
-                      onColorChange: setTimerFontColor,
-                      onColorReset: resetTimerFontColor,
-                    ),
-                    _FontOption(selectedFont: 'Aldrich'),
-                    FontSizeOption(
-                      controller: fontSizeController,
-                      onFontSizeChange: _setTimerFontSize,
-                      onReset: _resetTimerFontSize,
-                      scrollDown: _scrollDown,
-                    ),
-                    ColorOption(
-                      colorText: 'Quick Routine Accent Color',
-                      displayColor: quickRoutineAccentColor,
-                      hexText: quickRoutineAccentColor.toHex(),
-                      onColorChange: setQuickRoutineAccentColor,
-                      onColorReset: resetQuickRoutineAccentColor,
-                    ),
-                    _Subtitle(subtitleText: 'Home page'),
-                    ColorOption(
-                      colorText: 'Home Page Accent Color',
-                      displayColor: homePageAccentColor,
-                      hexText: homePageAccentColor.toHex(),
-                      onColorChange: setHomePageAccentColor,
-                      onColorReset: resetHomePageAccentColor,
-                    ),
-                    SizedBox(height: width / 4),
-                  ],
-                ),
-                Positioned(
-                  width: width,
-                  height: width / 4,
-                  bottom: 0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [
-                            backgroundColor,
-                            backgroundColor.withOpacity(0)
-                          ]),
-                    ),
+                      SizedBox(height: width / 50),
+                      _Subtitle(subtitleText: 'General'),
+                      ColorOption(
+                        colorText: 'Background Color',
+                        displayColor: backgroundColor,
+                        hexText: backgroundColor.toHex(),
+                        onColorChange: setBackgroundColor,
+                        onColorReset: resetBackgroundColor,
+                      ),
+                      _ImageSelector(),
+                      _Subtitle(subtitleText: 'Timer'),
+                      ColorOption(
+                        colorText: 'Timer Font Color',
+                        displayColor: timerFontColor,
+                        hexText: timerFontColor.toHex(),
+                        onColorChange: setTimerFontColor,
+                        onColorReset: resetTimerFontColor,
+                      ),
+                      _FontOption(selectedFont: 'Aldrich'),
+                      FontSizeOption(
+                        controller: fontSizeController,
+                        onFontSizeChange: _setTimerFontSize,
+                        onReset: _resetTimerFontSize,
+                        scrollDown: _scrollDown,
+                      ),
+                      ColorOption(
+                        colorText: 'Quick Routine Accent Color',
+                        displayColor: quickRoutineAccentColor,
+                        hexText: quickRoutineAccentColor.toHex(),
+                        onColorChange: setQuickRoutineAccentColor,
+                        onColorReset: resetQuickRoutineAccentColor,
+                      ),
+                      _Subtitle(subtitleText: 'Home page'),
+                      ColorOption(
+                        colorText: 'Home Page Accent Color',
+                        displayColor: homePageAccentColor,
+                        hexText: homePageAccentColor.toHex(),
+                        onColorChange: setHomePageAccentColor,
+                        onColorReset: resetHomePageAccentColor,
+                      ),
+                      SizedBox(height: width / 4),
+                    ],
                   ),
-                ),
-                Positioned(
-                  bottom: width / 13,
-                  width: width * 6 / 7,
-                  child: GestureDetector(
+                  Positioned(
+                    width: width,
+                    height: width / 4,
+                    bottom: 0,
                     child: Container(
-                      height: width / 8,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                      child: Center(
-                        child: Text('SAVE',
-                            style: Theme.of(context).textTheme.button),
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              backgroundColor,
+                              backgroundColor.withOpacity(0)
+                            ]),
                       ),
                     ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacementNamed('/home');
-                    },
                   ),
-                )
-              ],
+                  Positioned(
+                    bottom: width / 13,
+                    width: width * 6 / 7,
+                    child: GestureDetector(
+                      child: Container(
+                        height: width / 8,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade800,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        child: Center(
+                          child: Text('SAVE',
+                              style: Theme.of(context).textTheme.button),
+                        ),
+                      ),
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.of(context).pushReplacementNamed('/home');
+                        }
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -529,40 +538,53 @@ class _FontSizeOptionState extends State<FontSizeOption> {
                 flex: 9,
                 child: Container(
                   padding: EdgeInsets.only(left: width / 131),
-                  height: width / 10,
-                  child: TextField(
-                    focusNode: _focus,
-                    textAlign: TextAlign.start,
-                    keyboardType: TextInputType.number,
-                    onChanged: (text) {
-                      setState(() {
-                        if (controller.text.isNotEmpty) {
-                          String firstChar = controller.text[0];
-                          if (firstChar == '0') {
-                            controller.text =
-                                text.replaceFirst(new RegExp(r'^0+'), '');
-                            controller.selection = TextSelection.fromPosition(
-                                TextPosition(offset: 0));
+                  height: width / 6,
+                  child: Center(
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Please enter a font size between 10 and 50';
+                        int numValue = int.parse(value);
+                        if (numValue < 10 || 50 < numValue)
+                          return 'Please enter a font size between 10 and 50';
+                        return null;
+                      },
+                      focusNode: _focus,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.number,
+                      onChanged: (text) {
+                        setState(() {
+                          if (controller.text.isNotEmpty) {
+                            String firstChar = controller.text[0];
+                            if (firstChar == '0') {
+                              controller.text =
+                                  text.replaceFirst(new RegExp(r'^0+'), '');
+                              controller.selection = TextSelection.fromPosition(
+                                  TextPosition(offset: 0));
+                            }
+                            int numValue = int.parse(text);
+                            if (10 <= numValue && numValue <= 50)
+                              onFontSizeChange();
                           }
-                          onFontSizeChange();
-                        }
-                      });
-                    },
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                          color: Colors.white,
-                          decoration: TextDecoration.underline,
-                        ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
+                        });
+                      },
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                            fontSize: width / 10,
+                          ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                      ),
+                      controller: widget.controller,
                     ),
-                    controller: widget.controller,
                   ),
                 ),
               ),
