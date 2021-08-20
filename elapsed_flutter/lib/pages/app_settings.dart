@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cyclop/cyclop.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings extends StatefulWidget {
@@ -20,6 +23,33 @@ class _AppSettingsState extends State<AppSettings> {
   Color timerFontColor = Colors.white;
   Color quickRoutineAccentColor = Colors.tealAccent.shade400;
   Color homePageAccentColor = EColors.green;
+
+  String backgroundPath = '';
+  final picker = ImagePicker();
+
+  _getBackgroundImage() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      backgroundPath = prefs.getString('backgroundImage')!;
+    });
+  }
+
+  Future<void> _openImagePicker() async {
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        backgroundPath = pickedImage.path;
+      });
+      await prefs.setString('backgroundImage', backgroundPath);
+    }
+  }
+
+  resetBackgroundImage() async {
+    setState(() {
+      backgroundPath = '';
+    });
+    await prefs.setString('backgroundImage', '');
+  }
 
   late SharedPreferences prefs;
 
@@ -141,6 +171,7 @@ class _AppSettingsState extends State<AppSettings> {
   void initState() {
     fontFamilyController.text = 'Aldrich';
     _getColors();
+    _getBackgroundImage();
     _getTimerFontSize();
     _getTimerFontFamily();
     super.initState();
@@ -182,7 +213,11 @@ class _AppSettingsState extends State<AppSettings> {
                         onColorChange: setBackgroundColor,
                         onColorReset: resetBackgroundColor,
                       ),
-                      _ImageSelector(),
+                      _ImageSelector(
+                        imagePath: backgroundPath,
+                        onTap: _openImagePicker,
+                        onReset: resetBackgroundImage,
+                      ),
                       _Subtitle(subtitleText: 'Timer'),
                       ColorOption(
                         colorText: 'Timer Font Color',
@@ -402,8 +437,14 @@ class _ColorOptionState extends State<ColorOption> {
 }
 
 class _ImageSelector extends StatelessWidget {
+  final String? imagePath;
+  final Function onTap;
+  final VoidCallback onReset;
   const _ImageSelector({
     Key? key,
+    this.imagePath,
+    required this.onTap,
+    required this.onReset,
   }) : super(key: key);
 
   @override
@@ -419,33 +460,50 @@ class _ImageSelector extends StatelessWidget {
             style: Theme.of(context).textTheme.subtitle2,
           ),
           SizedBox(height: width / 33),
-          Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                height: width / 10,
-                decoration: BoxDecoration(
-                  color: Colors.white10,
-                  borderRadius: BorderRadius.circular(5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () => onTap(),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: width / 10,
+                      width: width * 0.74,
+                      decoration: BoxDecoration(
+                        color: Colors.white10,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    Positioned(
+                      left: width / 20,
+                      child: Text(
+                        'Select photo from library',
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(color: Colors.white),
+                      ),
+                    ),
+                    Positioned(
+                      right: width / 20,
+                      width: width / 10,
+                      height: width / 10,
+                      child: imagePath != ''
+                          ? Image.file(File(imagePath!), fit: BoxFit.cover)
+                          : Icon(
+                              Icons.image_outlined,
+                              color: Colors.white,
+                              size: width / 16,
+                            ),
+                    ),
+                  ],
                 ),
               ),
-              Positioned(
-                left: width / 20,
-                child: Text(
-                  'Select photo from library',
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle2!
-                      .copyWith(color: Colors.white),
-                ),
-              ),
-              Positioned(
-                right: width / 20,
-                child: Icon(
-                  Icons.image_outlined,
-                  color: Colors.white,
-                  size: width / 16,
-                ),
+              GestureDetector(
+                onTap: () => onReset(),
+                child: Icon(Icons.restart_alt),
               ),
             ],
           ),
