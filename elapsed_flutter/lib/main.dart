@@ -107,6 +107,8 @@ _initializeSharedPrefsVariables() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (!prefs.containsKey('backgroundColor'))
     await prefs.setString('backgroundColor', EColors.black.toHex());
+  if (!prefs.containsKey('backgroundImage'))
+    await prefs.setString('backgroundImage', '');
   if (!prefs.containsKey('timerFontColor'))
     await prefs.setString('timerFontColor', Colors.white.toHex());
   if (!prefs.containsKey('quickRoutineAccentColor'))
