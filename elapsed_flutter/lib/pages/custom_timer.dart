@@ -161,13 +161,13 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
     return Scaffold(
       backgroundColor: Colors.black87,
       body: Padding(
-        padding: const EdgeInsets.all(50.0),
+        padding: EdgeInsets.all(width / 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
+              padding: EdgeInsets.only(bottom: width / 40),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -219,7 +219,7 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
+                  padding: EdgeInsets.only(bottom: width / 20),
                   child: BreakTime(
                       displayBreakMinutes: breakTime.displayMinutes!,
                       displayBreakSeconds: breakTime.displaySeconds!),
