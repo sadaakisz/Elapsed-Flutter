@@ -1,3 +1,6 @@
+import 'package:elapsed_flutter/pages/app_settings.dart';
+import 'package:elapsed_flutter/pages/quick_timer.dart';
+import 'package:elapsed_flutter/utils/custom_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -22,7 +25,7 @@ class _NavBarState extends State<NavBar> {
           child: GestureDetector(
             child: Icon(Icons.bolt, color: Colors.white54),
             onTap: () {
-              Navigator.of(context).pushNamed('/quick-timer');
+              navPush(context, QuickTimerPage());
             },
           ),
         ),
@@ -46,7 +49,7 @@ class _NavBarState extends State<NavBar> {
           child: GestureDetector(
             child: Icon(Icons.settings, color: Colors.white54),
             onTap: () {
-              Navigator.of(context).pushNamed('/settings');
+              navPush(context, AppSettings());
             },
           ),
         ),

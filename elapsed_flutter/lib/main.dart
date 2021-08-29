@@ -55,6 +55,7 @@ void main() {
               fontSize: logicalWidth / 18,
               fontWeight: FontWeight.w400,
               color: Colors.white70),
+          //Used for selected font in appsettings
           headline5: GoogleFonts.rubik(
               fontSize: logicalWidth / 11,
               fontWeight: FontWeight.w500,
@@ -107,6 +108,8 @@ _initializeSharedPrefsVariables() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (!prefs.containsKey('backgroundColor'))
     await prefs.setString('backgroundColor', EColors.black.toHex());
+  if (!prefs.containsKey('backgroundImage'))
+    await prefs.setString('backgroundImage', '');
   if (!prefs.containsKey('timerFontColor'))
     await prefs.setString('timerFontColor', Colors.white.toHex());
   if (!prefs.containsKey('quickRoutineAccentColor'))
@@ -140,7 +143,7 @@ class _ElapsedState extends State<Elapsed> {
       duration: 1000,
       curve: Curves.easeInOut,
       splashTransition: SplashTransition.fadeTransition,
-      pageTransitionType: PageTransitionType.bottomToTop,
+      pageTransitionType: PageTransitionType.fade,
     );
   }
 }
