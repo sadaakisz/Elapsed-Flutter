@@ -18,11 +18,19 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<CustomRoutine> customRoutines = [
-    /*CustomRoutine(name: 'Pomodoro 1', timerTime: 25, breakTime: 5),
-    CustomRoutine(name: 'Second Pomodoro', timerTime: 30, breakTime: 3),
+    CustomRoutine(
+        name: 'Pomodoro 1',
+        timerTime: 25,
+        breakTime: 5,
+        labelColor: Colors.pink),
+    CustomRoutine(
+        name: 'Second Pomodoro',
+        timerTime: 30,
+        breakTime: 3,
+        labelColor: Colors.blue),
     CustomRoutine(name: 'Third Pomo', timerTime: 30, breakTime: 3),
     CustomRoutine(name: '4 Pomodoro', timerTime: 30, breakTime: 3),
-    CustomRoutine(name: 'Go Pomodoro', timerTime: 30, breakTime: 3),*/
+    CustomRoutine(name: 'Go Pomodoro', timerTime: 30, breakTime: 3),
   ];
 
   String tutorialDismissed = 'NOT DISMISSED';
@@ -63,33 +71,42 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElapsedTitle(),
-            customRoutines.length == 0
-                ? tutorialDismissed == 'NOT DISMISSED'
-                    ? TutorialStart(
-                        onDismiss: _dismissTutorial,
-                      )
-                    : EmptyStart()
-                : HomeCarousel(
-                    customRoutines: customRoutines,
-                    onDelete: _deleteRoutine,
-                  ),
-            //TutorialStart(),
-            /*Flexible(
-              child: FractionallySizedBox(
-                  heightFactor: 0.8, child: Center(child: EmptyStart())),
-            ),*/
-            SizedBox(height: 0),
-          ],
-        ),
+      body: Stack(
+        children: <Widget>[
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElapsedTitle(),
+                customRoutines.length == 0
+                    ? tutorialDismissed == 'NOT DISMISSED'
+                        ? TutorialStart(
+                            onDismiss: _dismissTutorial,
+                          )
+                        : EmptyStart()
+                    : HomeCarousel(
+                        customRoutines: customRoutines,
+                        onDelete: _deleteRoutine,
+                      ),
+                //TutorialStart(),
+                /*Flexible(
+                  child: FractionallySizedBox(
+                      heightFactor: 0.8, child: Center(child: EmptyStart())),
+                ),*/
+                SizedBox(height: width / 20),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            width: width,
+            child: NavBar(accentColor: accentColor),
+          )
+        ],
       ),
-      bottomNavigationBar: NavBar(accentColor: accentColor),
     );
   }
 

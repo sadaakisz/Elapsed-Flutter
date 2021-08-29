@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/pages/custom_timer.dart';
+import 'package:elapsed_flutter/utils/custom_navigator.dart';
 import 'package:elapsed_flutter/widgets/home_custom_timer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ class _HomeCarouselState extends State<HomeCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -42,13 +45,12 @@ class _HomeCarouselState extends State<HomeCarousel> {
           itemBuilder: (context, index, realIdx) {
             return GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CustomTimerPage(
-                        customRoutine: widget.customRoutines[index],
-                      ),
-                    ));
+                navPush(
+                  context,
+                  CustomTimerPage(
+                    customRoutine: widget.customRoutines[index],
+                  ),
+                );
               },
               child: Flex(
                 direction: Axis.vertical,
@@ -64,7 +66,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
           },
         ),
         Positioned(
-          bottom: 21,
+          bottom: height / 30,
           //BUG: When deleting the last routine, the active dot indicator does not show up after a swipe
           //TODO: Validate when there are too many custom routines and the Row of dots is too large
           child: Row(
@@ -72,11 +74,11 @@ class _HomeCarouselState extends State<HomeCarousel> {
             children: widget.customRoutines.asMap().entries.map((entry) {
               active = _current == entry.key;
               return AnimatedContainer(
-                width: active ? 12 : 6,
-                height: 6,
-                margin: EdgeInsets.symmetric(horizontal: 3),
+                width: active ? width / 33 : width / 66,
+                height: width / 66,
+                margin: EdgeInsets.symmetric(horizontal: width / 133),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
+                  borderRadius: BorderRadius.circular(width / 133),
                   gradient: active
                       ? LinearGradient(
                           colors: [EColors.light_aqua, EColors.light_purple],
