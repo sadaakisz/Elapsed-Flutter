@@ -12,6 +12,7 @@ class _SettingsTextFieldState extends State<SettingsTextField> {
   TextEditingController get controller => widget.controller;
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return TextField(
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
@@ -32,7 +33,7 @@ class _SettingsTextFieldState extends State<SettingsTextField> {
       ],
       style: TextStyle(
           color: Colors.white,
-          fontSize: 48,
+          fontSize: width / 8.18,
           fontWeight: FontWeight.w500,
           decoration: TextDecoration.underline),
       decoration: InputDecoration(
