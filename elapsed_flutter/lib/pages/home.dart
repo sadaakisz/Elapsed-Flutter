@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
@@ -29,6 +31,7 @@ class _HomeState extends State<Home> {
 
   Color backgroundColor = EColors.black;
   Color accentColor = EColors.green;
+  String backgroundPath = '';
 
   late SharedPreferences prefs;
 
@@ -54,42 +57,70 @@ class _HomeState extends State<Home> {
     accentColor = (prefs.getString('homePageAccentColor'))!.toColorFromHex();
   }
 
+  _getBackgroundImage() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      backgroundPath = prefs.getString('backgroundImage')!;
+    });
+  }
+
   @override
   void initState() {
     _getTutorialState();
     _getColors();
+    _getBackgroundImage();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElapsedTitle(),
-            customRoutines.length == 0
-                ? tutorialDismissed == 'NOT DISMISSED'
-                    ? TutorialStart(
-                        onDismiss: _dismissTutorial,
-                      )
-                    : EmptyStart()
-                : HomeCarousel(
-                    customRoutines: customRoutines,
-                    onDelete: _deleteRoutine,
+      body: Stack(
+        children: <Widget>[
+          backgroundPath != ''
+              ? Positioned.fill(
+                  child: Opacity(
+                  opacity: 0.5,
+                  child: Image.file(
+                    File(backgroundPath),
+                    fit: BoxFit.cover,
                   ),
-            //TutorialStart(),
-            /*Flexible(
-              child: FractionallySizedBox(
-                  heightFactor: 0.8, child: Center(child: EmptyStart())),
-            ),*/
-            SizedBox(height: 0),
-          ],
-        ),
+                ))
+              : SizedBox(),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElapsedTitle(),
+                customRoutines.length == 0
+                    ? tutorialDismissed == 'NOT DISMISSED'
+                        ? TutorialStart(
+                            onDismiss: _dismissTutorial,
+                          )
+                        : EmptyStart()
+                    : HomeCarousel(
+                        customRoutines: customRoutines,
+                        onDelete: _deleteRoutine,
+                      ),
+                //TutorialStart(),
+                /*Flexible(
+                  child: FractionallySizedBox(
+                      heightFactor: 0.8, child: Center(child: EmptyStart())),
+                ),*/
+                SizedBox(height: 0),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            width: width,
+            child: NavBar(accentColor: accentColor),
+          )
+        ],
       ),
-      bottomNavigationBar: NavBar(accentColor: accentColor),
+      //bottomNavigationBar: NavBar(accentColor: accentColor),
     );
   }
 
