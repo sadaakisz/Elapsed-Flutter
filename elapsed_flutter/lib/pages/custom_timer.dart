@@ -181,7 +181,7 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
                       Text(
                         customRoutine!.name,
                         style: Theme.of(context).textTheme.headline3!.copyWith(
-                              color: Colors.pink.shade600,
+                              color: customRoutine!.labelColor,
                               fontWeight: FontWeight.w500,
                               fontSize: width / 20,
                             ),
