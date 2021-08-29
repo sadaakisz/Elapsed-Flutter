@@ -42,6 +42,7 @@ class _AppSettingsState extends State<AppSettings> {
       });
       await prefs.setString('backgroundImage', backgroundPath);
     }
+    resetBackgroundColor();
   }
 
   resetBackgroundImage() async {
@@ -75,6 +76,7 @@ class _AppSettingsState extends State<AppSettings> {
       backgroundColor = color;
     });
     await prefs.setString('backgroundColor', color.toHex());
+    resetBackgroundImage();
   }
 
   resetBackgroundColor() async {
