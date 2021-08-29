@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:cyclop/cyclop.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
+import 'package:elapsed_flutter/utils/custom_navigator.dart';
 import 'package:elapsed_flutter/widgets/custom_color_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -188,6 +190,7 @@ class _AppSettingsState extends State<AppSettings> {
           FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: backgroundColor,
         body: Stack(
           children: <Widget>[
@@ -302,8 +305,7 @@ class _AppSettingsState extends State<AppSettings> {
                           ),
                           onTap: () {
                             if (_formKey.currentState!.validate()) {
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/home');
+                              navPush(context, Home());
                             }
                           },
                         ),
