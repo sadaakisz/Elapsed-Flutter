@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:cyclop/cyclop.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
+import 'package:elapsed_flutter/utils/custom_navigator.dart';
 import 'package:elapsed_flutter/widgets/custom_color_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings extends StatefulWidget {
@@ -20,6 +25,34 @@ class _AppSettingsState extends State<AppSettings> {
   Color timerFontColor = Colors.white;
   Color quickRoutineAccentColor = Colors.tealAccent.shade400;
   Color homePageAccentColor = EColors.green;
+
+  String backgroundPath = '';
+  final picker = ImagePicker();
+
+  _getBackgroundImage() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      backgroundPath = prefs.getString('backgroundImage')!;
+    });
+  }
+
+  Future<void> _openImagePicker() async {
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        backgroundPath = pickedImage.path;
+      });
+      await prefs.setString('backgroundImage', backgroundPath);
+    }
+    resetBackgroundColor();
+  }
+
+  resetBackgroundImage() async {
+    setState(() {
+      backgroundPath = '';
+    });
+    await prefs.setString('backgroundImage', '');
+  }
 
   late SharedPreferences prefs;
 
@@ -45,6 +78,7 @@ class _AppSettingsState extends State<AppSettings> {
       backgroundColor = color;
     });
     await prefs.setString('backgroundColor', color.toHex());
+    resetBackgroundImage();
   }
 
   resetBackgroundColor() async {
@@ -141,6 +175,7 @@ class _AppSettingsState extends State<AppSettings> {
   void initState() {
     fontFamilyController.text = 'Aldrich';
     _getColors();
+    _getBackgroundImage();
     _getTimerFontSize();
     _getTimerFontFamily();
     super.initState();
@@ -155,113 +190,132 @@ class _AppSettingsState extends State<AppSettings> {
           FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: backgroundColor,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: width / 14),
-            child: Form(
-              key: _formKey,
-              child: Stack(
-                children: [
-                  ListView(
-                    controller: scrollController,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: width / 16),
-                        child: Text(
-                          'APP SETTINGS',
-                          style: Theme.of(context).textTheme.headline1,
+        body: Stack(
+          children: <Widget>[
+            backgroundPath != ''
+                ? Positioned.fill(
+                    child: Opacity(
+                    opacity: 0.5,
+                    child: Image.file(
+                      File(backgroundPath),
+                      fit: BoxFit.cover,
+                    ),
+                  ))
+                : SizedBox(),
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: width / 14),
+                child: Form(
+                  key: _formKey,
+                  child: Stack(
+                    children: [
+                      ListView(
+                        controller: scrollController,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: width / 16),
+                            child: Text(
+                              'APP SETTINGS',
+                              style: Theme.of(context).textTheme.headline1,
+                            ),
+                          ),
+                          SizedBox(height: width / 50),
+                          _Subtitle(subtitleText: 'General'),
+                          ColorOption(
+                            colorText: 'Background Color',
+                            displayColor: backgroundColor,
+                            hexText: backgroundColor.toHex(),
+                            onColorChange: setBackgroundColor,
+                            onColorReset: resetBackgroundColor,
+                          ),
+                          _ImageSelector(
+                            imagePath: backgroundPath,
+                            onTap: _openImagePicker,
+                            onReset: resetBackgroundImage,
+                          ),
+                          _Subtitle(subtitleText: 'Timer'),
+                          ColorOption(
+                            colorText: 'Timer Font Color',
+                            displayColor: timerFontColor,
+                            hexText: timerFontColor.toHex(),
+                            onColorChange: setTimerFontColor,
+                            onColorReset: resetTimerFontColor,
+                          ),
+                          FontOption(
+                            controller: fontFamilyController,
+                            onFontFamilyChange: _setTimerFontFamily,
+                            onReset: _resetTimerFontFamily,
+                          ),
+                          FontSizeOption(
+                            controller: fontSizeController,
+                            onFontSizeChange: _setTimerFontSize,
+                            onReset: _resetTimerFontSize,
+                            scrollDown: _scrollDown,
+                          ),
+                          ColorOption(
+                            colorText: 'Quick Routine Accent Color',
+                            displayColor: quickRoutineAccentColor,
+                            hexText: quickRoutineAccentColor.toHex(),
+                            onColorChange: setQuickRoutineAccentColor,
+                            onColorReset: resetQuickRoutineAccentColor,
+                          ),
+                          _Subtitle(subtitleText: 'Home page'),
+                          ColorOption(
+                            colorText: 'Home Page Accent Color',
+                            displayColor: homePageAccentColor,
+                            hexText: homePageAccentColor.toHex(),
+                            onColorChange: setHomePageAccentColor,
+                            onColorReset: resetHomePageAccentColor,
+                          ),
+                          SizedBox(height: width / 4),
+                        ],
+                      ),
+                      Positioned(
+                        width: width,
+                        height: width / 4,
+                        bottom: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  backgroundColor,
+                                  backgroundColor.withOpacity(0)
+                                ]),
+                          ),
                         ),
                       ),
-                      SizedBox(height: width / 50),
-                      _Subtitle(subtitleText: 'General'),
-                      ColorOption(
-                        colorText: 'Background Color',
-                        displayColor: backgroundColor,
-                        hexText: backgroundColor.toHex(),
-                        onColorChange: setBackgroundColor,
-                        onColorReset: resetBackgroundColor,
-                      ),
-                      _ImageSelector(),
-                      _Subtitle(subtitleText: 'Timer'),
-                      ColorOption(
-                        colorText: 'Timer Font Color',
-                        displayColor: timerFontColor,
-                        hexText: timerFontColor.toHex(),
-                        onColorChange: setTimerFontColor,
-                        onColorReset: resetTimerFontColor,
-                      ),
-                      FontOption(
-                        controller: fontFamilyController,
-                        onFontFamilyChange: _setTimerFontFamily,
-                        onReset: _resetTimerFontFamily,
-                      ),
-                      FontSizeOption(
-                        controller: fontSizeController,
-                        onFontSizeChange: _setTimerFontSize,
-                        onReset: _resetTimerFontSize,
-                        scrollDown: _scrollDown,
-                      ),
-                      ColorOption(
-                        colorText: 'Quick Routine Accent Color',
-                        displayColor: quickRoutineAccentColor,
-                        hexText: quickRoutineAccentColor.toHex(),
-                        onColorChange: setQuickRoutineAccentColor,
-                        onColorReset: resetQuickRoutineAccentColor,
-                      ),
-                      _Subtitle(subtitleText: 'Home page'),
-                      ColorOption(
-                        colorText: 'Home Page Accent Color',
-                        displayColor: homePageAccentColor,
-                        hexText: homePageAccentColor.toHex(),
-                        onColorChange: setHomePageAccentColor,
-                        onColorReset: resetHomePageAccentColor,
-                      ),
-                      SizedBox(height: width / 4),
+                      Positioned(
+                        bottom: width / 13,
+                        width: width * 6 / 7,
+                        child: GestureDetector(
+                          child: Container(
+                            height: width / 8,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade800,
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                            child: Center(
+                              child: Text('SAVE',
+                                  style: Theme.of(context).textTheme.button),
+                            ),
+                          ),
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              navPush(context, Home());
+                            }
+                          },
+                        ),
+                      )
                     ],
                   ),
-                  Positioned(
-                    width: width,
-                    height: width / 4,
-                    bottom: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              backgroundColor,
-                              backgroundColor.withOpacity(0)
-                            ]),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: width / 13,
-                    width: width * 6 / 7,
-                    child: GestureDetector(
-                      child: Container(
-                        height: width / 8,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade800,
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                        child: Center(
-                          child: Text('SAVE',
-                              style: Theme.of(context).textTheme.button),
-                        ),
-                      ),
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.of(context).pushReplacementNamed('/home');
-                        }
-                      },
-                    ),
-                  )
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -402,8 +456,14 @@ class _ColorOptionState extends State<ColorOption> {
 }
 
 class _ImageSelector extends StatelessWidget {
+  final String? imagePath;
+  final Function onTap;
+  final VoidCallback onReset;
   const _ImageSelector({
     Key? key,
+    this.imagePath,
+    required this.onTap,
+    required this.onReset,
   }) : super(key: key);
 
   @override
@@ -419,33 +479,50 @@ class _ImageSelector extends StatelessWidget {
             style: Theme.of(context).textTheme.subtitle2,
           ),
           SizedBox(height: width / 33),
-          Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                height: width / 10,
-                decoration: BoxDecoration(
-                  color: Colors.white10,
-                  borderRadius: BorderRadius.circular(5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () => onTap(),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: width / 10,
+                      width: width * 0.74,
+                      decoration: BoxDecoration(
+                        color: Colors.white10,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    Positioned(
+                      left: width / 20,
+                      child: Text(
+                        'Select photo from library',
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(color: Colors.white),
+                      ),
+                    ),
+                    Positioned(
+                      right: width / 20,
+                      width: width / 10,
+                      height: width / 10,
+                      child: imagePath != ''
+                          ? Image.file(File(imagePath!), fit: BoxFit.cover)
+                          : Icon(
+                              Icons.image_outlined,
+                              color: Colors.white,
+                              size: width / 16,
+                            ),
+                    ),
+                  ],
                 ),
               ),
-              Positioned(
-                left: width / 20,
-                child: Text(
-                  'Select photo from library',
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle2!
-                      .copyWith(color: Colors.white),
-                ),
-              ),
-              Positioned(
-                right: width / 20,
-                child: Icon(
-                  Icons.image_outlined,
-                  color: Colors.white,
-                  size: width / 16,
-                ),
+              GestureDetector(
+                onTap: () => onReset(),
+                child: Icon(Icons.restart_alt),
               ),
             ],
           ),
