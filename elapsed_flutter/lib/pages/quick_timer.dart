@@ -173,7 +173,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
     return Scaffold(
       backgroundColor: Colors.black87,
       body: Padding(
-        padding: const EdgeInsets.all(50.0),
+        padding: EdgeInsets.all(width / 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -228,7 +228,7 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
+                  padding: EdgeInsets.only(bottom: width / 20),
                   child: BreakTime(
                       displayBreakMinutes: breakTime.displayMinutes!,
                       displayBreakSeconds: breakTime.displaySeconds!),
