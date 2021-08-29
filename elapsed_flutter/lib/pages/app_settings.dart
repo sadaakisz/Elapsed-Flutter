@@ -191,9 +191,12 @@ class _AppSettingsState extends State<AppSettings> {
           children: <Widget>[
             backgroundPath != ''
                 ? Positioned.fill(
+                    child: Opacity(
+                    opacity: 0.5,
                     child: Image.file(
-                    File(backgroundPath),
-                    fit: BoxFit.fill,
+                      File(backgroundPath),
+                      fit: BoxFit.cover,
+                    ),
                   ))
                 : SizedBox(),
             SafeArea(
