@@ -55,6 +55,7 @@ void main() {
               fontSize: logicalWidth / 18,
               fontWeight: FontWeight.w400,
               color: Colors.white70),
+          //Used for selected font in appsettings
           headline5: GoogleFonts.rubik(
               fontSize: logicalWidth / 11,
               fontWeight: FontWeight.w500,
@@ -142,7 +143,7 @@ class _ElapsedState extends State<Elapsed> {
       duration: 1000,
       curve: Curves.easeInOut,
       splashTransition: SplashTransition.fadeTransition,
-      pageTransitionType: PageTransitionType.bottomToTop,
+      pageTransitionType: PageTransitionType.fade,
     );
   }
 }
