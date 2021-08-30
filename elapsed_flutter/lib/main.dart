@@ -97,6 +97,7 @@ void main() async {
               fontSize: logicalWidth / 28,
               fontWeight: FontWeight.w300,
               color: Colors.white70),
+          //Used for selected font in appsettings
           bodyText2: GoogleFonts.rubik(
               fontSize: logicalWidth / 33,
               fontWeight: FontWeight.w400,
