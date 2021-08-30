@@ -1,3 +1,5 @@
+import 'package:elapsed_flutter/pages/quick_timer.dart';
+import 'package:elapsed_flutter/utils/custom_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:ms_undraw/ms_undraw.dart';
 
@@ -12,12 +14,15 @@ class EmptyStart extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         SizedBox(height: width * 0.2),
-        FractionallySizedBox(
-          widthFactor: 0.65,
-          child: UnDraw(
-            illustration: UnDrawIllustration.empty,
-            color: Colors.grey,
-            height: width / 2,
+        GestureDetector(
+          onTap: () => navPush(context, QuickTimerPage()),
+          child: FractionallySizedBox(
+            widthFactor: 0.65,
+            child: UnDraw(
+              illustration: UnDrawIllustration.empty,
+              color: Colors.grey,
+              height: width / 2,
+            ),
           ),
         ),
         SizedBox(height: width * 0.2),
