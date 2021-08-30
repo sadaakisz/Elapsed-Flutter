@@ -187,77 +187,73 @@ class _AppSettingsState extends State<AppSettings> {
             SafeArea(
               child: Stack(
                 alignment: Alignment.center,
-                children: [
+                children: <Widget>[
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: width / 14),
                     child: Form(
                       key: _formKey,
-                      child: Stack(
-                        children: [
-                          ListView(
-                            controller: scrollController,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(top: width / 16),
-                                child: Text(
-                                  'APP SETTINGS',
-                                  style: Theme.of(context).textTheme.headline1,
-                                ),
-                              ),
-                              SizedBox(height: width / 50),
-                              _Subtitle(subtitleText: 'General'),
-                              ColorOption(
-                                title: 'Background Color',
-                                displayColor: backgroundColor,
-                                onColorChange: _setBackgroundColor,
-                                onColorReset: _resetBackgroundColor,
-                              ),
-                              _ImageSelector(
-                                imagePath: backgroundPath,
-                                onTap: _setBackgroundImage,
-                                onReset: _resetBackgroundImage,
-                              ),
-                              _Subtitle(subtitleText: 'Timer'),
-                              ColorOption(
-                                title: 'Timer Font Color',
-                                displayColor: timerFontColor,
-                                onColorChange: _setTimerFontColor,
-                                onColorReset: _resetTimerFontColor,
-                              ),
-                              FontOption(
-                                controller: fontFamilyController,
-                                onFontFamilyChange: _setTimerFontFamily,
-                                onReset: _resetTimerFontFamily,
-                              ),
-                              FontSizeOption(
-                                controller: fontSizeController,
-                                onFontSizeChange: _setTimerFontSize,
-                                onReset: _resetTimerFontSize,
-                                scrollDown: _scrollDown,
-                              ),
-                              ColorOption(
-                                title: 'Quick Routine Accent Color',
-                                displayColor: quickRoutineAccentColor,
-                                onColorChange: _setQuickRoutineAccentColor,
-                                onColorReset: _resetQuickRoutineAccentColor,
-                              ),
-                              _Subtitle(subtitleText: 'Home page'),
-                              ColorOption(
-                                title: 'Home Page Accent Color',
-                                displayColor: homePageAccentColor,
-                                onColorChange: _setHomePageAccentColor,
-                                onColorReset: _resetHomePageAccentColor,
-                              ),
-                              SizedBox(height: width / 4),
-                            ],
+                      child: ListView(
+                        controller: scrollController,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: width / 16),
+                            child: Text(
+                              'APP SETTINGS',
+                              style: Theme.of(context).textTheme.headline1,
+                            ),
                           ),
+                          SizedBox(height: width / 50),
+                          _Subtitle(subtitleText: 'General'),
+                          ColorOption(
+                            title: 'Background Color',
+                            displayColor: backgroundColor,
+                            onColorChange: _setBackgroundColor,
+                            onColorReset: _resetBackgroundColor,
+                          ),
+                          _ImageSelector(
+                            imagePath: backgroundPath,
+                            onTap: _setBackgroundImage,
+                            onReset: _resetBackgroundImage,
+                          ),
+                          _Subtitle(subtitleText: 'Timer'),
+                          ColorOption(
+                            title: 'Timer Font Color',
+                            displayColor: timerFontColor,
+                            onColorChange: _setTimerFontColor,
+                            onColorReset: _resetTimerFontColor,
+                          ),
+                          FontOption(
+                            controller: fontFamilyController,
+                            onFontFamilyChange: _setTimerFontFamily,
+                            onReset: _resetTimerFontFamily,
+                          ),
+                          FontSizeOption(
+                            controller: fontSizeController,
+                            onFontSizeChange: _setTimerFontSize,
+                            onReset: _resetTimerFontSize,
+                            scrollDown: _scrollDown,
+                          ),
+                          ColorOption(
+                            title: 'Quick Routine Accent Color',
+                            displayColor: quickRoutineAccentColor,
+                            onColorChange: _setQuickRoutineAccentColor,
+                            onColorReset: _resetQuickRoutineAccentColor,
+                          ),
+                          _Subtitle(subtitleText: 'Home page'),
+                          ColorOption(
+                            title: 'Home Page Accent Color',
+                            displayColor: homePageAccentColor,
+                            onColorChange: _setHomePageAccentColor,
+                            onColorReset: _resetHomePageAccentColor,
+                          ),
+                          SizedBox(height: width / 4),
                         ],
                       ),
                     ),
                   ),
                   Positioned(
                     width: width,
-                    height: width / 4,
+                    height: width / 5,
                     bottom: 0,
                     child: Container(
                       decoration: BoxDecoration(
