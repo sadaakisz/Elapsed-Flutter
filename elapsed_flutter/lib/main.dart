@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/pages/app_settings.dart';
 import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/pages/quick_timer.dart';
@@ -9,17 +10,27 @@ import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
 
-void main() {
+void main() async {
+  //Ensures all the stuff is loaded TOP PRIORITY
+  WidgetsFlutterBinding.ensureInitialized();
+
   var pixelRatio = window.devicePixelRatio;
   var logicalScreenSize = window.physicalSize / pixelRatio;
   var logicalWidth = logicalScreenSize.width;
   var logicalHeight = logicalScreenSize.height;
   print('$logicalWidth, $logicalHeight');
-  WidgetsFlutterBinding.ensureInitialized();
+
+  final appDocumentDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDir.path);
+  Hive.registerAdapter(CustomRoutineAdapter());
+  Hive.openBox('custom_routines');
+
   _initializeSharedPrefsVariables();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .whenComplete(() {

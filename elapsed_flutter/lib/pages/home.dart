@@ -9,6 +9,7 @@ import 'package:elapsed_flutter/widgets/home_carousel.dart';
 import 'package:elapsed_flutter/widgets/navbar.dart';
 import 'package:elapsed_flutter/widgets/tutorial_start.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -19,21 +20,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<CustomRoutine> customRoutines = [
-    CustomRoutine(
-        name: 'Pomodoro 1',
-        timerTime: 25,
-        breakTime: 5,
-        labelColor: Colors.pink),
-    CustomRoutine(
-        name: 'Second Pomodoro',
-        timerTime: 30,
-        breakTime: 3,
-        labelColor: Colors.blue),
-    CustomRoutine(name: 'Third Pomo', timerTime: 30, breakTime: 3),
-    CustomRoutine(name: '4 Pomodoro', timerTime: 30, breakTime: 3),
-    CustomRoutine(name: 'Go Pomodoro', timerTime: 30, breakTime: 3),
-  ];
+  final customRoutineBox = Hive.box('custom_routines');
+  List<CustomRoutine> customRoutines = [];
 
   String tutorialDismissed = 'NOT DISMISSED';
 
@@ -42,6 +30,25 @@ class _HomeState extends State<Home> {
   String backgroundPath = '';
 
   late SharedPreferences prefs;
+
+  _getCustomRoutines() async {
+    Hive.openBox('custom_routines');
+    for (var i = 0; i < customRoutineBox.length; i++) {
+      customRoutines.add(customRoutineBox.getAt(i));
+    }
+  }
+
+  void addCustomRoutine() {
+    CustomRoutine customRoutine = CustomRoutine(
+        name: 'Pomodoro 1',
+        timerTime: 25,
+        breakTime: 5,
+        labelColor: Colors.pink.toHex());
+    setState(() {
+      customRoutines.add(customRoutine);
+    });
+    customRoutineBox.add(customRoutine);
+  }
 
   _getTutorialState() async {
     prefs = await SharedPreferences.getInstance();
@@ -72,11 +79,19 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void _deleteRoutine(int index) {
+    setState(() {
+      customRoutines.removeAt(index);
+    });
+    customRoutineBox.deleteAt(index);
+  }
+
   @override
   void initState() {
     _getTutorialState();
     _getColors();
     _getBackgroundImage();
+    _getCustomRoutines();
     super.initState();
   }
 
@@ -101,7 +116,9 @@ class _HomeState extends State<Home> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElapsedTitle(),
+                //TODO: Remove when adding a custom routine is implemented
+                GestureDetector(
+                    onTap: () => addCustomRoutine(), child: ElapsedTitle()),
                 customRoutines.length == 0
                     ? tutorialDismissed == 'NOT DISMISSED'
                         ? TutorialStart(
@@ -129,11 +146,5 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-  }
-
-  void _deleteRoutine(int index) {
-    setState(() {
-      customRoutines.removeAt(index);
-    });
   }
 }
