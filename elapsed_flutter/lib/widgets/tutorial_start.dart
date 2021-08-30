@@ -1,3 +1,6 @@
+import 'package:elapsed_flutter/pages/app_settings.dart';
+import 'package:elapsed_flutter/pages/quick_timer.dart';
+import 'package:elapsed_flutter/utils/custom_navigator.dart';
 import 'package:flutter/material.dart';
 
 class TutorialStart extends StatelessWidget {
@@ -26,37 +29,47 @@ class TutorialStart extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TutorialCard(
-                leading: Icon(Icons.bolt, color: Colors.white54),
-                title: 'QUICK ROUTINE',
-                message:
-                    'Want a no-brainer pomodoro timer? Create a quick routine by specifying your productive minutes and your break time.',
+              GestureDetector(
+                onTap: () => navPush(context, QuickTimerPage()),
+                child: TutorialCard(
+                  leading: Icon(Icons.bolt, color: Colors.white54),
+                  title: 'QUICK ROUTINE',
+                  message:
+                      'Want a no-brainer pomodoro timer? Create a quick routine by specifying your productive minutes and your break time.',
+                ),
               ),
               TutorialDivider(),
-              TutorialCard(
-                leading: Padding(
-                  padding: const EdgeInsets.only(left: 6.0),
-                  child: Container(
-                    width: 35,
-                    height: 35,
-                    child: Image.asset(
-                      'assets/TutorialDarkIcon.png',
+              //TODO: Route onTap to create new CustomRoutine
+              GestureDetector(
+                onTap: () {},
+                child: TutorialCard(
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 6.0),
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      child: Image.asset(
+                        'assets/TutorialDarkIcon.png',
+                      ),
                     ),
                   ),
+                  title: 'CUSTOM ROUTINE',
+                  message:
+                      'Customizability? Explore all the options for your own pomodoro timer for all your activities!',
                 ),
-                title: 'CUSTOM ROUTINE',
-                message:
-                    'Customizability? Explore all the options for your own pomodoro timer for all your activities!',
               ),
               TutorialDivider(),
-              TutorialCard(
-                leading: Padding(
-                  padding: const EdgeInsets.only(left: 7.0),
-                  child: Icon(Icons.settings, color: Colors.white54),
+              GestureDetector(
+                onTap: () => navPush(context, AppSettings()),
+                child: TutorialCard(
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 7.0),
+                    child: Icon(Icons.settings, color: Colors.white54),
+                  ),
+                  title: 'APP SETTINGS',
+                  message:
+                      'Tweak ALL the corners of the app, from the background, to timer font size and everything in between.',
                 ),
-                title: 'APP SETTINGS',
-                message:
-                    'Tweak ALL the corners of the app, from the background, to timer font size and everything in between.',
               ),
             ],
           ),
