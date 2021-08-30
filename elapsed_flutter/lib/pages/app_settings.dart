@@ -21,51 +21,29 @@ class AppSettings extends StatefulWidget {
 }
 
 class _AppSettingsState extends State<AppSettings> {
+  final _formKey = GlobalKey<FormState>();
+  late SharedPreferences prefs;
+  final ScrollController scrollController = ScrollController();
+
   Color backgroundColor = EColors.black;
+  String backgroundPath = '';
   Color timerFontColor = Colors.white;
+  final fontFamilyController = TextEditingController();
+  final fontSizeController = TextEditingController();
   Color quickRoutineAccentColor = Colors.tealAccent.shade400;
   Color homePageAccentColor = EColors.green;
 
-  String backgroundPath = '';
   final picker = ImagePicker();
 
-  _getBackgroundImage() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      backgroundPath = prefs.getString('backgroundImage')!;
-    });
-  }
-
-  Future<void> _openImagePicker() async {
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      setState(() {
-        backgroundPath = pickedImage.path;
-      });
-      await prefs.setString('backgroundImage', backgroundPath);
-    }
-    resetBackgroundColor();
-  }
-
-  resetBackgroundImage() async {
-    setState(() {
-      backgroundPath = '';
-    });
-    await prefs.setString('backgroundImage', '');
-  }
-
-  late SharedPreferences prefs;
-
-  final fontFamilyController = TextEditingController();
-  final fontSizeController = TextEditingController();
-  final ScrollController scrollController = ScrollController();
-  final _formKey = GlobalKey<FormState>();
-
-  _getColors() async {
+  Future<void> _initializeSharedPrefs() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       backgroundColor = (prefs.getString('backgroundColor')!.toColorFromHex());
+      backgroundPath = prefs.getString('backgroundImage')!;
       timerFontColor = (prefs.getString('timerFontColor')!.toColorFromHex());
+      fontFamilyController.text = prefs.getString('timerFontFamily')!;
+      fontSizeController.text =
+          prefs.getDouble('timerFontSize')!.toInt().toString();
       quickRoutineAccentColor =
           (prefs.getString('quickRoutineAccentColor')!.toColorFromHex());
       homePageAccentColor =
@@ -73,43 +51,84 @@ class _AppSettingsState extends State<AppSettings> {
     });
   }
 
-  setBackgroundColor(Color color) async {
+  Future<void> _setBackgroundColor(Color color) async {
     setState(() {
       backgroundColor = color;
     });
     await prefs.setString('backgroundColor', color.toHex());
-    resetBackgroundImage();
+    _resetBackgroundImage();
   }
 
-  resetBackgroundColor() async {
+  Future<void> _resetBackgroundColor() async {
     setState(() {
       backgroundColor = EColors.black;
     });
     await prefs.setString('backgroundColor', EColors.black.toHex());
   }
 
-  setTimerFontColor(Color color) async {
+  Future<void> _setBackgroundImage() async {
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        backgroundPath = pickedImage.path;
+      });
+      await prefs.setString('backgroundImage', backgroundPath);
+    }
+    _resetBackgroundColor();
+  }
+
+  Future<void> _resetBackgroundImage() async {
+    setState(() {
+      backgroundPath = '';
+    });
+    await prefs.setString('backgroundImage', '');
+  }
+
+  Future<void> _setTimerFontColor(Color color) async {
     setState(() {
       timerFontColor = color;
     });
     await prefs.setString('timerFontColor', color.toHex());
   }
 
-  resetTimerFontColor() async {
+  Future<void> _resetTimerFontColor() async {
     setState(() {
       timerFontColor = Colors.white;
     });
     await prefs.setString('timerFontColor', Colors.white.toHex());
   }
 
-  setQuickRoutineAccentColor(Color color) async {
+  Future<void> _setTimerFontFamily() async {
+    await prefs.setString('timerFontFamily', fontFamilyController.text);
+  }
+
+  Future<void> _resetTimerFontFamily() async {
+    setState(() {
+      fontFamilyController.text = 'Aldrich';
+    });
+    await prefs.setString('timerFontFamily', 'Aldrich');
+  }
+
+  Future<void> _setTimerFontSize() async {
+    await prefs.setDouble(
+        'timerFontSize', double.parse(fontSizeController.text));
+  }
+
+  Future<void> _resetTimerFontSize() async {
+    setState(() {
+      fontSizeController.text = '30';
+    });
+    await prefs.setDouble('timerFontSize', 30);
+  }
+
+  Future<void> _setQuickRoutineAccentColor(Color color) async {
     setState(() {
       quickRoutineAccentColor = color;
     });
     await prefs.setString('quickRoutineAccentColor', color.toHex());
   }
 
-  resetQuickRoutineAccentColor() async {
+  Future<void> _resetQuickRoutineAccentColor() async {
     setState(() {
       quickRoutineAccentColor = Colors.tealAccent.shade400;
     });
@@ -117,54 +136,18 @@ class _AppSettingsState extends State<AppSettings> {
         'quickRoutineAccentColor', Colors.tealAccent.shade400.toHex());
   }
 
-  setHomePageAccentColor(Color color) async {
+  Future<void> _setHomePageAccentColor(Color color) async {
     setState(() {
       homePageAccentColor = color;
     });
     await prefs.setString('homePageAccentColor', color.toHex());
   }
 
-  resetHomePageAccentColor() async {
+  Future<void> _resetHomePageAccentColor() async {
     setState(() {
       homePageAccentColor = EColors.green;
     });
     await prefs.setString('homePageAccentColor', EColors.green.toHex());
-  }
-
-  _getTimerFontFamily() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      fontFamilyController.text = prefs.getString('timerFontFamily')!;
-    });
-  }
-
-  _setTimerFontFamily() async {
-    await prefs.setString('timerFontFamily', fontFamilyController.text);
-  }
-
-  _resetTimerFontFamily() async {
-    setState(() {
-      fontFamilyController.text = 'Aldrich';
-    });
-    await prefs.setString('timerFontFamily', 'Aldrich');
-  }
-
-  _getTimerFontSize() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      fontSizeController.text =
-          prefs.getDouble('timerFontSize')!.toInt().toString();
-    });
-  }
-
-  _setTimerFontSize() async {
-    await prefs.setDouble(
-        'timerFontSize', double.parse(fontSizeController.text));
-  }
-
-  _resetTimerFontSize() async {
-    await prefs.setDouble('timerFontSize', 30);
-    fontSizeController.text = '30';
   }
 
   _scrollDown() {
@@ -174,10 +157,7 @@ class _AppSettingsState extends State<AppSettings> {
   @override
   void initState() {
     fontFamilyController.text = 'Aldrich';
-    _getColors();
-    _getBackgroundImage();
-    _getTimerFontSize();
-    _getTimerFontFamily();
+    _initializeSharedPrefs();
     super.initState();
   }
 
@@ -205,114 +185,115 @@ class _AppSettingsState extends State<AppSettings> {
                   ))
                 : SizedBox(),
             SafeArea(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: width / 14),
-                child: Form(
-                  key: _formKey,
-                  child: Stack(
-                    children: [
-                      ListView(
-                        controller: scrollController,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: width / 16),
-                            child: Text(
-                              'APP SETTINGS',
-                              style: Theme.of(context).textTheme.headline1,
-                            ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: width / 14),
+                    child: Form(
+                      key: _formKey,
+                      child: Stack(
+                        children: [
+                          ListView(
+                            controller: scrollController,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(top: width / 16),
+                                child: Text(
+                                  'APP SETTINGS',
+                                  style: Theme.of(context).textTheme.headline1,
+                                ),
+                              ),
+                              SizedBox(height: width / 50),
+                              _Subtitle(subtitleText: 'General'),
+                              ColorOption(
+                                title: 'Background Color',
+                                displayColor: backgroundColor,
+                                onColorChange: _setBackgroundColor,
+                                onColorReset: _resetBackgroundColor,
+                              ),
+                              _ImageSelector(
+                                imagePath: backgroundPath,
+                                onTap: _setBackgroundImage,
+                                onReset: _resetBackgroundImage,
+                              ),
+                              _Subtitle(subtitleText: 'Timer'),
+                              ColorOption(
+                                title: 'Timer Font Color',
+                                displayColor: timerFontColor,
+                                onColorChange: _setTimerFontColor,
+                                onColorReset: _resetTimerFontColor,
+                              ),
+                              FontOption(
+                                controller: fontFamilyController,
+                                onFontFamilyChange: _setTimerFontFamily,
+                                onReset: _resetTimerFontFamily,
+                              ),
+                              FontSizeOption(
+                                controller: fontSizeController,
+                                onFontSizeChange: _setTimerFontSize,
+                                onReset: _resetTimerFontSize,
+                                scrollDown: _scrollDown,
+                              ),
+                              ColorOption(
+                                title: 'Quick Routine Accent Color',
+                                displayColor: quickRoutineAccentColor,
+                                onColorChange: _setQuickRoutineAccentColor,
+                                onColorReset: _resetQuickRoutineAccentColor,
+                              ),
+                              _Subtitle(subtitleText: 'Home page'),
+                              ColorOption(
+                                title: 'Home Page Accent Color',
+                                displayColor: homePageAccentColor,
+                                onColorChange: _setHomePageAccentColor,
+                                onColorReset: _resetHomePageAccentColor,
+                              ),
+                              SizedBox(height: width / 4),
+                            ],
                           ),
-                          SizedBox(height: width / 50),
-                          _Subtitle(subtitleText: 'General'),
-                          ColorOption(
-                            colorText: 'Background Color',
-                            displayColor: backgroundColor,
-                            hexText: backgroundColor.toHex(),
-                            onColorChange: setBackgroundColor,
-                            onColorReset: resetBackgroundColor,
-                          ),
-                          _ImageSelector(
-                            imagePath: backgroundPath,
-                            onTap: _openImagePicker,
-                            onReset: resetBackgroundImage,
-                          ),
-                          _Subtitle(subtitleText: 'Timer'),
-                          ColorOption(
-                            colorText: 'Timer Font Color',
-                            displayColor: timerFontColor,
-                            hexText: timerFontColor.toHex(),
-                            onColorChange: setTimerFontColor,
-                            onColorReset: resetTimerFontColor,
-                          ),
-                          FontOption(
-                            controller: fontFamilyController,
-                            onFontFamilyChange: _setTimerFontFamily,
-                            onReset: _resetTimerFontFamily,
-                          ),
-                          FontSizeOption(
-                            controller: fontSizeController,
-                            onFontSizeChange: _setTimerFontSize,
-                            onReset: _resetTimerFontSize,
-                            scrollDown: _scrollDown,
-                          ),
-                          ColorOption(
-                            colorText: 'Quick Routine Accent Color',
-                            displayColor: quickRoutineAccentColor,
-                            hexText: quickRoutineAccentColor.toHex(),
-                            onColorChange: setQuickRoutineAccentColor,
-                            onColorReset: resetQuickRoutineAccentColor,
-                          ),
-                          _Subtitle(subtitleText: 'Home page'),
-                          ColorOption(
-                            colorText: 'Home Page Accent Color',
-                            displayColor: homePageAccentColor,
-                            hexText: homePageAccentColor.toHex(),
-                            onColorChange: setHomePageAccentColor,
-                            onColorReset: resetHomePageAccentColor,
-                          ),
-                          SizedBox(height: width / 4),
                         ],
                       ),
-                      Positioned(
-                        width: width,
-                        height: width / 4,
-                        bottom: 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  backgroundColor,
-                                  backgroundColor.withOpacity(0)
-                                ]),
-                          ),
+                    ),
+                  ),
+                  Positioned(
+                    width: width,
+                    height: width / 4,
+                    bottom: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              backgroundColor,
+                              backgroundColor.withOpacity(0)
+                            ]),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: width / 13,
+                    width: width * 0.86,
+                    child: GestureDetector(
+                      child: Container(
+                        height: width / 8,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade800,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        child: Center(
+                          child: Text('SAVE',
+                              style: Theme.of(context).textTheme.button),
                         ),
                       ),
-                      Positioned(
-                        bottom: width / 13,
-                        width: width * 6 / 7,
-                        child: GestureDetector(
-                          child: Container(
-                            height: width / 8,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade800,
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                            child: Center(
-                              child: Text('SAVE',
-                                  style: Theme.of(context).textTheme.button),
-                            ),
-                          ),
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              navPush(context, Home());
-                            }
-                          },
-                        ),
-                      )
-                    ],
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          navPush(context, Home());
+                        }
+                      },
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ],
@@ -360,16 +341,14 @@ class _Subtitle extends StatelessWidget {
 }
 
 class ColorOption extends StatefulWidget {
-  final String colorText;
+  final String title;
   final Color displayColor;
-  final String hexText;
   final Function(Color) onColorChange;
   final VoidCallback onColorReset;
   const ColorOption({
     Key? key,
-    required this.colorText,
+    required this.title,
     required this.displayColor,
-    required this.hexText,
     required this.onColorChange,
     required this.onColorReset,
   }) : super(key: key);
@@ -379,9 +358,10 @@ class ColorOption extends StatefulWidget {
 }
 
 class _ColorOptionState extends State<ColorOption> {
-  String get colorText => widget.colorText;
+  String get title => widget.title;
   Color get displayColor => widget.displayColor;
-  String get hexText => widget.hexText;
+  Function(Color) get onColorChange => widget.onColorChange;
+  VoidCallback get onColorReset => widget.onColorReset;
 
   @override
   Widget build(BuildContext context) {
@@ -392,7 +372,7 @@ class _ColorOptionState extends State<ColorOption> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            colorText,
+            title,
             style: Theme.of(context).textTheme.subtitle2,
           ),
           SizedBox(height: width / 33),
@@ -401,22 +381,23 @@ class _ColorOptionState extends State<ColorOption> {
               Flexible(
                 flex: 9,
                 child: CustomColorButton(
-                    darkMode: true,
+                  darkMode: true,
+                  color: displayColor,
+                  boxShape: BoxShape.rectangle,
+                  height: width / 10,
+                  decoration: BoxDecoration(
                     color: displayColor,
-                    boxShape: BoxShape.rectangle,
-                    height: width / 10,
-                    decoration: BoxDecoration(
-                      color: displayColor,
-                      border: Border.all(color: Colors.white38, width: 0.5),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    config: ColorPickerConfig(
-                        enableEyePicker: false, enableLibrary: false),
-                    onColorChanged: (value) {
-                      setState(() {
-                        widget.onColorChange(value);
-                      });
-                    }),
+                    border: Border.all(color: Colors.white38, width: 0.5),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  config: ColorPickerConfig(
+                      enableEyePicker: false, enableLibrary: false),
+                  onColorChanged: (value) {
+                    setState(() {
+                      onColorChange(value);
+                    });
+                  },
+                ),
               ),
               SizedBox(width: width / 22),
               Flexible(
@@ -432,7 +413,7 @@ class _ColorOptionState extends State<ColorOption> {
                       ),
                     ),
                     Text(
-                      hexText,
+                      displayColor.toHex(),
                       style: Theme.of(context).textTheme.overline,
                     )
                   ],
@@ -443,7 +424,7 @@ class _ColorOptionState extends State<ColorOption> {
                 child: Icon(Icons.restart_alt),
                 onTap: () {
                   setState(() {
-                    widget.onColorReset();
+                    onColorReset();
                   });
                 },
               ),
