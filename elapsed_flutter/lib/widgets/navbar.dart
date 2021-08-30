@@ -1,4 +1,5 @@
 import 'package:elapsed_flutter/pages/app_settings.dart';
+import 'package:elapsed_flutter/pages/create_custom_routine.dart';
 import 'package:elapsed_flutter/pages/quick_timer.dart';
 import 'package:elapsed_flutter/utils/custom_navigator.dart';
 import 'package:flutter/material.dart';
@@ -29,20 +30,22 @@ class _NavBarState extends State<NavBar> {
             },
           ),
         ),
-        //TODO: Connect elapsed icon to create new custom routine
-        Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            SvgPicture.asset(
-              'assets/AddIconBG.svg',
-              width: width / 2.1,
-              color: accentColor,
-            ),
-            Image.asset(
-              'assets/GreyIcon.png',
-              width: width / 13,
-            ),
-          ],
+        GestureDetector(
+          onTap: () => navPush(context, CreateCustomRoutine()),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              SvgPicture.asset(
+                'assets/AddIconBG.svg',
+                width: width / 2.1,
+                color: accentColor,
+              ),
+              Image.asset(
+                'assets/GreyIcon.png',
+                width: width / 13,
+              ),
+            ],
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
