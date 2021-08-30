@@ -4,7 +4,7 @@ import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/utils/custom_navigator.dart';
-import 'package:elapsed_flutter/widgets/settings_widgets/color_option.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/color_selector.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/font_selector.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/font_size_option.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/image_selector.dart';
