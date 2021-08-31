@@ -4,6 +4,8 @@ import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/utils/custom_navigator.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/bottom_fade_background.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/bottom_floating_button.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/color_selector.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/font_selector.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/font_size_option.dart';
@@ -153,6 +155,12 @@ class _AppSettingsState extends State<AppSettings> {
     scrollController.jumpTo(scrollController.position.maxScrollExtent);
   }
 
+  void _validate() {
+    if (_formKey.currentState!.validate()) {
+      navPush(context, Home());
+    }
+  }
+
   @override
   void initState() {
     fontFamilyController.text = 'Aldrich';
@@ -250,43 +258,15 @@ class _AppSettingsState extends State<AppSettings> {
                       ),
                     ),
                   ),
-                  Positioned(
+                  BottomFadeBackground(
                     width: width,
-                    height: width / 5,
-                    bottom: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              backgroundColor,
-                              backgroundColor.withOpacity(0)
-                            ]),
-                      ),
-                    ),
+                    fadeBackgroundColor: backgroundColor,
                   ),
-                  Positioned(
-                    bottom: width / 13,
-                    width: width * 0.86,
-                    child: GestureDetector(
-                      child: Container(
-                        height: width / 8,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade800,
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                        child: Center(
-                          child: Text('SAVE',
-                              style: Theme.of(context).textTheme.button),
-                        ),
-                      ),
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          navPush(context, Home());
-                        }
-                      },
-                    ),
+                  BottomFloatingButton(
+                    child:
+                        Text('SAVE', style: Theme.of(context).textTheme.button),
+                    width: width,
+                    onTap: _validate,
                   ),
                 ],
               ),
