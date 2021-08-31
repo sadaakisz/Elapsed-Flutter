@@ -4,6 +4,7 @@ import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/utils/custom_navigator.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/app_title.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_fade_background.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_floating_button.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/color_selector.dart';
@@ -202,13 +203,7 @@ class _AppSettingsState extends State<AppSettings> {
                       child: ListView(
                         controller: scrollController,
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: width / 16),
-                            child: Text(
-                              'APP SETTINGS',
-                              style: Theme.of(context).textTheme.headline1,
-                            ),
-                          ),
+                          AppTitle(width: width, title: 'APP SETTINGS'),
                           SizedBox(height: width / 50),
                           Subtitle(subtitleText: 'General'),
                           ColorSelector(
