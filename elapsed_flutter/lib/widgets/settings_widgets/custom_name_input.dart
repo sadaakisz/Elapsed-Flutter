@@ -60,6 +60,7 @@ class _CustomNameInputState extends State<CustomNameInput> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
+                flex: 9,
                 child: Container(
                   padding: EdgeInsets.only(left: width / 20),
                   height: width / 10,
@@ -99,6 +100,13 @@ class _CustomNameInputState extends State<CustomNameInput> {
                     controller: widget.controller,
                   ),
                 ),
+              ),
+              SizedBox(width: width / 22),
+              Expanded(
+                flex: 1,
+                child: GestureDetector(
+                    onTap: () => widget.controller.clear(),
+                    child: Icon(Icons.clear)),
               ),
             ],
           ),
