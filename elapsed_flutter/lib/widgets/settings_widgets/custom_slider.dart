@@ -48,7 +48,7 @@ class _CustomSliderState extends State<CustomSlider> {
                   height: width / 10,
                   decoration: BoxDecoration(
                     color: Colors.white10,
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(width / 6),
                   ),
                   child: SliderTheme(
                     data: SliderThemeData(
