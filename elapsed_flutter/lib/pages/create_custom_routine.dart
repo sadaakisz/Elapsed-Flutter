@@ -6,6 +6,7 @@ import 'package:elapsed_flutter/widgets/settings_widgets/app_title.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_fade_background.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_floating_button.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/color_selector.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/custom_name_input.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/image_selector.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/time_option.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,8 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
   Color backgroundColor = EColors.black;
   String backgroundPath = '';
 
+  final routineNameController = TextEditingController();
+  String routineName = '';
   final timerTimeController = TextEditingController();
   int timerTime = 25;
   final breakTimeController = TextEditingController();
@@ -45,6 +48,10 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
   void _initializeDefaultValues() {
     timerTimeController.text = '25';
     breakTimeController.text = '5';
+  }
+
+  void _setRoutineName() {
+    routineName = routineNameController.text;
   }
 
   void _setTimerTime() {
@@ -82,6 +89,21 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
         routineBackgroundPath = pickedImage.path;
       });
     }
+  }
+
+  void _resetBackgroundImage() {
+    setState(() {
+      routineBackgroundPath = '';
+    });
+  }
+
+  //TODO: Remove after implementing all parameters.
+  void printParams() {
+    print(routineName);
+    print(timerTime);
+    print(breakTime);
+    print(labelColor.toHex());
+    print(routineBackgroundPath);
   }
 
   @override
@@ -126,6 +148,10 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                         children: <Widget>[
                           AppTitle(width: width, title: 'CUSTOM ROUTINE'),
                           SizedBox(height: width / 50),
+                          CustomNameInput(
+                              title: 'Routine Name',
+                              controller: routineNameController,
+                              onTextChange: _setRoutineName),
                           TimeOption(
                             title: 'Timer Time',
                             controller: timerTimeController,
@@ -140,14 +166,14 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                           ),
                           ColorSelector(
                             title: 'Label Color',
-                            displayColor: backgroundColor,
+                            displayColor: labelColor,
                             onColorChange: _setLabelColor,
                             enableReset: false,
                           ),
                           ImageSelector(
-                            imagePath: backgroundPath,
+                            imagePath: routineBackgroundPath,
                             onTap: _setBackgroundImage,
-                            enableReset: false,
+                            onReset: _resetBackgroundImage,
                           ),
                         ],
                       ),
@@ -161,7 +187,8 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                     child:
                         Text('SAVE', style: Theme.of(context).textTheme.button),
                     width: width,
-                    onTap: () {},
+                    //TODO: Validate form
+                    onTap: printParams,
                   ),
                 ],
               ),
