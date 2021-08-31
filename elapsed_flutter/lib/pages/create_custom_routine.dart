@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/app_shortcut.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/app_title.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_fade_background.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_floating_button.dart';
@@ -97,6 +99,10 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
     });
   }
 
+  void _openSoundSettings() {
+    AppSettings.openSoundSettings();
+  }
+
   //TODO: Remove after implementing all parameters.
   void printParams() {
     print(routineName);
@@ -175,6 +181,12 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                             onTap: _setBackgroundImage,
                             onReset: _resetBackgroundImage,
                           ),
+                          AppShortcut(
+                            title: 'Notification Sound',
+                            content: 'Open sound settings',
+                            icon: Icons.app_settings_alt_outlined,
+                            onTap: _openSoundSettings,
+                          )
                         ],
                       ),
                     ),
