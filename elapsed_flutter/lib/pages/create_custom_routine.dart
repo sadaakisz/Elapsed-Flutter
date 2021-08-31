@@ -186,7 +186,8 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                             content: 'Open sound settings',
                             icon: Icons.app_settings_alt_outlined,
                             onTap: _openSoundSettings,
-                          )
+                          ),
+                          SizedBox(height: width / 4),
                         ],
                       ),
                     ),
