@@ -9,6 +9,7 @@ import 'package:elapsed_flutter/widgets/settings_widgets/bottom_fade_background.
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_floating_button.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/color_selector.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/custom_name_input.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/custom_slider.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/image_selector.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/time_option.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
 
   Color backgroundColor = EColors.black;
   String backgroundPath = '';
+  Color accentColor = EColors.green;
 
   final routineNameController = TextEditingController();
   String routineName = '';
@@ -38,12 +40,14 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
   int breakTime = 5;
   Color labelColor = EColors.red;
   String routineBackgroundPath = '';
+  double notificationVolume = 1;
 
   Future<void> _initializeSharedPrefs() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       backgroundColor = (prefs.getString('backgroundColor')!.toColorFromHex());
       backgroundPath = prefs.getString('backgroundImage')!;
+      accentColor = (prefs.getString('homePageAccentColor')!.toColorFromHex());
     });
   }
 
@@ -103,6 +107,10 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
     AppSettings.openSoundSettings();
   }
 
+  void _setNotificationVolume(double value) {
+    notificationVolume = value / 100;
+  }
+
   //TODO: Remove after implementing all parameters.
   void printParams() {
     print(routineName);
@@ -110,6 +118,7 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
     print(breakTime);
     print(labelColor.toHex());
     print(routineBackgroundPath);
+    print(notificationVolume);
   }
 
   @override
@@ -186,6 +195,11 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                             content: 'Open sound settings',
                             icon: Icons.app_settings_alt_outlined,
                             onTap: _openSoundSettings,
+                          ),
+                          CustomSlider(
+                            title: 'Notification Volume',
+                            onChanged: _setNotificationVolume,
+                            color: accentColor,
                           ),
                           SizedBox(height: width / 4),
                         ],
