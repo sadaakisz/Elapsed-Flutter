@@ -134,7 +134,7 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
       timerTime: timerTime,
       breakTime: breakTime,
       labelColor: labelColor.toHex(),
-      background: backgroundPath,
+      background: routineBackgroundPath,
       notificationVolume: notificationVolume.toInt(),
       vibrate: vibrate,
       autoStart: autoStart,
