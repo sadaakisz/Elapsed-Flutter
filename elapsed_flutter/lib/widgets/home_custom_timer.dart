@@ -178,6 +178,12 @@ class _CustomTimerInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.black26,
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
         backgroundPath != ''
             ? Positioned.fill(
                 child: ClipRRect(
@@ -198,7 +204,7 @@ class _CustomTimerInfo extends StatelessWidget {
           width: double.maxFinite,
           height: double.maxFinite,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
+            //border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(30),
           ),
           child: Padding(
