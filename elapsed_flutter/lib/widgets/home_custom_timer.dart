@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:elapsed_flutter/models/custom_routine.dart';
@@ -33,6 +34,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
   String get name => widget.routine.name;
   int get timerTime => widget.routine.timerTime;
   int get breakTime => widget.routine.breakTime;
+  String get backgroundPath => widget.routine.background;
   Function(int) get onDelete => widget.onDelete;
   int get index => widget.index;
 
@@ -75,6 +77,7 @@ class _HomeCustomTimerState extends State<HomeCustomTimer>
                 timerTime: timerTime,
                 breakTime: breakTime,
                 offset: tween.value,
+                backgroundPath: backgroundPath,
               ),
             ),
           ),
@@ -159,70 +162,86 @@ class _CustomTimerInfo extends StatelessWidget {
   final String name;
   final int timerTime;
   final int breakTime;
+  final String backgroundPath;
 
   final double offset;
-  const _CustomTimerInfo(
-      {Key? key,
-      required this.name,
-      required this.timerTime,
-      required this.breakTime,
-      required this.offset})
-      : super(key: key);
+  const _CustomTimerInfo({
+    Key? key,
+    required this.name,
+    required this.timerTime,
+    required this.breakTime,
+    required this.offset,
+    required this.backgroundPath,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      height: double.maxFinite,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          //TODO: Replace with default or specific background of custom timer
-          image: AssetImage("assets/UnsplashBG.png"),
-          colorFilter: new ColorFilter.mode(Colors.black54, BlendMode.dstATop),
-          fit: BoxFit.cover,
-        ),
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(offset, 0.0, 0.0, 45.0),
-        child: FractionallySizedBox(
-          alignment: Alignment.bottomCenter,
-          widthFactor: 0.75,
-          heightFactor: 0.2,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                maxLines: 1,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5!
-                    .copyWith(fontSize: 28, fontWeight: FontWeight.w600),
-              ),
-              Text(
-                '$timerTime min',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline3!
-                    .copyWith(fontWeight: FontWeight.w600),
-              ),
-              Text(
-                'Break · $breakTime min',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(fontWeight: FontWeight.normal),
-              ),
-            ],
+    return Stack(
+      children: [
+        backgroundPath != ''
+            ? Positioned.fill(
+                child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Image.file(
+                  File(backgroundPath),
+                  fit: BoxFit.cover,
+                ),
+              ))
+            : SizedBox(),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.black26,
+            borderRadius: BorderRadius.circular(30),
           ),
         ),
-      ),
+        Container(
+          width: double.maxFinite,
+          height: double.maxFinite,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(offset, 0.0, 0.0, 45.0),
+            child: FractionallySizedBox(
+              alignment: Alignment.bottomCenter,
+              widthFactor: 0.75,
+              heightFactor: 0.2,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline5!
+                        .copyWith(fontSize: 28, fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    '$timerTime min',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline3!
+                        .copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    'Break · $breakTime min',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontWeight: FontWeight.normal),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -38,18 +38,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-  void addCustomRoutine() {
-    CustomRoutine customRoutine = CustomRoutine(
-        name: 'Pomodoro 1',
-        timerTime: 25,
-        breakTime: 5,
-        labelColor: Colors.pink.toHex());
-    setState(() {
-      customRoutines.add(customRoutine);
-    });
-    customRoutineBox.add(customRoutine);
-  }
-
   _getTutorialState() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -116,9 +104,7 @@ class _HomeState extends State<Home> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                //TODO: Remove when adding a custom routine is implemented
-                GestureDetector(
-                    onTap: () => addCustomRoutine(), child: ElapsedTitle()),
+                ElapsedTitle(),
                 customRoutines.length == 0
                     ? tutorialDismissed == 'NOT DISMISSED'
                         ? TutorialStart(

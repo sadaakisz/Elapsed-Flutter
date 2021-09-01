@@ -1,14 +1,23 @@
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/models/custom_routine.dart';
+import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
+import 'package:elapsed_flutter/utils/custom_navigator.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/app_shortcut.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/app_title.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_fade_background.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_floating_button.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/color_selector.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/custom_name_input.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/custom_slider.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/custom_switch.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/image_selector.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/time_option.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,29 +31,41 @@ class CreateCustomRoutine extends StatefulWidget {
 class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
   final _formKey = GlobalKey<FormState>();
   late SharedPreferences prefs;
+  final customRoutineBox = Hive.box('custom_routines');
   final picker = ImagePicker();
 
   Color backgroundColor = EColors.black;
   String backgroundPath = '';
+  Color accentColor = EColors.green;
 
+  final routineNameController = TextEditingController();
+  String routineName = '';
   final timerTimeController = TextEditingController();
   int timerTime = 25;
   final breakTimeController = TextEditingController();
   int breakTime = 5;
   Color labelColor = EColors.red;
   String routineBackgroundPath = '';
+  double notificationVolume = 1;
+  bool vibrate = true;
+  bool autoStart = false;
 
   Future<void> _initializeSharedPrefs() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       backgroundColor = (prefs.getString('backgroundColor')!.toColorFromHex());
       backgroundPath = prefs.getString('backgroundImage')!;
+      accentColor = (prefs.getString('homePageAccentColor')!.toColorFromHex());
     });
   }
 
   void _initializeDefaultValues() {
     timerTimeController.text = '25';
     breakTimeController.text = '5';
+  }
+
+  void _setRoutineName() {
+    routineName = routineNameController.text;
   }
 
   void _setTimerTime() {
@@ -84,9 +105,50 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
     }
   }
 
+  void _resetBackgroundImage() {
+    setState(() {
+      routineBackgroundPath = '';
+    });
+  }
+
+  void _openSoundSettings() {
+    AppSettings.openSoundSettings();
+  }
+
+  void _setNotificationVolume(double value) {
+    notificationVolume = value / 100;
+  }
+
+  void _setVibration(bool value) {
+    vibrate = value;
+  }
+
+  void _setAutostart(bool value) {
+    autoStart = value;
+  }
+
+  void _createCustomRoutine() {
+    _formKey.currentState!.validate();
+    CustomRoutine customRoutine = CustomRoutine(
+      name: routineName,
+      timerTime: timerTime,
+      breakTime: breakTime,
+      labelColor: labelColor.toHex(),
+      background: routineBackgroundPath,
+      notificationVolume: notificationVolume.toInt(),
+      vibrate: vibrate,
+      autoStart: autoStart,
+    );
+    setState(() {
+      customRoutineBox.add(customRoutine);
+    });
+    navPushReplace(context, Home());
+  }
+
   @override
   void initState() {
     _initializeSharedPrefs();
+    Hive.openBox('custom_routines');
     _initializeDefaultValues();
     super.initState();
   }
@@ -126,6 +188,10 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                         children: <Widget>[
                           AppTitle(width: width, title: 'CUSTOM ROUTINE'),
                           SizedBox(height: width / 50),
+                          CustomNameInput(
+                              title: 'Routine Name',
+                              controller: routineNameController,
+                              onTextChange: _setRoutineName),
                           TimeOption(
                             title: 'Timer Time',
                             controller: timerTimeController,
@@ -140,15 +206,40 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                           ),
                           ColorSelector(
                             title: 'Label Color',
-                            displayColor: backgroundColor,
+                            displayColor: labelColor,
                             onColorChange: _setLabelColor,
                             enableReset: false,
                           ),
                           ImageSelector(
-                            imagePath: backgroundPath,
+                            imagePath: routineBackgroundPath,
                             onTap: _setBackgroundImage,
-                            enableReset: false,
+                            onReset: _resetBackgroundImage,
                           ),
+                          AppShortcut(
+                            title: 'Notification Sound',
+                            content: 'Open sound settings',
+                            icon: Icons.app_settings_alt_outlined,
+                            onTap: _openSoundSettings,
+                          ),
+                          CustomSlider(
+                            title: 'Notification Volume',
+                            onChanged: _setNotificationVolume,
+                            color: accentColor,
+                          ),
+                          CustomSwitch(
+                            title: 'Vibrate',
+                            subtitle:
+                                'Phone will vibrate during each notification',
+                            onSwitch: _setVibration,
+                          ),
+                          CustomSwitch(
+                            title: 'Auto-Start',
+                            subtitle:
+                                'Timer will start as soon as the app is opened',
+                            onSwitch: _setAutostart,
+                            defaultValue: false,
+                          ),
+                          SizedBox(height: width / 4),
                         ],
                       ),
                     ),
@@ -161,7 +252,7 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                     child:
                         Text('SAVE', style: Theme.of(context).textTheme.button),
                     width: width,
-                    onTap: () {},
+                    onTap: _createCustomRoutine,
                   ),
                 ],
               ),

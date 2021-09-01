@@ -9,6 +9,7 @@ class ColorSelector extends StatefulWidget {
   final Function(Color) onColorChange;
   final VoidCallback? onColorReset;
   final bool enableReset;
+  final bool enableOutline;
   const ColorSelector({
     Key? key,
     required this.title,
@@ -16,6 +17,7 @@ class ColorSelector extends StatefulWidget {
     required this.onColorChange,
     this.onColorReset,
     this.enableReset = true,
+    this.enableOutline = false,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class _ColorSelectorState extends State<ColorSelector> {
   Function(Color) get onColorChange => widget.onColorChange;
   VoidCallback? get onColorReset => widget.onColorReset;
   bool get enableReset => widget.enableReset;
-
+  bool get enableOutline => widget.enableOutline;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -53,7 +55,9 @@ class _ColorSelectorState extends State<ColorSelector> {
                   height: width / 10,
                   decoration: BoxDecoration(
                     color: displayColor,
-                    border: Border.all(color: Colors.white38, width: 0.5),
+                    border: enableOutline
+                        ? Border.all(color: Colors.white38, width: 0.5)
+                        : Border.all(width: 0),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   config: ColorPickerConfig(

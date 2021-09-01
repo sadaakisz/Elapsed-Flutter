@@ -20,11 +20,11 @@ class CustomRoutineAdapter extends TypeAdapter<CustomRoutine> {
       name: fields[0] as String,
       timerTime: fields[1] as int,
       breakTime: fields[2] as int,
-      labelColor: fields[3] as String?,
-      background: fields[4] as String?,
-      notificationVolume: fields[5] as int?,
-      vibrate: fields[6] as bool?,
-      autoStart: fields[7] as bool?,
+      labelColor: fields[3] as String,
+      background: fields[4] as String,
+      notificationVolume: fields[5] as int,
+      vibrate: fields[6] as bool,
+      autoStart: fields[7] as bool,
     );
   }
 
