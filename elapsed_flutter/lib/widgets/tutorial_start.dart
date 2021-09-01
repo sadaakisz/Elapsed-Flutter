@@ -71,6 +71,7 @@ class TutorialStart extends StatelessWidget {
                       'Tweak ALL the corners of the app, from the background, to timer font size and everything in between.',
                 ),
               ),
+              SizedBox(),
             ],
           ),
         ),
