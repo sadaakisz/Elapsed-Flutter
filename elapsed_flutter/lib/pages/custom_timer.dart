@@ -176,13 +176,12 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
                     children: [
                       Icon(
                         Icons.stop_rounded,
-                        color: customRoutine!.labelColor!.toColorFromHex(),
+                        color: customRoutine!.labelColor.toColorFromHex(),
                       ),
                       Text(
                         customRoutine!.name,
                         style: Theme.of(context).textTheme.headline3!.copyWith(
-                              color:
-                                  customRoutine!.labelColor!.toColorFromHex(),
+                              color: customRoutine!.labelColor.toColorFromHex(),
                               fontWeight: FontWeight.w500,
                               fontSize: width / 20,
                             ),

@@ -39,6 +39,9 @@ dependencies:
   flutter_material_pickers: ^3.1.0
   hive: ^2.0.4
   hive_flutter: ^1.1.0
+  english_words: ^4.0.0
+  app_settings: 4.1.1
+  flutter_ringtone_player: ^3.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.1"
