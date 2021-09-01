@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:ui';
 
 import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/models/time_model.dart';
@@ -13,9 +15,9 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomTimerPage extends StatefulWidget {
-  final CustomRoutine? customRoutine;
+  final CustomRoutine customRoutine;
 
-  CustomTimerPage({Key? key, this.customRoutine}) : super(key: key);
+  CustomTimerPage({Key? key, required this.customRoutine}) : super(key: key);
 
   @override
   _CustomTimerPageState createState() => _CustomTimerPageState();
@@ -23,7 +25,8 @@ class CustomTimerPage extends StatefulWidget {
 
 class _CustomTimerPageState extends State<CustomTimerPage> {
   Timer? _timer;
-  CustomRoutine? get customRoutine => widget.customRoutine;
+  CustomRoutine get customRoutine => widget.customRoutine;
+  String get backgroundPath => widget.customRoutine.background;
 
   TimeModel timerTime = new TimeModel(minutes: 10, seconds: 0);
   TimeModel breakTime = new TimeModel(minutes: 5, seconds: 0);
@@ -50,8 +53,8 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     super.initState();
     setState(() {
-      timerTime.minutes = customRoutine!.timerTime;
-      breakTime.minutes = customRoutine!.breakTime;
+      timerTime.minutes = customRoutine.timerTime;
+      breakTime.minutes = customRoutine.breakTime;
       timerTime.updateActual();
       breakTime.updateActual();
       timerTime.updateDisplay();
@@ -134,7 +137,7 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
           builder: (context) => CustomTimerSettings(
               int.parse(timerTime.displayMinutes!),
               int.parse(breakTime.displayMinutes!),
-              customRoutine!.name)),
+              customRoutine.name)),
     );
     if (result != null) {
       setState(() {
@@ -160,86 +163,111 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black87,
-      body: Padding(
-        padding: EdgeInsets.all(width / 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(bottom: width / 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.stop_rounded,
-                        color: customRoutine!.labelColor.toColorFromHex(),
+      body: Stack(
+        children: [
+          backgroundPath != ''
+              ? Positioned.fill(
+                  child: ImageFiltered(
+                  //TODO: Make this blur customizable
+                  imageFilter: ImageFilter.blur(
+                    sigmaX: 5,
+                    sigmaY: 5,
+                  ),
+                  child: Opacity(
+                    opacity: 0.5,
+                    child: Image.file(
+                      File(backgroundPath),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ))
+              : SizedBox(),
+          Padding(
+            padding: EdgeInsets.all(width / 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: width / 40),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.stop_rounded,
+                            color: customRoutine.labelColor.toColorFromHex(),
+                          ),
+                          Text(
+                            customRoutine.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline3!
+                                .copyWith(
+                                  color:
+                                      customRoutine.labelColor.toColorFromHex(),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: width / 20,
+                                ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        customRoutine!.name,
-                        style: Theme.of(context).textTheme.headline3!.copyWith(
-                              color: customRoutine!.labelColor.toColorFromHex(),
-                              fontWeight: FontWeight.w500,
-                              fontSize: width / 20,
-                            ),
+                      TimerIconButton(
+                        icon: Icons.close,
+                        event: () {
+                          Navigator.pop(context);
+                        },
                       ),
                     ],
                   ),
-                  TimerIconButton(
-                    icon: Icons.close,
-                    event: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: <Widget>[
-                TimerTime(
-                  displayTimerMinutes: timerTime.displayMinutes!,
-                  displayTimerSeconds: timerTime.displaySeconds!,
-                  fontColor: timerFontColor,
                 ),
-                TimerIconButton(
-                  icon: Icons.edit_outlined,
-                  event: () {
-                    editCustomTimerTime(context);
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: <Widget>[
+                    TimerTime(
+                      displayTimerMinutes: timerTime.displayMinutes!,
+                      displayTimerSeconds: timerTime.displaySeconds!,
+                      fontColor: timerFontColor,
+                    ),
+                    TimerIconButton(
+                      icon: Icons.edit_outlined,
+                      event: () {
+                        editCustomTimerTime(context);
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(bottom: width / 20),
-                  child: BreakTime(
-                      displayBreakMinutes: breakTime.displayMinutes!,
-                      displayBreakSeconds: breakTime.displaySeconds!),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: width / 20),
+                      child: BreakTime(
+                          displayBreakMinutes: breakTime.displayMinutes!,
+                          displayBreakSeconds: breakTime.displaySeconds!),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TimerButtonClass.button(
+                        buttonState, startTimer, pauseTimer, resumeTimer),
+                    TimerIconButton(
+                      icon: Icons.restart_alt,
+                      event: resetTimer,
+                    ),
+                  ],
                 )
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TimerButtonClass.button(
-                    buttonState, startTimer, pauseTimer, resumeTimer),
-                TimerIconButton(
-                  icon: Icons.restart_alt,
-                  event: resetTimer,
-                ),
-              ],
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
