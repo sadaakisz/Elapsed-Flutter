@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:elapsed_flutter/models/custom_routine.dart';
+import 'package:elapsed_flutter/pages/edit_custom_routine.dart';
+import 'package:elapsed_flutter/utils/custom_navigator.dart';
 import 'package:elapsed_flutter/widgets/delete_custom_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -314,9 +316,8 @@ class _CustomTimerMoreMenu extends StatelessWidget {
                     size: tween.value / 3.2,
                   ),
                 ),
-                //TODO: Route the edit icon to edit a custom routine
                 onTap: () {
-                  print('Hello');
+                  navPush(context, EditCustomRoutine(index: index));
                 },
               ),
               Flexible(child: SizedBox(height: 8)),
