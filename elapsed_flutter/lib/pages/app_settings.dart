@@ -211,7 +211,7 @@ class _AppSettingsState extends State<AppSettings> {
                             displayColor: backgroundColor,
                             onColorChange: _setBackgroundColor,
                             onColorReset: _resetBackgroundColor,
-                            enableOutline: true,
+                            enableOutline: backgroundPath == '',
                           ),
                           ImageSelector(
                             imagePath: backgroundPath,
