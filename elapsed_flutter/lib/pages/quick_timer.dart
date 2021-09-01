@@ -267,18 +267,21 @@ class TimerIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return IconButton(
-      icon: Icon(
-        icon,
-        size: width / 10,
+    return Container(
+      height: width / 7,
+      child: IconButton(
+        icon: Icon(
+          icon,
+          size: width / 10,
+        ),
+        hoverColor: Colors.black,
+        highlightColor: Colors.black,
+        focusColor: Colors.black,
+        splashColor: Colors.black,
+        onPressed: () {
+          event();
+        },
       ),
-      hoverColor: Colors.black,
-      highlightColor: Colors.black,
-      focusColor: Colors.black,
-      splashColor: Colors.black,
-      onPressed: () {
-        event();
-      },
     );
   }
 }
