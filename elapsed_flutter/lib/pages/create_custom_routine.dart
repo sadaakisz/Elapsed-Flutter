@@ -253,6 +253,7 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                         Text('SAVE', style: Theme.of(context).textTheme.button),
                     width: width,
                     onTap: _createCustomRoutine,
+                    backButton: true,
                   ),
                 ],
               ),
