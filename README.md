@@ -3,7 +3,7 @@
 # Elapsed-Flutter
 An elegant and customizable pomodoro timer.
 
-Fueled by the need of making study and work sustainable.
+Fueled by the need of making study and work periods sustainable.
 
 Made by two college students at UPC. @sadaakisz and @TheRoro.
 
