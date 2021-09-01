@@ -8,3 +8,7 @@ void navPush(BuildContext context, Widget child) {
 void navPushReplace(BuildContext context, Widget child) {
   Navigator.of(context).pushReplacement(CustomPageRoute(child));
 }
+
+void navPop(BuildContext context) {
+  Navigator.of(context).pop();
+}
