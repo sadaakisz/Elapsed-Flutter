@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 part 'custom_routine.g.dart';
@@ -12,24 +11,24 @@ class CustomRoutine {
   @HiveField(2)
   int breakTime;
   @HiveField(3)
-  String? labelColor;
+  String labelColor;
   @HiveField(4)
-  String? background;
+  String background;
   //TODO: Add notification sound variable
   @HiveField(5)
-  int? notificationVolume;
+  int notificationVolume;
   @HiveField(6)
-  bool? vibrate;
+  bool vibrate;
   @HiveField(7)
-  bool? autoStart;
+  bool autoStart;
   //Do not change the number of the HiveField, if you want to add a field, do it in autoincrements.
   CustomRoutine(
       {required this.name,
       required this.timerTime,
       required this.breakTime,
-      this.labelColor,
-      this.background,
-      this.notificationVolume,
-      this.vibrate,
-      this.autoStart});
+      required this.labelColor,
+      required this.background,
+      required this.notificationVolume,
+      required this.vibrate,
+      required this.autoStart});
 }
