@@ -188,12 +188,24 @@ class _CustomTimerInfo extends StatelessWidget {
             ? Positioned.fill(
                 child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
-                child: Image.file(
-                  File(backgroundPath),
-                  fit: BoxFit.cover,
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                  child: Image.file(
+                    File(backgroundPath),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ))
-            : SizedBox(),
+            : ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                  child: Container(
+                    color: Colors.black.withOpacity(0.1),
+                    alignment: Alignment.center,
+                  ),
+                ),
+              ),
         Container(
           decoration: BoxDecoration(
             color: Colors.black26,
