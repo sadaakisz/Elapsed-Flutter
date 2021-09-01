@@ -8,8 +8,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeCarousel extends StatefulWidget {
-  HomeCarousel({Key? key, required this.customRoutines, required this.onDelete})
-      : super(key: key);
+  HomeCarousel({
+    Key? key,
+    required this.customRoutines,
+    required this.onDelete,
+  }) : super(key: key);
   final List<CustomRoutine> customRoutines;
   final Function(int) onDelete;
 
@@ -20,6 +23,12 @@ class HomeCarousel extends StatefulWidget {
 class _HomeCarouselState extends State<HomeCarousel> {
   int _current = 0;
   bool active = false;
+
+  void _setIndex(int index) {
+    setState(() {
+      _current = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +46,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
             viewportFraction: 1,
             enlargeStrategy: CenterPageEnlargeStrategy.height,
             onPageChanged: (index, reason) {
-              setState(() {
-                _current = index;
-              });
+              _setIndex(index);
             },
           ),
           itemBuilder: (context, index, realIdx) {
