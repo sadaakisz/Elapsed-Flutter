@@ -47,13 +47,10 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
   bool isTimerRunning = false;
 
   Color timerFontColor = Colors.white;
-  Color quickRoutineAccentColor = Colors.tealAccent.shade400;
 
   getSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     timerFontColor = prefs.getString('timerFontColor')!.toColorFromHex();
-    quickRoutineAccentColor =
-        prefs.getString('quickRoutineAccentColor')!.toColorFromHex();
   }
 
   @override
@@ -180,6 +177,7 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
                     child: Image.file(
                       File(backgroundPath),
                       fit: BoxFit.cover,
+                      cacheHeight: 1920,
                     ),
                   ),
                 ))
