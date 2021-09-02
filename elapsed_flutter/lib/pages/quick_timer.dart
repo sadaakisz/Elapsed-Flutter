@@ -94,11 +94,12 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
         oneSec,
         (Timer timer) => setState(() {
               if (timerTimeTurn) {
+                //TODO: Implement volume for quick timer
                 time.tickTimerTime(timer, timerTime, breakTime, timerTimeTurn,
-                    resetTimer, context);
+                    resetTimer, 1, context);
               } else {
                 time.tickBreakTime(timer, timerTime, breakTime, timerTimeTurn,
-                    resetTimer, context);
+                    resetTimer, 1, context);
               }
             }));
   }
