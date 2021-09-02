@@ -1,3 +1,4 @@
+import 'package:elapsed_flutter/widgets/settings_widgets/blur_container.dart';
 import 'package:flutter/material.dart';
 
 class CustomSlider extends StatefulWidget {
@@ -47,29 +48,33 @@ class _CustomSliderState extends State<CustomSlider> {
                 child: Container(
                   height: width / 10,
                   decoration: BoxDecoration(
-                    color: Colors.white10,
                     borderRadius: BorderRadius.circular(width / 6),
                   ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      activeTrackColor: color.withOpacity(0.7),
-                      inactiveTrackColor: Colors.white30,
-                      thumbColor: color,
-                      // Use this if you don't want padding.
-                      //trackShape: CustomTrackShape(),
-                    ),
-                    child: Slider(
-                      min: min,
-                      max: max,
-                      value: _currentValue,
-                      divisions: (max - min).toInt(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _currentValue = newValue;
-                          onChanged(_currentValue);
-                        });
-                      },
-                    ),
+                  child: Stack(
+                    children: [
+                      BlurContainer(borderRadius: width / 6),
+                      SliderTheme(
+                        data: SliderThemeData(
+                          activeTrackColor: color.withOpacity(0.7),
+                          inactiveTrackColor: Colors.white30,
+                          thumbColor: color,
+                          // Use this if you don't want padding.
+                          //trackShape: CustomTrackShape(),
+                        ),
+                        child: Slider(
+                          min: min,
+                          max: max,
+                          value: _currentValue,
+                          divisions: (max - min).toInt(),
+                          onChanged: (newValue) {
+                            setState(() {
+                              _currentValue = newValue;
+                              onChanged(_currentValue);
+                            });
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

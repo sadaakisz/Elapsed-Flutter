@@ -1,5 +1,6 @@
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/utils/custom_navigator.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/blur_container.dart';
 import 'package:flutter/material.dart';
 
 class BottomFloatingButton extends StatelessWidget {
@@ -29,11 +30,19 @@ class BottomFloatingButton extends StatelessWidget {
               child: Container(
                 height: width / 8,
                 decoration: BoxDecoration(
-                  color: foregroundColor,
+                  color: foregroundColor.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(3),
                 ),
-                child: Center(
-                  child: child,
+                child: Stack(
+                  children: [
+                    BlurContainer(
+                      borderRadius: 3,
+                      blurStrength: 7,
+                    ),
+                    Center(
+                      child: child,
+                    ),
+                  ],
                 ),
               ),
               onTap: () {
@@ -49,12 +58,21 @@ class BottomFloatingButton extends StatelessWidget {
                     width: width / 8,
                     height: width / 8,
                     decoration: BoxDecoration(
-                      color: foregroundColor,
+                      color: foregroundColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(3),
                     ),
-                    child: Icon(
-                      Icons.clear,
-                      color: EColors.red,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        BlurContainer(
+                          borderRadius: 3,
+                          blurStrength: 7,
+                        ),
+                        Icon(
+                          Icons.clear,
+                          color: EColors.red,
+                        ),
+                      ],
                     ),
                   ),
                 )
