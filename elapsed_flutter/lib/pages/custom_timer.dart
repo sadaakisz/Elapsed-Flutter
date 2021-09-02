@@ -32,8 +32,8 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
   int get index => widget.index;
   Timer? _timer;
   CustomRoutine get customRoutine => widget.customRoutine;
-  double get volume =>
-      double.parse(widget.customRoutine.notificationVolume.toString());
+  double get volume => widget.customRoutine.notificationVolume;
+  bool get vibrate => widget.customRoutine.vibrate;
   String get backgroundPath => widget.customRoutine.background;
 
   TimeModel timerTime = new TimeModel(minutes: 10, seconds: 0);
@@ -93,10 +93,10 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
         (Timer timer) => setState(() {
               if (timerTimeTurn) {
                 time.tickTimerTime(timer, timerTime, breakTime, timerTimeTurn,
-                    resetTimer, volume, context);
+                    resetTimer, volume, vibrate, context);
               } else {
                 time.tickBreakTime(timer, timerTime, breakTime, timerTimeTurn,
-                    resetTimer, volume, context);
+                    resetTimer, volume, vibrate, context);
               }
             }));
   }
