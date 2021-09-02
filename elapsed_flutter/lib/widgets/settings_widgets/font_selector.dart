@@ -44,7 +44,7 @@ class _FontSelectorState extends State<FontSelector> {
             style: Theme.of(context)
                 .textTheme
                 .bodyText2!
-                .copyWith(color: EColors.red),
+                .copyWith(color: EColors.red.withOpacity(0.8)),
           ),
           SizedBox(height: width / 33),
           Row(
