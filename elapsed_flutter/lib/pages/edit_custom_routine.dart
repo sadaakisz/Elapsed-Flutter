@@ -23,7 +23,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class EditCustomRoutine extends StatefulWidget {
   final int index;
-  const EditCustomRoutine({Key? key, required this.index}) : super(key: key);
+  final bool editingInTimer;
+  const EditCustomRoutine({
+    Key? key,
+    required this.index,
+    this.editingInTimer = false,
+  }) : super(key: key);
 
   @override
   _EditCustomRoutineState createState() => _EditCustomRoutineState();
@@ -31,6 +36,7 @@ class EditCustomRoutine extends StatefulWidget {
 
 class _EditCustomRoutineState extends State<EditCustomRoutine> {
   int get index => widget.index;
+  bool get editingInTimer => widget.editingInTimer;
 
   late CustomRoutine customRoutine;
 
@@ -158,7 +164,10 @@ class _EditCustomRoutineState extends State<EditCustomRoutine> {
     setState(() {
       customRoutineBox.putAt(index, customRoutine);
     });
-    navPushReplace(context, Home(index: index));
+    if (editingInTimer)
+      Navigator.of(context).pop([timerTime, breakTime]);
+    else
+      navPushReplace(context, Home(index: index));
   }
 
   @override
