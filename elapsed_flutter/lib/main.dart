@@ -146,6 +146,7 @@ class _ElapsedState extends State<Elapsed> {
   @override
   Widget build(BuildContext context) {
     Wakelock.enable();
+    precacheImage(AssetImage("assets/UnsplashBG.png"), context);
     return AnimatedSplashScreen(
       //TODO: Change splash to Widget
       splash: 'assets/DarkIcon.png',
