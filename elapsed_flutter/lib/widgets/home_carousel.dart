@@ -12,9 +12,11 @@ class HomeCarousel extends StatefulWidget {
     Key? key,
     required this.customRoutines,
     required this.onDelete,
+    required this.index,
   }) : super(key: key);
   final List<CustomRoutine> customRoutines;
   final Function(int) onDelete;
+  final int index;
 
   @override
   _HomeCarouselState createState() => _HomeCarouselState();
@@ -31,6 +33,12 @@ class _HomeCarouselState extends State<HomeCarousel> {
   }
 
   @override
+  void initState() {
+    _current = widget.index;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -40,6 +48,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
         CarouselSlider.builder(
           itemCount: widget.customRoutines.length,
           options: CarouselOptions(
+            initialPage: _current,
             enableInfiniteScroll: false,
             enlargeCenterPage: true,
             aspectRatio: 0.68,
@@ -79,14 +88,21 @@ class _HomeCarouselState extends State<HomeCarousel> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: widget.customRoutines.asMap().entries.map((entry) {
+              // SHEEEEEEEEEEESH finally bug found: _current is not setState when deleting. Took long enough.
+              int length = widget.customRoutines.length;
+              if (_current >= widget.customRoutines.length) {
+                setState(() {
+                  _current = length - 1;
+                });
+              }
               active = _current == entry.key;
               return AnimatedContainer(
-                width: active ? width / 33 : width / 66,
+                width: _current == entry.key ? width / 33 : width / 66,
                 height: width / 66,
                 margin: EdgeInsets.symmetric(horizontal: width / 133),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(width / 133),
-                  gradient: active
+                  gradient: _current == entry.key
                       ? LinearGradient(
                           colors: [EColors.light_aqua, EColors.light_purple],
                           begin: Alignment.topLeft,
