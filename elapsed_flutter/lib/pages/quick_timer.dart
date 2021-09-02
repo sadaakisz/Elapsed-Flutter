@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:elapsed_flutter/models/time_model.dart';
-import 'package:elapsed_flutter/pages/quick_timer_settings.dart';
+import 'package:elapsed_flutter/pages/edit_quick_routine.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
+import 'package:elapsed_flutter/utils/custom_page_route.dart';
 import 'package:elapsed_flutter/utils/time.dart';
 import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
@@ -144,10 +145,9 @@ class _QuickTimerPageState extends State<QuickTimerPage> {
     resetTimer();
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => QuickTimerSettings(
-              int.parse(timerTime.displayMinutes!),
-              int.parse(breakTime.displayMinutes!))),
+      CustomPageRoute(EditQuickRoutine(
+          timerTime: int.parse(timerTime.displayMinutes!),
+          breakTime: int.parse(breakTime.displayMinutes!))),
     );
     if (result != null) {
       setState(() {
