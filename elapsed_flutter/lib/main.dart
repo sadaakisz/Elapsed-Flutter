@@ -40,14 +40,14 @@ void main() async {
         textTheme: Typography.whiteMountainView,
         iconTheme: IconThemeData(
           size: logicalWidth / 13,
-          color: Colors.white24,
+          color: Colors.white38,
         ),
       ).copyWith(
         textTheme: TextTheme(
           headline1: GoogleFonts.rubik(
               fontSize: logicalWidth / 13,
               fontWeight: FontWeight.w500,
-              color: Colors.white60),
+              color: Colors.white70),
           headline2: GoogleFonts.rubik(
             fontSize: logicalWidth / 14,
             fontWeight: FontWeight.w500,
@@ -78,11 +78,11 @@ void main() async {
           subtitle1: GoogleFonts.rubik(
               fontSize: logicalWidth / 16.5,
               fontWeight: FontWeight.w500,
-              color: Colors.white54),
+              color: Colors.white60),
           subtitle2: GoogleFonts.rubik(
               fontSize: logicalWidth / 24.5,
               fontWeight: FontWeight.w400,
-              color: Colors.white54),
+              color: Colors.white60),
           button: GoogleFonts.rubik(
               fontSize: logicalWidth / 24.5,
               fontWeight: FontWeight.w500,
