@@ -16,7 +16,7 @@ class CustomRoutine {
   String background;
   //TODO: Add notification sound variable
   @HiveField(5)
-  int notificationVolume;
+  double notificationVolume;
   @HiveField(6)
   bool vibrate;
   @HiveField(7)

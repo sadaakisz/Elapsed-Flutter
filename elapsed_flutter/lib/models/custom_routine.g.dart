@@ -22,7 +22,7 @@ class CustomRoutineAdapter extends TypeAdapter<CustomRoutine> {
       breakTime: fields[2] as int,
       labelColor: fields[3] as String,
       background: fields[4] as String,
-      notificationVolume: fields[5] as int,
+      notificationVolume: fields[5] as double,
       vibrate: fields[6] as bool,
       autoStart: fields[7] as bool,
     );
