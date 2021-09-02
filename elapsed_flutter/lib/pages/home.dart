@@ -13,13 +13,15 @@ import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final int index;
+  const Home({Key? key, this.index = 0}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  int get index => widget.index;
   final customRoutineBox = Hive.box('custom_routines');
   List<CustomRoutine> customRoutines = [];
 
@@ -114,6 +116,7 @@ class _HomeState extends State<Home> {
                     : HomeCarousel(
                         customRoutines: customRoutines,
                         onDelete: _deleteRoutine,
+                        index: index,
                       ),
                 //TutorialStart(),
                 /*Flexible(
