@@ -1,3 +1,4 @@
+import 'package:elapsed_flutter/widgets/settings_widgets/blur_container.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
@@ -62,42 +63,49 @@ class _CustomNameInputState extends State<CustomNameInput> {
               Expanded(
                 flex: 9,
                 child: Container(
-                  padding: EdgeInsets.only(left: width / 20),
                   height: width / 10,
                   decoration: BoxDecoration(
-                    color: Colors.white10,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        setState(() {
-                          controller.text = hintText;
-                          onTextChange();
-                        });
-                    },
-                    focusNode: _focus,
-                    textAlign: TextAlign.start,
-                    onChanged: (text) {
-                      setState(() {
-                        if (controller.text.isNotEmpty) {
-                          onTextChange();
-                        }
-                      });
-                    },
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                          color: Colors.white,
+                  child: Stack(
+                    children: [
+                      BlurContainer(),
+                      Padding(
+                        padding: EdgeInsets.only(left: width / 20),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              setState(() {
+                                controller.text = hintText;
+                                onTextChange();
+                              });
+                          },
+                          focusNode: _focus,
+                          textAlign: TextAlign.start,
+                          onChanged: (text) {
+                            setState(() {
+                              if (controller.text.isNotEmpty) {
+                                onTextChange();
+                              }
+                            });
+                          },
+                          style:
+                              Theme.of(context).textTheme.subtitle2!.copyWith(
+                                    color: Colors.white,
+                                  ),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            hintText: hintText,
+                            hintStyle: Theme.of(context).textTheme.subtitle2,
+                          ),
+                          controller: widget.controller,
                         ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      hintText: hintText,
-                      hintStyle: Theme.of(context).textTheme.subtitle2,
-                    ),
-                    controller: widget.controller,
+                      ),
+                    ],
                   ),
                 ),
               ),

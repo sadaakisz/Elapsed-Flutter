@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/blur_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -66,30 +69,33 @@ class _FontSelectorState extends State<FontSelector> {
                     }),
                   );
                 },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: width / 10,
-                      width: width * 0.74,
-                      decoration: BoxDecoration(
-                        color: Colors.white10,
-                        borderRadius: BorderRadius.circular(5),
+                child: Container(
+                  height: width / 10,
+                  width: width * 0.74,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      BlurContainer(),
+                      Positioned(
+                        left: width / 20,
+                        child: Text(
+                          widget.controller.text,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2!
+                              .copyWith(
+                                color: Colors.white,
+                                fontFamily:
+                                    GoogleFonts.getFont(widget.controller.text)
+                                        .fontFamily,
+                              ),
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      left: width / 20,
-                      child: Text(
-                        widget.controller.text,
-                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                              color: Colors.white,
-                              fontFamily:
-                                  GoogleFonts.getFont(widget.controller.text)
-                                      .fontFamily,
-                            ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               GestureDetector(
