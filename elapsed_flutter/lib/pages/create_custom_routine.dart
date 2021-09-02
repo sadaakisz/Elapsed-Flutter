@@ -136,7 +136,7 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
       breakTime: breakTime,
       labelColor: labelColor.toHex(),
       background: routineBackgroundPath,
-      notificationVolume: notificationVolume.toInt(),
+      notificationVolume: notificationVolume,
       vibrate: vibrate,
       autoStart: autoStart,
     );
@@ -226,6 +226,7 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
                             title: 'Notification Volume',
                             onChanged: _setNotificationVolume,
                             color: accentColor,
+                            value: notificationVolume * 100,
                           ),
                           CustomSwitch(
                             title: 'Vibrate',
