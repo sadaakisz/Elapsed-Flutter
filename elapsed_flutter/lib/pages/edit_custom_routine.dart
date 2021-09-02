@@ -80,8 +80,7 @@ class _EditCustomRoutineState extends State<EditCustomRoutine> {
     breakTime = customRoutine.breakTime;
     labelColor = customRoutine.labelColor.toColorFromHex();
     routineBackgroundPath = customRoutine.background;
-    notificationVolume =
-        double.parse(customRoutine.notificationVolume.toString());
+    notificationVolume = customRoutine.notificationVolume;
     vibrate = customRoutine.vibrate;
     autoStart = customRoutine.autoStart;
   }
@@ -157,7 +156,7 @@ class _EditCustomRoutineState extends State<EditCustomRoutine> {
       breakTime: breakTime,
       labelColor: labelColor.toHex(),
       background: routineBackgroundPath,
-      notificationVolume: notificationVolume.toInt(),
+      notificationVolume: notificationVolume,
       vibrate: vibrate,
       autoStart: autoStart,
     );
@@ -250,6 +249,7 @@ class _EditCustomRoutineState extends State<EditCustomRoutine> {
                             title: 'Notification Volume',
                             onChanged: _setNotificationVolume,
                             color: accentColor,
+                            value: notificationVolume * 100,
                           ),
                           CustomSwitch(
                             title: 'Vibrate',
