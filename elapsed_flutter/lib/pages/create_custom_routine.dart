@@ -129,6 +129,7 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
 
   void _createCustomRoutine() {
     _formKey.currentState!.validate();
+    int length = customRoutineBox.length;
     CustomRoutine customRoutine = CustomRoutine(
       name: routineName,
       timerTime: timerTime,
@@ -142,7 +143,7 @@ class _CreateCustomRoutineState extends State<CreateCustomRoutine> {
     setState(() {
       customRoutineBox.add(customRoutine);
     });
-    navPushReplace(context, Home());
+    navPushReplace(context, Home(index: length));
   }
 
   @override
