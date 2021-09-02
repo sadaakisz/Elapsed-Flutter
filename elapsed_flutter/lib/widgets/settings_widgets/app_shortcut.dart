@@ -1,3 +1,4 @@
+import 'package:elapsed_flutter/widgets/settings_widgets/blur_container.dart';
 import 'package:flutter/material.dart';
 
 class AppShortcut extends StatelessWidget {
@@ -35,12 +36,12 @@ class AppShortcut extends StatelessWidget {
                   child: Container(
                     height: width / 10,
                     decoration: BoxDecoration(
-                      color: Colors.white10,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Stack(
                       alignment: Alignment.center,
                       children: <Widget>[
+                        BlurContainer(),
                         Positioned(
                           left: width / 20,
                           child: Text(
