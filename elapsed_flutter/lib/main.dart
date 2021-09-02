@@ -152,7 +152,7 @@ class _ElapsedState extends State<Elapsed> {
       nextScreen: Home(),
       backgroundColor: EColors.black,
       //TODO: Change duration accordingly
-      duration: 1000,
+      duration: 750,
       curve: Curves.easeInOut,
       splashTransition: SplashTransition.fadeTransition,
       pageTransitionType: PageTransitionType.fade,
