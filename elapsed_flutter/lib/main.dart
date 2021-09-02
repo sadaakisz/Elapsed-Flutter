@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -143,10 +144,23 @@ class Elapsed extends StatefulWidget {
 }
 
 class _ElapsedState extends State<Elapsed> {
+  Future<void> _precacheImages() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    precacheImage(AssetImage("assets/UnsplashBG.png"), context);
+    String backgroundImagePath = prefs.getString('backgroundImage')!;
+    if (backgroundImagePath != '')
+      precacheImage(FileImage((File(backgroundImagePath))), context);
+  }
+
+  @override
+  void initState() {
+    _precacheImages();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Wakelock.enable();
-    precacheImage(AssetImage("assets/UnsplashBG.png"), context);
     return AnimatedSplashScreen(
       //TODO: Change splash to Widget
       splash: 'assets/DarkIcon.png',
