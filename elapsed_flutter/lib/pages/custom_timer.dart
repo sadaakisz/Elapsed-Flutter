@@ -4,8 +4,11 @@ import 'dart:ui';
 
 import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/models/time_model.dart';
-import 'package:elapsed_flutter/pages/custom_timer_settings.dart';
+import 'package:elapsed_flutter/pages/edit_custom_routine.dart';
+import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
+import 'package:elapsed_flutter/utils/custom_navigator.dart';
+import 'package:elapsed_flutter/utils/custom_page_route.dart';
 import 'package:elapsed_flutter/utils/time.dart';
 import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
@@ -16,14 +19,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomTimerPage extends StatefulWidget {
   final CustomRoutine customRoutine;
+  final int index;
 
-  CustomTimerPage({Key? key, required this.customRoutine}) : super(key: key);
+  CustomTimerPage({Key? key, required this.customRoutine, required this.index})
+      : super(key: key);
 
   @override
   _CustomTimerPageState createState() => _CustomTimerPageState();
 }
 
 class _CustomTimerPageState extends State<CustomTimerPage> {
+  int get index => widget.index;
   Timer? _timer;
   CustomRoutine get customRoutine => widget.customRoutine;
   String get backgroundPath => widget.customRoutine.background;
@@ -131,18 +137,12 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
 
   void editCustomTimerTime(BuildContext context) async {
     resetTimer();
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => CustomTimerSettings(
-              int.parse(timerTime.displayMinutes!),
-              int.parse(breakTime.displayMinutes!),
-              customRoutine.name)),
-    );
+    final result = await Navigator.push(context,
+        CustomPageRoute(EditCustomRoutine(index: index, editingInTimer: true)));
     if (result != null) {
       setState(() {
-        timerTime.minutes = int.parse(result[0]);
-        breakTime.minutes = int.parse(result[1]);
+        timerTime.minutes = result[0];
+        breakTime.minutes = result[1];
         timerTime.updateActual();
         breakTime.updateActual();
         timerTime.updateDisplay();
@@ -217,7 +217,7 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
                       TimerIconButton(
                         icon: Icons.close,
                         event: () {
-                          Navigator.pop(context);
+                          navPushReplace(context, Home(index: index));
                         },
                       ),
                     ],
