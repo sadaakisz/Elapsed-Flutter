@@ -65,6 +65,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
                   context,
                   CustomTimerPage(
                     customRoutine: widget.customRoutines[index],
+                    index: index,
                   ),
                 );
               },
