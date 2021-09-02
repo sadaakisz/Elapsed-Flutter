@@ -43,6 +43,7 @@ dependencies:
   app_settings: 4.1.1
   flutter_ringtone_player: ^3.0.0
   url_launcher: ^6.0.9
+  vibration: ^1.7.4-nullsafety.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.1"
