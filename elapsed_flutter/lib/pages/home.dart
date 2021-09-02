@@ -106,7 +106,10 @@ class _HomeState extends State<Home> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElapsedTitle(),
+                GestureDetector(
+                    // For debugging
+                    onTap: () {},
+                    child: ElapsedTitle()),
                 customRoutines.length == 0
                     ? tutorialDismissed == 'NOT DISMISSED'
                         ? TutorialStart(
