@@ -195,8 +195,7 @@ class _CustomTimerInfo extends StatelessWidget {
                     child: Image.file(
                       File(backgroundPath),
                       fit: BoxFit.cover,
-                      cacheHeight: 320,
-                      cacheWidth: 180,
+                      cacheHeight: 1920,
                     ),
                   ),
                 ),
