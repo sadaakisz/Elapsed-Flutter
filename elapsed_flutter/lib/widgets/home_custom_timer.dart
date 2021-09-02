@@ -189,22 +189,25 @@ class _CustomTimerInfo extends StatelessWidget {
         backgroundPath != ''
             ? Positioned.fill(
                 child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                  child: Image.file(
-                    File(backgroundPath),
-                    fit: BoxFit.cover,
+                  borderRadius: BorderRadius.circular(30),
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                    child: Image.file(
+                      File(backgroundPath),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ))
-            : ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                  child: Container(
-                    color: Colors.black.withOpacity(0.1),
-                    alignment: Alignment.center,
+              )
+            : Positioned.fill(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                    child: Image.asset(
+                      "assets/UnsplashBG.png",
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
