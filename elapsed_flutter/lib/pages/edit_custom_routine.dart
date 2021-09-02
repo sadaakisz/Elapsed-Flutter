@@ -158,7 +158,7 @@ class _EditCustomRoutineState extends State<EditCustomRoutine> {
     setState(() {
       customRoutineBox.putAt(index, customRoutine);
     });
-    navPushReplace(context, Home());
+    navPushReplace(context, Home(index: index));
   }
 
   @override
