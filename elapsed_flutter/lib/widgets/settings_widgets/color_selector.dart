@@ -1,4 +1,5 @@
 import 'package:cyclop/cyclop.dart';
+import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/widgets/custom_color_button.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ class ColorSelector extends StatefulWidget {
   final VoidCallback? onColorReset;
   final bool enableReset;
   final bool enableOutline;
+  //TODO: Remove notice when light theme is implemented.
+  final bool warning;
   const ColorSelector({
     Key? key,
     required this.title,
@@ -18,6 +21,7 @@ class ColorSelector extends StatefulWidget {
     this.onColorReset,
     this.enableReset = true,
     this.enableOutline = false,
+    this.warning = false,
   }) : super(key: key);
 
   @override
@@ -31,6 +35,10 @@ class _ColorSelectorState extends State<ColorSelector> {
   VoidCallback? get onColorReset => widget.onColorReset;
   bool get enableReset => widget.enableReset;
   bool get enableOutline => widget.enableOutline;
+
+  //TODO: Remove notice when light theme is implemented.
+  bool get warning => widget.warning;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -44,6 +52,17 @@ class _ColorSelectorState extends State<ColorSelector> {
             style: Theme.of(context).textTheme.subtitle2,
           ),
           SizedBox(height: width / 33),
+          //TODO: Remove notice when light theme is implemented.
+          warning
+              ? Text(
+                  'Avoid using light colors for now,\nwe are working on a light theme 🙌',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2!
+                      .copyWith(color: Colors.white38),
+                )
+              : SizedBox(),
+          warning ? SizedBox(height: width / 33) : SizedBox(),
           Row(
             children: <Widget>[
               Flexible(
@@ -92,7 +111,8 @@ class _ColorSelectorState extends State<ColorSelector> {
               enableReset ? SizedBox(width: width / 22) : SizedBox(),
               enableReset
                   ? GestureDetector(
-                      child: Icon(Icons.restart_alt),
+                      child: Icon(Icons.restart_alt,
+                          color: warning ? EColors.red : Colors.white38),
                       onTap: () {
                         setState(() {
                           onColorReset!();
