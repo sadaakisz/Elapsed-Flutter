@@ -75,7 +75,7 @@ class _TimeOptionState extends State<TimeOption> {
                           return 'Please enter a time between $minValue and $maxValue minutes';
                         int numValue = int.parse(value);
                         if (numValue < minValue || maxValue < numValue)
-                          return 'Please enter a font size between $minValue and $maxValue';
+                          return 'Please enter a time between $minValue and $maxValue minutes';
                         return null;
                       },
                       focusNode: _focus,
