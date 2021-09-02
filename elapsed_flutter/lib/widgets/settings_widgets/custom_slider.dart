@@ -7,14 +7,16 @@ class CustomSlider extends StatefulWidget {
   final double max;
   final Function(double) onChanged;
   final Color color;
-  const CustomSlider(
-      {Key? key,
-      required this.title,
-      this.min = 0,
-      this.max = 100,
-      required this.onChanged,
-      required this.color})
-      : super(key: key);
+  final double value;
+  const CustomSlider({
+    Key? key,
+    required this.title,
+    this.min = 0,
+    this.max = 100,
+    required this.onChanged,
+    required this.color,
+    required this.value,
+  }) : super(key: key);
 
   @override
   _CustomSliderState createState() => _CustomSliderState();
@@ -27,6 +29,13 @@ class _CustomSliderState extends State<CustomSlider> {
   Function(double) get onChanged => widget.onChanged;
   Color get color => widget.color;
   double _currentValue = 100;
+
+  @override
+  void initState() {
+    _currentValue = widget.value;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
