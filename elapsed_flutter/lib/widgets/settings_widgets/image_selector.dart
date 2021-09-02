@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:ui';
 
+import 'package:elapsed_flutter/widgets/settings_widgets/blur_container.dart';
 import 'package:flutter/material.dart';
 
 class ImageSelector extends StatelessWidget {
@@ -37,12 +39,12 @@ class ImageSelector extends StatelessWidget {
                   child: Container(
                     height: width / 10,
                     decoration: BoxDecoration(
-                      color: Colors.white10,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Stack(
                       alignment: Alignment.center,
                       children: <Widget>[
+                        BlurContainer(),
                         Positioned(
                           left: width / 20,
                           child: Text(
