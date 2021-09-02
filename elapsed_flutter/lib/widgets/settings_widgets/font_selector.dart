@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/app_shortcut.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/blur_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FontSelector extends StatefulWidget {
   final TextEditingController controller;
@@ -25,6 +27,12 @@ class _FontSelectorState extends State<FontSelector> {
   VoidCallback get onFontFamilyChange => widget.onFontFamilyChange;
   VoidCallback get onReset => widget.onReset;
   List<String> fontFamilyList = GoogleFonts.asMap().keys.toList();
+
+  void _launchGoogleFontsUrl() async {
+    const _url = 'https://fonts.google.com/';
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -104,6 +112,12 @@ class _FontSelectorState extends State<FontSelector> {
               ),
             ],
           ),
+          SizedBox(height: width / 33),
+          AppShortcut(
+              title: "Don't know which font to choose?",
+              content: 'Open Google Fonts',
+              icon: Icons.north_east_rounded,
+              onTap: _launchGoogleFontsUrl)
         ],
       ),
     );
