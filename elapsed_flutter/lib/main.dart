@@ -123,6 +123,8 @@ _initializeSharedPrefsVariables() async {
     await prefs.setString('backgroundColor', EColors.black.toHex());
   if (!prefs.containsKey('backgroundImage'))
     await prefs.setString('backgroundImage', '');
+  if (!prefs.containsKey('opacityBackgroundImage'))
+    await prefs.setDouble('opacityBackgroundImage', 0.5);
   if (!prefs.containsKey('timerFontColor'))
     await prefs.setString('timerFontColor', Colors.white.toHex());
   if (!prefs.containsKey('quickRoutineAccentColor'))
