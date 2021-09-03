@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
+import 'package:elapsed_flutter/widgets/background.dart';
 import 'package:elapsed_flutter/widgets/elapsed_title.dart';
 import 'package:elapsed_flutter/widgets/empty_start.dart';
 import 'package:elapsed_flutter/widgets/home_carousel.dart';
@@ -92,16 +91,7 @@ class _HomeState extends State<Home> {
       backgroundColor: backgroundColor,
       body: Stack(
         children: <Widget>[
-          backgroundPath != ''
-              ? Positioned.fill(
-                  child: Opacity(
-                  opacity: 0.5,
-                  child: Image.file(
-                    File(backgroundPath),
-                    fit: BoxFit.cover,
-                  ),
-                ))
-              : SizedBox(),
+          Background(backgroundPath: backgroundPath),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
