@@ -14,7 +14,6 @@ import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomTimerPage extends StatefulWidget {
@@ -58,7 +57,7 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
 
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    //SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     super.initState();
     setState(() {
       timerTime.minutes = customRoutine.timerTime;
@@ -156,7 +155,7 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
   @override
   void dispose() {
     _timer?.cancel();
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.dispose();
   }
 
