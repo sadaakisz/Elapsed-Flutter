@@ -1,13 +1,13 @@
-import 'dart:io';
-
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/utils/custom_navigator.dart';
+import 'package:elapsed_flutter/widgets/background.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/app_title.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_fade_background.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_floating_button.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/color_selector.dart';
+import 'package:elapsed_flutter/widgets/settings_widgets/custom_slider.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/font_selector.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/font_size_option.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/image_selector.dart';
@@ -31,17 +31,19 @@ class _AppSettingsState extends State<AppSettings> {
 
   Color backgroundColor = EColors.black;
   String backgroundPath = '';
+  double opacityBackgroundImage = 0.5;
   Color timerFontColor = Colors.white;
   final fontFamilyController = TextEditingController();
   final fontSizeController = TextEditingController();
   Color quickRoutineAccentColor = Colors.tealAccent.shade400;
   Color homePageAccentColor = EColors.green;
 
-  Future<void> _initializeSharedPrefs() async {
+  Future<bool> _initializeSharedPrefs() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       backgroundColor = (prefs.getString('backgroundColor')!.toColorFromHex());
       backgroundPath = prefs.getString('backgroundImage')!;
+      opacityBackgroundImage = prefs.getDouble('opacityBackgroundImage')!;
       timerFontColor = (prefs.getString('timerFontColor')!.toColorFromHex());
       fontFamilyController.text = prefs.getString('timerFontFamily')!;
       fontSizeController.text =
@@ -51,6 +53,7 @@ class _AppSettingsState extends State<AppSettings> {
       homePageAccentColor =
           (prefs.getString('homePageAccentColor')!.toColorFromHex());
     });
+    return true;
   }
 
   Future<void> _setBackgroundColor(Color color) async {
@@ -84,6 +87,13 @@ class _AppSettingsState extends State<AppSettings> {
       backgroundPath = '';
     });
     await prefs.setString('backgroundImage', '');
+  }
+
+  Future<void> _setOpacityBackgroundImage(double value) async {
+    setState(() {
+      opacityBackgroundImage = value / 100;
+    });
+    await prefs.setDouble('opacityBackgroundImage', opacityBackgroundImage);
   }
 
   Future<void> _setTimerFontColor(Color color) async {
@@ -158,7 +168,7 @@ class _AppSettingsState extends State<AppSettings> {
 
   void _validate() {
     if (_formKey.currentState!.validate()) {
-      navPush(context, Home());
+      navPushReplace(context, Home());
     }
   }
 
@@ -172,105 +182,110 @@ class _AppSettingsState extends State<AppSettings> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return GestureDetector(
-      onTap: () {
-        if (_formKey.currentState!.validate())
-          FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: backgroundColor,
-        body: Stack(
-          children: <Widget>[
-            backgroundPath != ''
-                ? Positioned.fill(
-                    child: Opacity(
-                    opacity: 0.5,
-                    child: Image.file(
-                      File(backgroundPath),
-                      fit: BoxFit.cover,
-                    ),
-                  ))
-                : SizedBox(),
-            SafeArea(
-              child: Stack(
-                alignment: Alignment.center,
+    return FutureBuilder(
+      future: _initializeSharedPrefs(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.hasData) {
+          return GestureDetector(
+            onTap: () {
+              if (_formKey.currentState!.validate())
+                FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: backgroundColor,
+              body: Stack(
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: width / 14),
-                    child: Form(
-                      key: _formKey,
-                      child: ListView(
-                        controller: scrollController,
-                        children: <Widget>[
-                          AppTitle(width: width, title: 'APP SETTINGS'),
-                          SizedBox(height: width / 50),
-                          Subtitle(subtitleText: 'General'),
-                          ColorSelector(
-                            title: 'Background Color',
-                            displayColor: backgroundColor,
-                            onColorChange: _setBackgroundColor,
-                            onColorReset: _resetBackgroundColor,
-                            enableOutline: backgroundPath == '',
-                            warning: true,
+                  Background(backgroundPath: backgroundPath),
+                  SafeArea(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: width / 14),
+                          child: Form(
+                            key: _formKey,
+                            child: ListView(
+                              controller: scrollController,
+                              children: <Widget>[
+                                AppTitle(width: width, title: 'APP SETTINGS'),
+                                SizedBox(height: width / 50),
+                                Subtitle(subtitleText: 'General'),
+                                ColorSelector(
+                                  title: 'Background Color',
+                                  displayColor: backgroundColor,
+                                  onColorChange: _setBackgroundColor,
+                                  onColorReset: _resetBackgroundColor,
+                                  enableOutline: backgroundPath == '',
+                                  warning: true,
+                                ),
+                                ImageSelector(
+                                  imagePath: backgroundPath,
+                                  onTap: _setBackgroundImage,
+                                  onReset: _resetBackgroundImage,
+                                ),
+                                CustomSlider(
+                                  title: 'Background Opacity',
+                                  onChanged: _setOpacityBackgroundImage,
+                                  color: homePageAccentColor,
+                                  value: opacityBackgroundImage * 100,
+                                ),
+                                Subtitle(subtitleText: 'Timer'),
+                                ColorSelector(
+                                  title: 'Timer Font Color',
+                                  displayColor: timerFontColor,
+                                  onColorChange: _setTimerFontColor,
+                                  onColorReset: _resetTimerFontColor,
+                                ),
+                                FontSelector(
+                                  controller: fontFamilyController,
+                                  onFontFamilyChange: _setTimerFontFamily,
+                                  onReset: _resetTimerFontFamily,
+                                ),
+                                FontSizeOption(
+                                  controller: fontSizeController,
+                                  onFontSizeChange: _setTimerFontSize,
+                                  onReset: _resetTimerFontSize,
+                                  scrollDown: _scrollDown,
+                                ),
+                                ColorSelector(
+                                  title: 'Quick Routine Accent Color',
+                                  displayColor: quickRoutineAccentColor,
+                                  onColorChange: _setQuickRoutineAccentColor,
+                                  onColorReset: _resetQuickRoutineAccentColor,
+                                ),
+                                Subtitle(subtitleText: 'Home page'),
+                                ColorSelector(
+                                  title: 'Home Page Accent Color',
+                                  displayColor: homePageAccentColor,
+                                  onColorChange: _setHomePageAccentColor,
+                                  onColorReset: _resetHomePageAccentColor,
+                                ),
+                                SizedBox(height: width / 4),
+                              ],
+                            ),
                           ),
-                          ImageSelector(
-                            imagePath: backgroundPath,
-                            onTap: _setBackgroundImage,
-                            onReset: _resetBackgroundImage,
-                          ),
-                          Subtitle(subtitleText: 'Timer'),
-                          ColorSelector(
-                            title: 'Timer Font Color',
-                            displayColor: timerFontColor,
-                            onColorChange: _setTimerFontColor,
-                            onColorReset: _resetTimerFontColor,
-                          ),
-                          FontSelector(
-                            controller: fontFamilyController,
-                            onFontFamilyChange: _setTimerFontFamily,
-                            onReset: _resetTimerFontFamily,
-                          ),
-                          FontSizeOption(
-                            controller: fontSizeController,
-                            onFontSizeChange: _setTimerFontSize,
-                            onReset: _resetTimerFontSize,
-                            scrollDown: _scrollDown,
-                          ),
-                          ColorSelector(
-                            title: 'Quick Routine Accent Color',
-                            displayColor: quickRoutineAccentColor,
-                            onColorChange: _setQuickRoutineAccentColor,
-                            onColorReset: _resetQuickRoutineAccentColor,
-                          ),
-                          Subtitle(subtitleText: 'Home page'),
-                          ColorSelector(
-                            title: 'Home Page Accent Color',
-                            displayColor: homePageAccentColor,
-                            onColorChange: _setHomePageAccentColor,
-                            onColorReset: _resetHomePageAccentColor,
-                          ),
-                          SizedBox(height: width / 4),
-                        ],
-                      ),
+                        ),
+                        BottomFadeBackground(
+                          width: width,
+                          fadeBackgroundColor: backgroundColor,
+                        ),
+                        BottomFloatingButton(
+                          child: Text('SAVE',
+                              style: Theme.of(context).textTheme.button),
+                          width: width,
+                          onTap: _validate,
+                        ),
+                      ],
                     ),
-                  ),
-                  BottomFadeBackground(
-                    width: width,
-                    fadeBackgroundColor: backgroundColor,
-                  ),
-                  BottomFloatingButton(
-                    child:
-                        Text('SAVE', style: Theme.of(context).textTheme.button),
-                    width: width,
-                    onTap: _validate,
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        } else
+          return CircularProgressIndicator();
+      },
     );
   }
 }
