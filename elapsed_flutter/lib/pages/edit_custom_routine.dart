@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:app_settings/app_settings.dart';
 import 'package:elapsed_flutter/colors/elapsed_colors.dart';
 import 'package:elapsed_flutter/models/custom_routine.dart';
 import 'package:elapsed_flutter/pages/home.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:elapsed_flutter/utils/custom_navigator.dart';
+import 'package:elapsed_flutter/widgets/background.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/app_shortcut.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/app_title.dart';
 import 'package:elapsed_flutter/widgets/settings_widgets/bottom_fade_background.dart';
@@ -190,16 +189,7 @@ class _EditCustomRoutineState extends State<EditCustomRoutine> {
         backgroundColor: backgroundColor,
         body: Stack(
           children: <Widget>[
-            backgroundPath != ''
-                ? Positioned.fill(
-                    child: Opacity(
-                    opacity: 0.5,
-                    child: Image.file(
-                      File(backgroundPath),
-                      fit: BoxFit.cover,
-                    ),
-                  ))
-                : SizedBox(),
+            Background(backgroundPath: backgroundPath),
             SafeArea(
               child: Stack(
                 alignment: Alignment.center,
