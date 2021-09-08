@@ -206,7 +206,7 @@ class _CustomTimerInfo extends StatelessWidget {
                   child: ImageFiltered(
                     imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
                     child: Image.asset(
-                      "assets/UnsplashBG.png",
+                      "assets/UnsplashBG.jpg",
                       fit: BoxFit.cover,
                     ),
                   ),

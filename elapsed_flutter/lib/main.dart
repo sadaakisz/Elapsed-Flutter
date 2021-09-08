@@ -148,7 +148,7 @@ class Elapsed extends StatefulWidget {
 class _ElapsedState extends State<Elapsed> {
   Future<void> _precacheImages() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    precacheImage(AssetImage("assets/UnsplashBG.png"), context);
+    precacheImage(AssetImage("assets/UnsplashBG.jpg"), context);
     String backgroundImagePath = prefs.getString('backgroundImage')!;
     if (backgroundImagePath != '')
       precacheImage(FileImage((File(backgroundImagePath))), context);
