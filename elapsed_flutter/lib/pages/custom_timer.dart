@@ -13,6 +13,7 @@ import 'package:elapsed_flutter/utils/time.dart';
 import 'package:elapsed_flutter/utils/timer_button.dart';
 import 'package:elapsed_flutter/widgets/break_time.dart';
 import 'package:elapsed_flutter/widgets/timer_time.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -193,25 +194,26 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.stop_rounded,
-                            color: customRoutine.labelColor.toColorFromHex(),
-                          ),
-                          Text(
-                            customRoutine.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline3!
-                                .copyWith(
-                                  color:
-                                      customRoutine.labelColor.toColorFromHex(),
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: width / 20,
-                                ),
-                          ),
-                        ],
+                      Icon(
+                        Icons.stop_rounded,
+                        color: customRoutine.labelColor.toColorFromHex(),
+                      ),
+                      Expanded(
+                        child: Text(
+                          customRoutine.name,
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline3!
+                              .copyWith(
+                                color:
+                                    customRoutine.labelColor.toColorFromHex(),
+                                fontWeight: FontWeight.w500,
+                                fontSize: width / 20,
+                              ),
+                        ),
                       ),
                       TimerIconButton(
                         icon: Icons.close,
