@@ -50,7 +50,9 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
 
   getSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    timerFontColor = prefs.getString('timerFontColor')!.toColorFromHex();
+    setState(() {
+      timerFontColor = prefs.getString('timerFontColor')!.toColorFromHex();
+    });
   }
 
   @override
@@ -65,6 +67,7 @@ class _CustomTimerPageState extends State<CustomTimerPage> {
       timerTime.updateDisplay();
       breakTime.updateDisplay();
     });
+    getSettings();
   }
 
   void startTimerParam() {
