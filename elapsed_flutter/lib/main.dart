@@ -17,9 +17,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
 
-void main() async {
+void main() {
   //Ensures all the stuff is loaded TOP PRIORITY
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   var pixelRatio = window.devicePixelRatio;
   var logicalScreenSize = window.physicalSize / pixelRatio;
@@ -27,94 +28,88 @@ void main() async {
   var logicalHeight = logicalScreenSize.height;
   print('$logicalWidth, $logicalHeight');
 
-  final appDocumentDir = await getApplicationDocumentsDirectory();
-  Hive.init(appDocumentDir.path);
-  Hive.registerAdapter(CustomRoutineAdapter());
-  Hive.openBox('custom_routines');
-
+  _openHiveBox();
   _initializeSharedPrefsVariables();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .whenComplete(() {
-    runApp(MaterialApp(
-      title: 'elapsed.',
-      theme: ThemeData(
-        textTheme: Typography.whiteMountainView,
-        iconTheme: IconThemeData(
-          size: logicalWidth / 13,
-          color: Colors.white38,
-        ),
-      ).copyWith(
-        textTheme: TextTheme(
-          headline1: GoogleFonts.rubik(
-              fontSize: logicalWidth / 13,
-              fontWeight: FontWeight.w500,
-              color: Colors.white70),
-          headline2: GoogleFonts.rubik(
-            fontSize: logicalWidth / 14,
-            fontWeight: FontWeight.w500,
-            shadows: <Shadow>[
-              Shadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 8,
-                  color: Colors.white.withOpacity(0.15))
-            ],
-          ),
-          headline3: GoogleFonts.rubik(
-              fontSize: logicalWidth / 22,
-              fontWeight: FontWeight.w500,
-              color: Colors.white54),
-          headline4: GoogleFonts.rubik(
-              fontSize: logicalWidth / 18,
-              fontWeight: FontWeight.w400,
-              color: Colors.white70),
-          //Used for selected font in appsettings
-          headline5: GoogleFonts.rubik(
-              fontSize: logicalWidth / 11,
-              fontWeight: FontWeight.w500,
-              color: Colors.white),
-          headline6: GoogleFonts.rubik(
-              fontSize: logicalWidth / 22,
-              fontWeight: FontWeight.w700,
-              color: Colors.black),
-          subtitle1: GoogleFonts.rubik(
-              fontSize: logicalWidth / 16.5,
-              fontWeight: FontWeight.w500,
-              color: Colors.white60),
-          subtitle2: GoogleFonts.rubik(
-              fontSize: logicalWidth / 24.5,
-              fontWeight: FontWeight.w400,
-              color: Colors.white60),
-          button: GoogleFonts.rubik(
-              fontSize: logicalWidth / 24.5,
-              fontWeight: FontWeight.w500,
-              color: Colors.white70),
-          overline: GoogleFonts.rubik(
-            fontSize: logicalWidth / 28,
-            fontWeight: FontWeight.w400,
-            color: Colors.black,
-            decoration: TextDecoration.underline,
-          ),
-          bodyText1: GoogleFonts.rubik(
-              fontSize: logicalWidth / 28,
-              fontWeight: FontWeight.w300,
-              color: Colors.white70),
-          //Used for selected font in appsettings
-          bodyText2: GoogleFonts.rubik(
-              fontSize: logicalWidth / 33,
-              fontWeight: FontWeight.w400,
-              color: Colors.white54),
-        ),
+
+  runApp(MaterialApp(
+    title: 'elapsed.',
+    theme: ThemeData(
+      textTheme: Typography.whiteMountainView,
+      iconTheme: IconThemeData(
+        size: logicalWidth / 13,
+        color: Colors.white38,
       ),
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => Elapsed(),
-        '/home': (context) => Home(),
-        '/quick-timer': (context) => QuickTimerPage(),
-        '/settings': (context) => AppSettings(),
-      },
-    ));
-  });
+    ).copyWith(
+      textTheme: TextTheme(
+        headline1: GoogleFonts.rubik(
+            fontSize: logicalWidth / 13,
+            fontWeight: FontWeight.w500,
+            color: Colors.white70),
+        headline2: GoogleFonts.rubik(
+          fontSize: logicalWidth / 14,
+          fontWeight: FontWeight.w500,
+          shadows: <Shadow>[
+            Shadow(
+                offset: Offset(2.0, 2.0),
+                blurRadius: 8,
+                color: Colors.white.withOpacity(0.15))
+          ],
+        ),
+        headline3: GoogleFonts.rubik(
+            fontSize: logicalWidth / 22,
+            fontWeight: FontWeight.w500,
+            color: Colors.white54),
+        headline4: GoogleFonts.rubik(
+            fontSize: logicalWidth / 18,
+            fontWeight: FontWeight.w400,
+            color: Colors.white70),
+        //Used for selected font in appsettings
+        headline5: GoogleFonts.rubik(
+            fontSize: logicalWidth / 11,
+            fontWeight: FontWeight.w500,
+            color: Colors.white),
+        headline6: GoogleFonts.rubik(
+            fontSize: logicalWidth / 22,
+            fontWeight: FontWeight.w700,
+            color: Colors.black),
+        subtitle1: GoogleFonts.rubik(
+            fontSize: logicalWidth / 16.5,
+            fontWeight: FontWeight.w500,
+            color: Colors.white60),
+        subtitle2: GoogleFonts.rubik(
+            fontSize: logicalWidth / 24.5,
+            fontWeight: FontWeight.w400,
+            color: Colors.white60),
+        button: GoogleFonts.rubik(
+            fontSize: logicalWidth / 24.5,
+            fontWeight: FontWeight.w500,
+            color: Colors.white70),
+        overline: GoogleFonts.rubik(
+          fontSize: logicalWidth / 28,
+          fontWeight: FontWeight.w400,
+          color: Colors.black,
+          decoration: TextDecoration.underline,
+        ),
+        bodyText1: GoogleFonts.rubik(
+            fontSize: logicalWidth / 28,
+            fontWeight: FontWeight.w300,
+            color: Colors.white70),
+        //Used for selected font in appsettings
+        bodyText2: GoogleFonts.rubik(
+            fontSize: logicalWidth / 33,
+            fontWeight: FontWeight.w400,
+            color: Colors.white54),
+      ),
+    ),
+    debugShowCheckedModeBanner: false,
+    initialRoute: '/',
+    routes: {
+      '/': (context) => Elapsed(),
+      '/home': (context) => Home(),
+      '/quick-timer': (context) => QuickTimerPage(),
+      '/settings': (context) => AppSettings(),
+    },
+  ));
 }
 
 _initializeSharedPrefsVariables() async {
@@ -136,6 +131,13 @@ _initializeSharedPrefsVariables() async {
     await prefs.setString('timerFontFamily', 'Aldrich');
   if (!prefs.containsKey('timerFontSize'))
     await prefs.setDouble('timerFontSize', 30);
+}
+
+_openHiveBox() async {
+  final appDocumentDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDir.path);
+  Hive.registerAdapter(CustomRoutineAdapter());
+  Hive.openBox('custom_routines');
 }
 
 class Elapsed extends StatefulWidget {

@@ -29,7 +29,7 @@ class Time {
             asAlarm: false, // Android only - all APIs
           );
           if (vibrate) Vibration.vibrate(pattern: [0, 100, 50, 50]);
-          ;
+
           playedTimerFinished = true;
         }
         tickBreakTime(timer, timerTime, breakTime, timerTimeTurn, resetTimer,
