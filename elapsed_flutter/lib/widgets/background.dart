@@ -44,6 +44,13 @@ class _BackgroundState extends State<Background> {
               fit: BoxFit.cover,
             ),
           ))
-        : SizedBox();
+        : Positioned.fill(
+            child: Opacity(
+            opacity: opacity,
+            child: Image.asset(
+              "assets/UnsplashHomeBG.jpg",
+              fit: BoxFit.cover,
+            ),
+          ));
   }
 }
