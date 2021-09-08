@@ -98,7 +98,8 @@ class _TimeOptionState extends State<TimeOption> {
                         });
                       },
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
                       ],
                       style: Theme.of(context).textTheme.headline1!.copyWith(
                             color: Colors.white,
