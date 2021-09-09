@@ -10,7 +10,6 @@ import 'package:elapsed_flutter/pages/quick_timer.dart';
 import 'package:elapsed_flutter/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
@@ -38,6 +37,7 @@ void main() async {
     runApp(MaterialApp(
       title: 'elapsed.',
       theme: ThemeData(
+        fontFamily: 'Rubik',
         textTheme: Typography.whiteMountainView,
         iconTheme: IconThemeData(
           size: logicalWidth / 13,
@@ -45,11 +45,17 @@ void main() async {
         ),
       ).copyWith(
         textTheme: TextTheme(
-          headline1: GoogleFonts.rubik(
+          headline1: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 13,
               fontWeight: FontWeight.w500,
               color: Colors.white70),
-          headline2: GoogleFonts.rubik(
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 13,
+              fontWeight: FontWeight.w500,
+              color: Colors.white70),*/
+          headline2: TextStyle(
+            fontFamily: 'Rubik',
             fontSize: logicalWidth / 14,
             fontWeight: FontWeight.w500,
             shadows: <Shadow>[
@@ -59,50 +65,111 @@ void main() async {
                   color: Colors.white.withOpacity(0.15))
             ],
           ),
-          headline3: GoogleFonts.rubik(
+          /*GoogleFonts.rubik(
+            fontSize: logicalWidth / 14,
+            fontWeight: FontWeight.w500,
+            shadows: <Shadow>[
+              Shadow(
+                  offset: Offset(2.0, 2.0),
+                  blurRadius: 8,
+                  color: Colors.white.withOpacity(0.15))
+            ],
+          ),*/
+          headline3: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 22,
               fontWeight: FontWeight.w500,
               color: Colors.white54),
-          headline4: GoogleFonts.rubik(
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 22,
+              fontWeight: FontWeight.w500,
+              color: Colors.white54),*/
+          headline4: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 18,
               fontWeight: FontWeight.w400,
               color: Colors.white70),
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.white70),*/
           //Used for selected font in appsettings
-          headline5: GoogleFonts.rubik(
+          headline5: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 11,
               fontWeight: FontWeight.w500,
               color: Colors.white),
-          headline6: GoogleFonts.rubik(
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 11,
+              fontWeight: FontWeight.w500,
+              color: Colors.white),*/
+          headline6: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 22,
               fontWeight: FontWeight.w700,
               color: Colors.black),
-          subtitle1: GoogleFonts.rubik(
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 22,
+              fontWeight: FontWeight.w700,
+              color: Colors.black),*/
+          subtitle1: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 16.5,
               fontWeight: FontWeight.w500,
               color: Colors.white60),
-          subtitle2: GoogleFonts.rubik(
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 16.5,
+              fontWeight: FontWeight.w500,
+              color: Colors.white60),*/
+          subtitle2: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 24.5,
               fontWeight: FontWeight.w400,
               color: Colors.white60),
-          button: GoogleFonts.rubik(
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 24.5,
+              fontWeight: FontWeight.w400,
+              color: Colors.white60),*/
+          button: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 24.5,
               fontWeight: FontWeight.w500,
               color: Colors.white70),
-          overline: GoogleFonts.rubik(
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 24.5,
+              fontWeight: FontWeight.w500,
+              color: Colors.white70),*/
+          overline: TextStyle(
+              fontFamily: 'Rubik',
+              fontSize: logicalWidth / 28,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+              decoration: TextDecoration.underline),
+          /*GoogleFonts.rubik(
             fontSize: logicalWidth / 28,
             fontWeight: FontWeight.w400,
             color: Colors.black,
             decoration: TextDecoration.underline,
-          ),
-          bodyText1: GoogleFonts.rubik(
+          ),*/
+          bodyText1: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 28,
               fontWeight: FontWeight.w300,
               color: Colors.white70),
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 28,
+              fontWeight: FontWeight.w300,
+              color: Colors.white70),*/
           //Used for selected font in appsettings
-          bodyText2: GoogleFonts.rubik(
+          bodyText2: TextStyle(
+              fontFamily: 'Rubik',
               fontSize: logicalWidth / 33,
               fontWeight: FontWeight.w400,
               color: Colors.white54),
+          /*GoogleFonts.rubik(
+              fontSize: logicalWidth / 33,
+              fontWeight: FontWeight.w400,
+              color: Colors.white54),*/
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -149,15 +216,17 @@ class _ElapsedState extends State<Elapsed> {
   Future<void> _precacheImages() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     precacheImage(AssetImage("assets/UnsplashBG.jpg"), context);
-    String backgroundImagePath = prefs.getString('backgroundImage')!;
-    if (backgroundImagePath != '')
-      precacheImage(FileImage((File(backgroundImagePath))), context);
+    if (prefs.containsKey('backgroundImage')) {
+      String backgroundImagePath = prefs.getString('backgroundImage')!;
+      if (backgroundImagePath != '')
+        precacheImage(FileImage((File(backgroundImagePath))), context);
+    }
   }
 
   @override
   void initState() {
-    _precacheImages();
     super.initState();
+    _precacheImages();
   }
 
   @override
