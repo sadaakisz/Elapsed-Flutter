@@ -46,8 +46,8 @@ class TutorialStart extends StatelessWidget {
                   leading: Padding(
                     padding: const EdgeInsets.only(left: 6.0),
                     child: Container(
-                      width: 35,
-                      height: 35,
+                      width: width * 0.09,
+                      height: width * 0.09,
                       child: Image.asset(
                         'assets/TutorialDarkIcon.png',
                       ),
