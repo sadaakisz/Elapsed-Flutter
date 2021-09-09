@@ -20,12 +20,6 @@ void main() async {
   //Ensures all the stuff is loaded TOP PRIORITY
   WidgetsFlutterBinding.ensureInitialized();
 
-  var pixelRatio = window.devicePixelRatio;
-  var logicalScreenSize = window.physicalSize / pixelRatio;
-  var logicalWidth = logicalScreenSize.width;
-  var logicalHeight = logicalScreenSize.height;
-  print('$logicalWidth, $logicalHeight');
-
   final appDocumentDir = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDir.path);
   Hive.registerAdapter(CustomRoutineAdapter());
@@ -34,7 +28,27 @@ void main() async {
   _initializeSharedPrefsVariables();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .whenComplete(() {
-    runApp(MaterialApp(
+    runApp(ElapsedApp());
+  });
+}
+
+class ElapsedApp extends StatefulWidget {
+  const ElapsedApp({Key? key}) : super(key: key);
+
+  @override
+  _ElapsedAppState createState() => _ElapsedAppState();
+}
+
+class _ElapsedAppState extends State<ElapsedApp> {
+  @override
+  Widget build(BuildContext context) {
+    var pixelRatio = window.devicePixelRatio;
+    var logicalScreenSize = window.physicalSize / pixelRatio;
+    var logicalWidth = logicalScreenSize.width;
+    var logicalHeight = logicalScreenSize.height;
+    print('$logicalWidth, $logicalHeight');
+
+    return MaterialApp(
       title: 'elapsed.',
       theme: ThemeData(
         fontFamily: 'Rubik',
@@ -180,8 +194,8 @@ void main() async {
         '/quick-timer': (context) => QuickTimerPage(),
         '/settings': (context) => AppSettings(),
       },
-    ));
-  });
+    );
+  }
 }
 
 _initializeSharedPrefsVariables() async {
