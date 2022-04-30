@@ -1,7 +1,7 @@
-![Image of elapsed.](https://github.com/sadaakisz/Elapsed-Flutter/blob/develop/ElapsedTitle.png)
+![Image of elapsed.](https://github.com/sadaakisz/Elapsed-Flutter/blob/develop/GithubAssets/RoundedFunctionGraphics.png)
 
 # Elapsed-Flutter
-An elegant and customizable pomodoro timer.
+An elegant and customizable pomodoro timer for Android.
 
 Fueled by the need of making study and work periods sustainable.
 
